@@ -156,6 +156,22 @@ _G['isFalse'] = function (onearg)
 	return false
 end
 
+-- 实例函数。判断实例对象是不是空的。即数据库中的没有符合要求的对象。
+-- 下面是我们的规则
+_G['isEmpty'] = function (obj)
+	for k, v in pairs(obj) do
+		if not k:startsWith('_') 		-- 去掉_parent
+		and type(v) ~= 'function' 		-- 去掉new, extend两个函数
+		and k ~= 'id'					-- 去掉id字段
+		and k ~= 'name'					-- 去掉name字段
+		then
+			return false
+		end
+	end
+	
+	return true
+end;
+
 _G['setProto'] = function (obj, proto)
 	checkType(obj, proto, 'table', 'table')
 	

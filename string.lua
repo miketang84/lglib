@@ -490,3 +490,46 @@ function utf8reverse (self)
 end
 
 
+function findpart(str, start, endwhich)
+	if endwhich < start then return '' end
+	if endwhich <= 0 or start <= 0 then return '' end
+	
+	local str = str:trim()
+	local count = 0
+	local p = 0
+
+	local i = 0
+	while i do
+		i = str:find(' ', i+1)
+		if i then
+			count = count + 1
+			if count == start - 1 then
+				p = i + 1
+				break
+			end
+		end
+	end
+	
+	if p == 0 then return '' end
+	
+	i = 0
+	count = 0		
+	str = str:sub(p)
+	p = 0
+	while i do
+		i = str:find(' ', i+1)
+		if i then
+			count = count + 1
+			if count == endwhich - start + 1 then
+				p = i - 1
+				break
+			end
+		end
+	end
+	
+	if p == 0 then 
+		return str 
+	else
+		return str:sub(1, p)
+	end
+end

@@ -84,6 +84,14 @@ Object = {
 		local parent = self._parent
 		return self == class or (parent and parent:isInstance(class))
 	end;
+	isClass = function (self)
+		local tag = rawget(self, '__tag')
+		if tag then
+			return true
+		else
+			return false
+		end
+	end;
 	-- 返回父类引用
 	parent = function (self) return self._parent end;
 	abstractMethod = abstractMethod;
