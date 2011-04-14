@@ -63,7 +63,12 @@ _G['class'] = function (constructor)
 	end
 end
 
+_G['I_AM_CLASS'] = function (self)
+	assert(self:isClass(), 'This function is only allowed to be called by class singleton.')
+end
+
 _G['UTF8_FULLSUPPORT'] = true
+
 
 _G['T'] = function (t)
 	local mt = getmetatable(t) or {}
