@@ -22,6 +22,20 @@ function ins(self, i, val)
     return self
 end
 
+function slice(self, start, ended)
+	local nt = {}
+	checkType(start, ended, 'number', 'number')
+	assert(ended >= start and ended > 0 and start > 0)
+	
+	if start > #self then return {} end
+	
+	for i = start, (#self > ended and ended or #self) do
+		table.insert(nt, self[i])
+	end
+	
+	return nt
+end
+
 
 function takeApart(self)
 	local list_len = #self
