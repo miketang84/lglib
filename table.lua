@@ -22,14 +22,16 @@ function ins(self, i, val)
     return self
 end
 
-function slice(self, start, ended)
+function slice(self, start, stop)
 	local nt = {}
-	checkType(start, ended, 'number', 'number')
-	assert(ended >= start and ended > 0 and start > 0)
+	local start = start or 1
+	local stop = stop or #self
+	checkType(start, stop, 'number', 'number')
+	assert(stop >= start and stop > 0 and start > 0)
 	
 	if start > #self then return {} end
 	
-	for i = start, (#self > ended and ended or #self) do
+	for i = start, (#self > stop and stop or #self) do
 		table.insert(nt, self[i])
 	end
 	
