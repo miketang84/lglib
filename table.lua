@@ -1,5 +1,5 @@
 local table, pairs, next, type, require, ipairs = table, pairs, next, type, require, ipairs
-local tostring, debug, error, setmetatable = tostring, debug, error, setmetatable
+local tostring, debug, assert, error, setmetatable = tostring, debug, assert, error, setmetatable
 local string = string
 
 
@@ -23,10 +23,12 @@ function ins(self, i, val)
 end
 
 function slice(self, start, stop)
+	assert(type(start) == 'number' and type(stop) == 'number')
+	
 	local nt = {}
 	local start = start or 1
 	local stop = stop or #self
-	checkType(start, stop, 'number', 'number')
+	
 	assert(stop >= start and stop > 0 and start > 0)
 	
 	if start > #self then return {} end
