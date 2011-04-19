@@ -166,7 +166,7 @@ end
 _G['isEmpty'] = function (obj)
 	checkType(obj, 'table')
 	
-	if isFalse(obj) return false end
+	if isFalse(obj) then return false end
 	for k, v in pairs(obj) do
 		if not k:startsWith('_') 		-- 去掉_parent
 		and type(v) ~= 'function' 		-- 去掉new, extend两个函数
