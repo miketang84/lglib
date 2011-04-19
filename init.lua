@@ -164,9 +164,9 @@ end
 -- 实例函数。判断实例对象是不是空的。即数据库中的没有符合要求的对象。
 -- 下面是我们的规则
 _G['isEmpty'] = function (obj)
+	if isFalse(obj) then return false end
 	checkType(obj, 'table')
 	
-	if isFalse(obj) then return false end
 	for k, v in pairs(obj) do
 		if not k:startsWith('_') 		-- 去掉_parent
 		and type(v) ~= 'function' 		-- 去掉new, extend两个函数
