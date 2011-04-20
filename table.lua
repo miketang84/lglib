@@ -22,19 +22,39 @@ function ins(self, i, val)
     return self
 end
 
-function slice(self, start, stop)
+function slice(self, start, stop, is_rev)
 	assert(type(start) == 'number' and type(stop) == 'number')
 	
 	local nt = {}
 	local start = start or 1
 	local stop = stop or #self
 	
-	assert(stop >= start and stop > 0 and start > 0)
-	
+	assert(stop >= start)
 	if start > #self then return {} end
 	
-	for i = start, (#self > stop and stop or #self) do
-		table.insert(nt, self[i])
+	-- 处理索引为负数的情况
+	-- 最后一个元素为-1，倒数第二个为-2
+	if start == 0 then 
+		start = 1 
+	elseif start < 0 then
+		start = #self + start + 1
+		if start < 1 then return {} end
+	end
+	if stop == 0 then 
+		stop = 1 
+	elseif stop < 0 then 
+		stop = #self + stop + 1 
+		if stop < 1 then return {} end
+	end
+	
+	if not is_rev then
+		for i = start, (#self > stop and stop or #self) do
+			table.insert(nt, self[i])
+		end
+	else
+		for i = (#self > stop and stop or #self), start, -1 do
+			table.insert(nt, self[i])
+		end
 	end
 	
 	return nt
