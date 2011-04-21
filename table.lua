@@ -29,7 +29,7 @@ function slice(self, start, stop, is_rev)
 	local start = start or 1
 	local stop = stop or #self
 	
-	assert(stop >= start)
+	if (stop > 0 and start > 0) or (stop < 0 and start < 0) then assert( stop >= start) end
 	if start > #self then return {} end
 	
 	-- 处理索引为负数的情况
