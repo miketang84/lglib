@@ -22,9 +22,9 @@ function ins(self, i, val)
     return self
 end
 
+-- 支持start, stop为空，为负值
 function slice(self, start, stop, is_rev)
-	assert(type(start) == 'number' and type(stop) == 'number')
-	
+		
 	local nt = {}
 	local start = start or 1
 	local stop = stop or #self
