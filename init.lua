@@ -123,8 +123,8 @@ _G['checkType'] = function (...)
 	for i=1, half do
 		assert('string' == type(args[i+half]), 
 			'The front half part of the argumet list should be string!')
-		assert(args[i+half] == type(args[i]), 
-			("This %s argument: %s doesn't match given type: %s"):format(i, args[i], args[i+half]))
+		assert( args[i+half] == type(args[i]), 
+			("This %snd argument doesn't match given type: %s"):format(i, args[i+half]))
 	end
 
 	return true
