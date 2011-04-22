@@ -54,17 +54,21 @@ local Object = require 'lglib.oop'
 _G['Object'] = Object
 
 -- put _M here maybe not right, this _M is lglib's _M
-_G['class'] = function (constructor)
-	return function ()
-		local _M = _M
-		setmetatable(_M, {__index=_G, __call = function (...)
-			return constructor(...)
-		end})
-	end
-end
+--_G['class'] = function (constructor)
+	--return function ()
+		--local _M = _M
+		--setmetatable(_M, {__index=_G, __call = function (...)
+			--return constructor(...)
+		--end})
+	--end
+--end
 
 _G['I_AM_CLASS'] = function (self)
 	assert(self:isClass(), 'This function is only allowed to be called by class singleton.')
+end
+
+_G['I_AM_INSTANCE'] = function (self)
+	assert(self:isInstance(), 'This function is only allowed to be called by instance of class.')
 end
 
 _G['UTF8_FULLSUPPORT'] = true

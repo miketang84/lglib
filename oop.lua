@@ -10,7 +10,7 @@ local abstractMethod = function () error(("Method must be implemented first.\n%s
 
 local Object
 Object = {
-	__tag = "Bamboo";
+	__tag = "Object";
 	_parent = Object;
 	-- 每个类的定义的时候，都必须定义这个init方法。它有两个功能：
 	-- 1. 在这个方法里面，进行类的属性的定义；
@@ -81,8 +81,17 @@ Object = {
 	end;
 	-- 这个函数，可以判断一个对象是不是某一个类的实例，或某一个类单例是不是某个类单例
 	isInstance = function (self, class)
-		local parent = self._parent
-		return self == class or (parent and parent:isInstance(class))
+		if class then
+			local parent = self._parent
+			return self == class or (parent and parent:isInstance(class))
+		else
+			-- 如果获取到了，就是类
+			if rawget(self, '__tag') then
+				return false
+			else
+				return true
+			end
+		end
 	end;
 	isClass = function (self)
 		local tag = rawget(self, '__tag')
