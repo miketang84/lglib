@@ -165,19 +165,23 @@ _G['isFalse'] = function (onearg)
 	return false
 end
 
+_G['isEmpty'] = _G['isFalse']
+
 -- 实例函数。判断实例对象是不是空的。即数据库中的没有符合要求的对象。
 -- 下面是我们的规则
-_G['isEmpty'] = function (obj)
+_G['isObjEmpty'] = function (obj)
 	if isFalse(obj) then return false end
 	checkType(obj, 'table')
 	
 	for k, v in pairs(obj) do
-		if not k:startsWith('_') 		-- 去掉_parent
-		and type(v) ~= 'function' 		-- 去掉new, extend两个函数
-		and k ~= 'id'					-- 去掉id字段
-		and k ~= 'name'					-- 去掉name字段
-		then
-			return false
+		if type(k) == 'string' then
+			if not k:startsWith('_') 		-- 去掉_parent
+			and type(v) ~= 'function' 		-- 去掉new, extend两个函数
+			and k ~= 'id'					-- 去掉id字段
+			and k ~= 'name'					-- 去掉name字段
+			then
+				return false
+			end
 		end
 	end
 	
@@ -202,7 +206,7 @@ _G['seri'] = function (self, seen)
 	seen = seen or {}
 	local selfType = type(self)
 	if "string" == selfType then
-		return ("%s"):format(self)
+		return ("'%s'"):format(self)
 	elseif "number" == selfType or "boolean" == selfType or "nil" == selfType  then
 		return tostring(self)
 	elseif "table" == selfType then
@@ -215,7 +219,7 @@ _G['seri'] = function (self, seen)
 				if first then
 					first = false
 				else
-					res = ('%s;'):format(res)
+					res = ('%s,'):format(res)
 				end
 				if k == index then
 					res = ('%s%s'):format(res, seri(v, seen))
@@ -224,7 +228,7 @@ _G['seri'] = function (self, seen)
 					if "number" == type(k) then
 						res = ('%s[%s]='):format(res, k)
 					else
-						res = ('%s[%s]='):format(res, ("%q"):format(k))
+						res = ("%s[%s]="):format(res, ("'%s'"):format(k))
 					end
 					res = ('%s%s'):format(res, seri(v, seen))
 				end
