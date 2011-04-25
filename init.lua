@@ -206,7 +206,7 @@ _G['seri'] = function (self, seen)
 	seen = seen or {}
 	local selfType = type(self)
 	if "string" == selfType then
-		return ("'%s'"):format(self)
+		return ("%q"):format(self)
 	elseif "number" == selfType or "boolean" == selfType or "nil" == selfType  then
 		return tostring(self)
 	elseif "table" == selfType then
@@ -228,7 +228,7 @@ _G['seri'] = function (self, seen)
 					if "number" == type(k) then
 						res = ('%s[%s]='):format(res, k)
 					else
-						res = ("%s[%s]="):format(res, ("'%s'"):format(k))
+						res = ("%s[%s]="):format(res, ("%q"):format(k))
 					end
 					res = ('%s%s'):format(res, seri(v, seen))
 				end
