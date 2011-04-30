@@ -1,7 +1,7 @@
 local table, pairs, next, type, require, ipairs = table, pairs, next, type, require, ipairs
 local tostring, debug, assert, error, setmetatable = tostring, debug, assert, error, setmetatable
 local string = string
-
+local math = math
 
 
 ------------------------------------------------------------------------
@@ -37,8 +37,11 @@ function slice(self, start, stop, is_rev)
 	if start == 0 then 
 		start = 1 
 	elseif start < 0 then
-		start = #self + start + 1
-		if start < 1 then return {} end
+		if math.abs(start) >= #self then
+			start = 1
+		else
+			start = #self + start + 1
+		end
 	end
 	if stop == 0 then 
 		stop = 1 
