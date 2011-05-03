@@ -53,10 +53,10 @@ end
 ------------------------------------------------------------------------
 -- 检查字串包含指定子串
 -- @param self  被检查字串
--- @param beg   子串
+-- @param substr   子串
 -- @return true|false   如果self包含substr，返回true，否则返回false
 ------------------------------------------------------------------------
-function startsWith(self, substr)
+function contains(self, substr)
     if self:find(substr, 1, true) then
         return true
     end
