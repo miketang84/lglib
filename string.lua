@@ -1,7 +1,7 @@
 local require, getmetatable = require, getmetatable
 local string, table, unpack, select, debug, error, loadstring, assert = string, table, unpack, select, debug, error, loadstring, assert
 local type, tostring, pairs, io, error, print = type, tostring, pairs, io, error, print
-
+local UTF8_FULLSUPPORT = UTF8_FULLSUPPORT
 
 -- 如果要了下面这一句，那么就会把lglib.table中的函数，解压到全局变量_G中去。因为require功能是加载文件并执行，并把执行的结果放到_G中。
 -- 由于那边并没有写module()语句，并且，这边这个环境中又没有_G。所以，执行后，其定义的函数就放到其继承的metatable中的_G中去了，也就是
@@ -248,7 +248,11 @@ function index(self, i)
 end
 
 function slice(self, i, j)
-    return self:sub(i, j)
+	if UTF8_FULLSUPPORT then
+		return utf8slice(self, i, j)
+	else
+		return self:sub(i, j)
+	end
 end
 
 ------------------------------------------------------------------------

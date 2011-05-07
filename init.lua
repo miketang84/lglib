@@ -12,6 +12,8 @@ function import(wrap_table, sub_modname)
 	setfenv(assert(loadfile( ('%s/%s.lua'):format(filedir, sub_modname))), setmetatable(wrap_table, {__index=_G}))(filedir)
 	setmetatable(wrap_table, nil)
 end
+
+_G['UTF8_FULLSUPPORT'] = true
 -- 这一句必须写在这里，后面几个函数要用
 _G['import'] = import
 
@@ -71,7 +73,7 @@ _G['I_AM_INSTANCE'] = function (self)
 	assert(self:isInstance(), 'This function is only allowed to be called by instance of class.')
 end
 
-_G['UTF8_FULLSUPPORT'] = true
+
 
 
 _G['T'] = function (t)
@@ -170,7 +172,7 @@ _G['isEmpty'] = _G['isFalse']
 -- 实例函数。判断实例对象是不是空的。即数据库中的没有符合要求的对象。
 -- 下面是我们的规则
 _G['isObjEmpty'] = function (obj)
-	if isFalse(obj) then return false end
+	if isFalse(obj) then return true end
 	checkType(obj, 'table')
 	
 	for k, v in pairs(obj) do
