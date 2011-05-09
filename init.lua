@@ -127,10 +127,15 @@ _G['checkType'] = function (...)
 	
 	local half = args_len / 2;
 	for i=1, half do
-		assert('string' == type(args[i+half]), 
-			'The front half part of the argumet list should be string!')
-		assert( args[i+half] == type(args[i]), 
-			("This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]))
+		if 'string' ~= type(args[i+half]) then
+			print(debug.traceback())
+			error('The front half part of the argumet list should be string!', 2)
+		end
+		
+		if args[i+half] ~= type(args[i]) then
+			print(debug.traceback())
+			error(("This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]), 2)
+		end
 	end
 
 	return true
