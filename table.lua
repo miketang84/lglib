@@ -22,6 +22,13 @@ function ins(self, i, val)
     return self
 end
 
+function joint(self, another)
+	for _, v in ipairs(another) do
+		table.insert(self, v)
+	end
+	return self
+end
+
 -- 支持start, stop为空，为负值
 function slice(self, start, stop, is_rev)
 		
