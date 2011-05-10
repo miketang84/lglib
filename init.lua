@@ -117,6 +117,17 @@ _G['ptable'] = function (t)
 	print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 end
 
+_G['pptable'] = function (t)
+	print('-----------------PPTABLE--------------------')
+	for i,v in pairs(t) do 
+		for ii, vv in pairs(v) do
+			print(ii,vv) 
+		end
+	end
+	print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+end
+
+
 ---
 -- checkType(a, b, c, 'string', 'table', 'number')
 --
