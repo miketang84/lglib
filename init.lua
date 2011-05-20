@@ -20,9 +20,6 @@ _G['import'] = import
 --======================================================================
 --==                     其它一些全局辅助函数                          ==
 --======================================================================
-
--- 加载http库
-require 'lglib.http'
 local Object = require 'lglib.oop'
 
 -------------------------------------------------
@@ -49,6 +46,10 @@ _G['I_AM_INSTANCE'] = function (self)
 	assert(self:isInstance(), 'This function is only allowed to be called by instance of class.')
 end
 
+-- 把它们自动加为全局对象，不用引入直接可以使用
+_G['List'] = require 'lglib.list'
+_G['Dict'] = require 'lglib.dict'
+_G['Set'] = require 'lglib.set'
 
 
 
@@ -278,7 +279,9 @@ end
 
 
 
-
+------------------------------------------------------------------------
+-- 几个注入操作
+------------------------------------------------------------------------
 function loadStringModule()
 	import(string, 'string')
 end
