@@ -136,6 +136,6 @@ function difference (s1, s2, symm)
     return res
 end
 
-function isEmpty()
+function isEmpty(self)
     return nil == next(self)
 end

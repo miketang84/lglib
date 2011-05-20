@@ -2,30 +2,8 @@ local require, getmetatable = require, getmetatable
 local string, table, unpack, select, debug, error, loadstring, assert = string, table, unpack, select, debug, error, loadstring, assert
 local type, tostring, pairs, io, error, print = type, tostring, pairs, io, error, print
 local UTF8_FULLSUPPORT = UTF8_FULLSUPPORT
+local Set = require 'lglib.set'
 
--- 如果要了下面这一句，那么就会把lglib.table中的函数，解压到全局变量_G中去。因为require功能是加载文件并执行，并把执行的结果放到_G中。
--- 由于那边并没有写module()语句，并且，这边这个环境中又没有_G。所以，执行后，其定义的函数就放到其继承的metatable中的_G中去了，也就是
--- 到全局环境中去了。
---local lgtable = require 'lglib.table'
--- 这句也一样
---dofile('./lglib/table.lua')
-
-local lgtable = {}
-import(lgtable, 'table')
-
-------------------------------------------------------------------------
--- Python风格的字符串内插函数
--- @usage 'I love %s' % { 'you' }
--- @return 被替换后的字符串
-------------------------------------------------------------------------
-getmetatable("").__mod = function (self, tab)
-    return (self:gsub("%%%((%a%w*)%)([-0-9%.]*[cdeEfgGiouxXsq])",
-        function(k, fmt)
-            --return tab[k] and (('%%%s'):format(fmt)):format(tab[k]) or ("%%(%s)%s"):format(k, fmt)
-            return tab[k] and ("%"..fmt):format(tab[k]) or "%("..k..")"..fmt
-        end
-    ))
-end
 
 getmetatable("").__add = function (self, astr)
     return self .. astr
@@ -174,7 +152,7 @@ function rfind(self, substr)
 end
 
 -- 空白字符集
-local TRIM_CHARS = {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();("\n"):byte();0}
+local TRIM_CHARS = Set {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();("\n"):byte();0}
 ------------------------------------------------------------------------
 -- 清除字符串首部的空白
 -- @param self  被处理字符串
@@ -183,7 +161,7 @@ local TRIM_CHARS = {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();("\n"
 function ltrim(self)
 	local index = 1
 	for i = 1, #self do
-		if not lgtable.isIn(TRIM_CHARS, self:byte(i)) then
+		if not TRIM_CHARS:has(self:byte(i)) then
 			index = i
 			break
 		end
@@ -199,7 +177,7 @@ end
 function rtrim(self)
 	local index = 1
 	for i = #self, 1, -1 do
-		if not lgtable.isIn(TRIM_CHARS, self:byte(i)) then
+		if not TRIM_CHARS:has(self:byte(i)) then
 			index = i
 			break
 		end

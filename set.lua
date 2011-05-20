@@ -45,6 +45,15 @@ function Set:delete (key)
     self[key] = nil
 end
 
+function Set:has (key)
+    if self[key] then
+		return true
+	else
+		return false
+	end
+end
+
+
 Set.members = Dict.keys
 
 

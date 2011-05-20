@@ -17,30 +17,6 @@ _G['UTF8_FULLSUPPORT'] = true
 -- 这一句必须写在这里，后面几个函数要用
 _G['import'] = import
 
-function loadStringModule()
-	import(string, 'string')
-end
-
-function loadTableModule()
-	import(table, 'table')
-end
-
-function loadIoModule()
-	import(io, 'io')
-end
-
--------------------------------------------------
--- Initialize all sub module
--------------------------------------------------
-local function lglib_init()
-	loadTableModule()
-	loadStringModule()
-	loadIoModule()
-end
--- call it
-lglib_init()
-
-
 --======================================================================
 --==                     其它一些全局辅助函数                          ==
 --======================================================================
@@ -302,3 +278,26 @@ end
 
 
 
+
+function loadStringModule()
+	import(string, 'string')
+end
+
+function loadTableModule()
+	import(table, 'table')
+end
+
+function loadIoModule()
+	import(io, 'io')
+end
+
+-------------------------------------------------
+-- Initialize all sub module
+-------------------------------------------------
+local function lglib_init()
+	loadTableModule()
+	loadStringModule()
+	loadIoModule()
+end
+-- call it
+lglib_init()

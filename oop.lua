@@ -3,6 +3,8 @@ local loadstring, assert = loadstring, assert
 local tostring, getmetatable, setmetatable, error, io, debug, type, pairs, rawget, rawset = tostring, getmetatable, setmetatable, error, io, debug, type, pairs, rawget, rawset
 local ipairs, debug, require, select = ipairs, debug, require, select
 
+local List = require 'lglib.list'
+
 module('lglib.oop')
 
 local abstractMethod = function () error(("Method must be implemented first.\n%s"):format(debug.traceback())) end
@@ -51,10 +53,10 @@ Object = {
 		end
 		
 		-- 存储继承链关系
-		local proto_chain = {}
+		local proto_chain = List()
 		local p = self
 		repeat
-			table.append(proto_chain, p)
+			proto_chain:append(p)
 			-- 往上回溯，找到所有类的继承链
 			p = p._parent
 		-- 当回溯到Object这个原始原型的时候，就停止
