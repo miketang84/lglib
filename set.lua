@@ -82,10 +82,6 @@ end
 Set.__lt = Set.is_subset
 
 
-function Set:isEmpty ()
-    return next(self) == nil
-end
-
 -- 改变默认打印输出方式
 function Set:__tostring ()
     return '['..self:members():join(',')..']'

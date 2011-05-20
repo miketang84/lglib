@@ -90,8 +90,4 @@ function Dict:values()
 	return res
 end
 
-function Dict:isEmpty()
-    return nil == next(self)
-end
-
 return Dict

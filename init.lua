@@ -74,18 +74,7 @@ _G['I_AM_INSTANCE'] = function (self)
 end
 
 
---_G['T'] = function (t)
-	--local mt = getmetatable(t) or {}
-	--local oi = mt.__index
-	
-	--mt.__index = function(k)
-		--return (oi and oi(k)) or table[k] 
-	--end
-	
-	--return setmetatable(t, mt)
-	---- Simple case: If t doesn't have metatable
-	---- return setmetatable(t or {}, {__index=table})
---end
+
 
 _G['toString'] = function (obj)
 	if "nil" == type(obj) then
@@ -234,9 +223,19 @@ end;
 _G['setProto'] = function (obj, proto)
 	checkType(obj, proto, 'table', 'table')
 	
-	return setmetatable(obj, {__index=proto})
+	local mt = getmetatable(obj) or {}
+	local old_meta = mt.__index
+	
+	mt.__index = function(t, k)
+		return (old_meta and old_meta(k)) or proto[k] 
+	end
+	
+	return setmetatable(obj, mt)
 end
 
+_G['T'] = function (t)
+	return setProto(t, table)
+end
 
 
 ------------------------------------------------------------------------

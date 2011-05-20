@@ -25,3 +25,7 @@ print(typename(a))
 print(typename(b))
 print(isList(a))
 print(isDict(b))
+
+c, d = t:takeAparts()
+ptable(c)
+ptable(d)
