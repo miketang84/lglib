@@ -203,8 +203,11 @@ _G['setProto'] = function (obj, proto)
 	local mt = getmetatable(obj) or {}
 	local old_meta = mt.__index
 	
-	mt.__index = function(t, k)
-		return (old_meta and old_meta(k)) or proto[k] 
+	-- 当old_meta为nil或表格时，才进行函数绑定
+	if not old_meta or type(old_meta) == 'table' then
+		mt.__index = function(t, k)
+			return (old_meta and old_meta[k]) or proto[k] 
+		end
 	end
 	
 	return setmetatable(obj, mt)

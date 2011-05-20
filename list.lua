@@ -13,7 +13,7 @@ List.__typename = "List"
 local function new (tbl)
 	-- 如果没传入表作参数，则生成一个空表
 	local t = {}
-	-- 只抽取
+	
 	if tbl then
 		checkType(tbl, 'table')
 		for _, v in ipairs(tbl) do
