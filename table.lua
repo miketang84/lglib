@@ -5,73 +5,11 @@ local math = math
 
 
 ------------------------------------------------------------------------
--- List or Array Specific
-------------------------------------------------------------------------
-function append(self, val)
-    table.insert(self, val)
-    return self
-end
+__typename = 'Table'
 
-function prepend(self, val)
-    table.insert(self, 1, val)
-    return self
-end
-
-function ins(self, i, val)
-    table.insert(self, i, val)
-    return self
-end
-
-function joint(self, another)
-	for _, v in ipairs(another) do
-		table.insert(self, v)
-	end
-	return self
-end
-
--- 支持start, stop为空，为负值
-function slice(self, start, stop, is_rev)
-		
-	local nt = {}
-	local start = start or 1
-	local stop = stop or #self
-	
-	if (stop > 0 and start > 0) or (stop < 0 and start < 0) then assert( stop >= start) end
-	if start > #self then return {} end
-	
-	-- 处理索引为负数的情况
-	-- 最后一个元素为-1，倒数第二个为-2
-	if start == 0 then 
-		start = 1 
-	elseif start < 0 then
-		if math.abs(start) >= #self then
-			start = 1
-		else
-			start = #self + start + 1
-		end
-	end
-	if stop == 0 then 
-		stop = 1 
-	elseif stop < 0 then 
-		stop = #self + stop + 1 
-		if stop < 1 then return {} end
-	end
-	
-	if not is_rev then
-		for i = start, (#self > stop and stop or #self) do
-			table.insert(nt, self[i])
-		end
-	else
-		for i = (#self > stop and stop or #self), start, -1 do
-			table.insert(nt, self[i])
-		end
-	end
-	
-	return nt
-end
-
-
-function takeApart(self)
+-- 将序列部分和字典部分分离开来
+-- 注：返回的是两个对象，每一个为序列，第二个为字典
+function takeAparts(self)
 	local list_len = #self
 	local list_part, dict_part = {}, {}
 	for i=1, list_len do
@@ -84,108 +22,10 @@ function takeApart(self)
 		end
 	end
 	
-	return list_part, dict_part
-end
-------------------------------------------------------------------------
--- Dict or Hash Table Specific
-------------------------------------------------------------------------
-function keys(self)
-	local res = {}
-	for key, _ in pairs(self) do
-		table.insert(res, key)
-	end
-	return res
+	local List, Dict = require 'lglib.list', require 'lglib.dict'
+	return List(list_part), Dict(dict_part)
 end
 
-function size(self)
-	local count = 0
-	for _ in pairs(self) do
-		count = count + 1
-	end
-	return count
-end
-
-function hasKey(self, key)
-    for k, _ in pairs(self) do
-		if k == key then
-            return true
-        end
-	end
-	return false
-end
-
-function isEmpty(self)
-    return nil == next(self)
-end
-
-function isIn(self, val)
-	for k, v in pairs(self) do
-		if val == v then
-			return true
-		end
-	end
-    
-    return false
-end
-
-function ifind(self, val)
-	for k, v in ipairs(self) do
-		if val == v then
-			return k
-		end
-	end
-end
-
-function find(self, val)
-	for k, v in pairs(self) do
-		if val == v then
-			return k
-		end
-	end
-    return nil
-end
-
-function imap(self, func)
-	local res = {}
-	for _, val in ipairs(self) do
-		local newVal
-		if "string" == type(func) then
-			newVal = val[func](val)
-		else
-			newVal = func(val)
-		end
-		if newVal then
-			table.insert(res, func(val))
-		end
-	end
-	return res
-end
-
-function map(self, func)
-	local res = {}
-	for key, val in pairs(self) do
-		if "string" == type(func) then
-			res[key] = val[func](val)
-		else
-			res[key] = func(val)
-		end
-	end
-	return res
-end
-
-function iremVal(self, val)
-	local key = table.ifind(self, val)
-	if key then
-		return table.remove(self, key)
-	end
-end
-
-function remVal(self, val)
-	local key = table.find(self, val)
-	if key then
-		return table.remove(self, key)
-	end
-end
 
 function copy(self)
 	local res = {}
@@ -212,25 +52,6 @@ function deepcopy(self, seen)
 	end
 	seen[self] = nil
 	return res
-end
-
-
-function ijoin(self, sep)
-	local res
-	sep = sep or ""
-	for _, v in ipairs(self) do
-		res = ('%s%s'):format((res and ('%s%s'):format(res, sep) or ""), tostring(v))
-	end
-	return res or ""
-end
-
-function join(self, sep)
-	local res
-	sep = sep or ""
-	for _, v in pairs(self) do
-		res = ('%s%s'):format((res and ('%s%s'):format(res, sep) or ""), tostring(v))
-	end
-	return res or ""
 end
 
 function pt(tt, indent, done)
@@ -285,5 +106,33 @@ function update(self, source, keys)
     end
 
     return self
+end
+
+-- 要求传入的t1, t2必须为表格
+-- dup为true表示并运算，为false表示差运算
+function merge (t1, t2, dup)
+    local res = {}
+    for k,v in pairs(t1) do
+        if dup or t2[k] then res[k] = v end
+    end
+    for k,v in pairs(t2) do
+        if dup or t1[k] then res[k] = v end
+    end
+    return res
+end
+
+-- 要求传入的t1, t2必须为表格
+-- symm为true表示求共有部分，symm为false表示异或运算
+function difference (s1, s2, symm)
+    local res = {}
+    for k,v in pairs(s1) do
+        if not s2[k] then res[k] = v end
+    end
+    if symm then
+        for k,v in pairs(s2) do
+            if not s1[k] then res[k] = v end
+        end
+    end
+    return res
 end
 

@@ -74,20 +74,18 @@ _G['I_AM_INSTANCE'] = function (self)
 end
 
 
-
-
-_G['T'] = function (t)
-	local mt = getmetatable(t) or {}
-	local oi = mt.__index
+--_G['T'] = function (t)
+	--local mt = getmetatable(t) or {}
+	--local oi = mt.__index
 	
-	mt.__index = function(k)
-		return (oi and oi(k)) or table[k] 
-	end
+	--mt.__index = function(k)
+		--return (oi and oi(k)) or table[k] 
+	--end
 	
-	return setmetatable(t, mt)
-	-- Simple case: If t doesn't have metatable
-	-- return setmetatable(t or {}, {__index=table})
-end
+	--return setmetatable(t, mt)
+	---- Simple case: If t doesn't have metatable
+	---- return setmetatable(t or {}, {__index=table})
+--end
 
 _G['toString'] = function (obj)
 	if "nil" == type(obj) then
@@ -150,6 +148,33 @@ _G['checkType'] = function (...)
 	end
 
 	return true
+end
+
+-- 获取typename属性，传入的对象必须为List, Dict, Table, Set中的一种
+_G['typename'] = function (t)
+	checkType(t, 'table')
+	if t.__typename then
+		return t.__typename
+	else 
+		return nil
+	end
+end
+
+local istabletype = function (t, name)
+	local ret = typename(t) 
+	if ret and ret == name then
+		return true
+	else
+		return false
+	end
+end
+
+_G['isList'] = function (t)
+	return istabletype(t, 'List')
+end
+
+_G['isDict'] = function (t)
+	return istabletype(t, 'Dict')
 end
 
 ---
