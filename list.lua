@@ -56,7 +56,7 @@ function normalize_slice( self, start, stop )
 		stop = 1 
 	elseif stop < 0 then 
 		stop = #self + stop + 1 
-		if stop < 1 then return nil end
+		if stop < 1 then return nil, nil end
 	end
 	
 	return start, stop
@@ -200,6 +200,7 @@ end
 function List:slice(start, stop, is_rev)
 	local nt = {}
 	local start, stop = normalize_slice(self, start, stop)
+	if not start or not stop then return self end
 	
 	if is_rev ~= 'rev' then
 		for i = start, (#self > stop and stop or #self) do

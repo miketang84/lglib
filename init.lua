@@ -38,13 +38,47 @@ _G['Object'] = Object
 	--end
 --end
 
+-- 下面四个断言，只能是类，实例或query set调用
 _G['I_AM_CLASS'] = function (self)
 	assert(self:isClass(), 'This function is only allowed to be called by class singleton.')
+end
+
+_G['I_AM_CLASS_OR_QUERY_SET'] = function (self)
+	assert(self:isClass() or self.__spectype == 'QuerySet', 'This function is only allowed to be called by class singleton or query set.')
 end
 
 _G['I_AM_INSTANCE'] = function (self)
 	assert(self:isInstance(), 'This function is only allowed to be called by instance of class.')
 end
+
+_G['I_AM_INSTANCE_OR_QUERY_SET'] = function (self)
+	assert(self:isInstance() or self.__spectype == 'QuerySet', 'This function is only allowed to be called by instance of class.')
+end
+
+_G['isClass'] = function (t)
+	if t.isClass then
+		if type(t.isClass) == 'function' then
+			return t:isClass()
+		else
+			return false
+		end
+	else 
+		return false
+	end
+end
+
+_G['isInstance'] = function (t)
+	if t.isInstance then 
+		if type(t.isInstance) == 'function' then
+			return t:isInstance()
+		else
+			return false
+		end
+	else 
+		return false
+	end
+end
+
 
 -- 把它们自动加为全局对象，不用引入直接可以使用
 _G['List'] = require 'lglib.list'
@@ -142,6 +176,8 @@ end
 _G['isDict'] = function (t)
 	return istabletype(t, 'Dict')
 end
+
+
 
 ---
 -- checkType(a, 0, 10, b, 20, 30, c, 10, 100)
