@@ -148,12 +148,12 @@ function List:pop()
     return tremove(self)
 end
 
-function List:find(t, val, idx)
-    checkType(t, 'table')
+function List:find(val, idx)
+    checkType(self, 'table')
     local idx = idx or 1
-    if idx < 0 then idx = #t + idx + 1 end
-    for i = idx, #t do
-        if t[i] == val then return i end
+    if idx < 0 then idx = #self + idx + 1 end
+    for i = idx, #self do
+        if self[i] == val then return i end
     end
     return nil
 end
