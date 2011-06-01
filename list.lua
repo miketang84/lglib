@@ -120,7 +120,7 @@ function List:prepend(val)
 end
 
 -- 用一个新list来扩展本list
-function List:extend( another )
+function List:extends( another )
 	checkType(another, 'table')
 	for i = 1, #another do tinsert(self, another[i]) end
 	return self
