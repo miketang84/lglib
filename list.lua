@@ -120,7 +120,7 @@ function List:prepend(val)
 end
 
 -- 用一个新list来扩展本list
-function List:extends( another )
+function List:extend( another )
 	checkType(another, 'table')
 	for i = 1, #another do tinsert(self, another[i]) end
 	return self
@@ -218,7 +218,7 @@ end
 -- 清空
 function List:clear()
 	for i=1, #self do tremove(self, i) end
-	return selfs
+	return self
 end
 
 -- 测量长度
