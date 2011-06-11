@@ -2,6 +2,7 @@ local require, getmetatable = require, getmetatable
 local string, table, unpack, select, debug, error, loadstring, assert = string, table, unpack, select, debug, error, loadstring, assert
 local type, tostring, pairs, io, error, print = type, tostring, pairs, io, error, print
 local UTF8_FULLSUPPORT = UTF8_FULLSUPPORT
+local List = require 'lglib.list'
 local Set = require 'lglib.set'
 
 
@@ -81,7 +82,7 @@ function split(self, delim, count, no_patterns)
 
     local next_delim = 1
     local i = 1
-    local rlist = {}
+    local rlist = List()
 
     repeat
         local start, finish = self:find(delim, next_delim, no_patterns)
@@ -117,7 +118,8 @@ end
 -- @return 解开列表包裹的多值返回
 ------------------------------------------------------------------------
 function splitBy(self, ...)
-	local res, tail, values = {}, self, {select(1, ...)}
+	local res = List()
+	local tail, values = self, {select(1, ...)}
 	for i = 1, select("#", ...) do
 		if not tail then break end
 		local begPos, endPos = tail:find(values[i], 1, true)
