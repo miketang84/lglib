@@ -59,6 +59,10 @@ _G['isDict'] = function (t)
 	return istabletype(t, 'Dict')
 end
 
+_G['isSet'] = function (t)
+	return istabletype(t, 'Set')
+end
+
 --------------------------------------------------------------------------------
 -- 打印辅助函数
 _G['toString'] = function (obj)
@@ -156,26 +160,6 @@ end
 
 _G['isEmpty'] = _G['isFalse']
 
--- 实例函数。判断实例对象是不是空的。即数据库中的没有符合要求的对象。
--- 下面是我们的规则
-_G['isObjEmpty'] = function (obj)
-	if isFalse(obj) then return true end
-	checkType(obj, 'table')
-	
-	for k, v in pairs(obj) do
-		if type(k) == 'string' then
-			if not k:startsWith('_') 		-- 去掉_parent
-			and type(v) ~= 'function' 		-- 去掉new, extend两个函数
-			and k ~= 'id'					-- 去掉id字段
-			and k ~= 'name'					-- 去掉name字段
-			then
-				return false
-			end
-		end
-	end
-	
-	return true
-end;
 
 _G['setProto'] = function (obj, proto)
 	checkType(obj, proto, 'table', 'table')
@@ -194,6 +178,7 @@ _G['setProto'] = function (obj, proto)
 end
 
 _G['T'] = function (t)
+	local t = t or {}
 	return setProto(t, table)
 end
 
