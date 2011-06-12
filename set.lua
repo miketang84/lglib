@@ -59,25 +59,25 @@ Set.members = Dict.keys
 
 
 function Set:union (set)
-    return merge(self, set, true)
+    return Set(merge(self, set, true))
 end
 Set.__add = Set.union
 
 
 function Set:intersection (set)
-    return merge(self,set,false)
+    return Set(merge(self,set,false))
 end
 Set.__mul = Set.intersection
 
 
 function Set:difference (set)
-    return difference(self,set,false)
+    return Set(difference(self,set,false))
 end
 Set.__sub = Set.difference
 
 
 function Set:symmetricDifference (set)
-    return difference(self,set,true)
+    return Set(difference(self,set,true))
 end
 Set.__pow = Set.symmetricDifference
 
