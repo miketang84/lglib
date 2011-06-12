@@ -25,68 +25,42 @@ local Object = require 'lglib.oop'
 -------------------------------------------------
 -- Define some global callable functions
 -------------------------------------------------
--- 类树最基础的设施
+-- 类树最基础的节点
 _G['Object'] = Object
-
--- put _M here maybe not right, this _M is lglib's _M
---_G['class'] = function (constructor)
-	--return function ()
-		--local _M = _M
-		--setmetatable(_M, {__index=_G, __call = function (...)
-			--return constructor(...)
-		--end})
-	--end
---end
-
--- 下面四个断言，只能是类，实例或query set调用
-_G['I_AM_CLASS'] = function (self)
-	assert(self:isClass(), 'This function is only allowed to be called by class singleton.')
-end
-
-_G['I_AM_CLASS_OR_QUERY_SET'] = function (self)
-	assert(self:isClass() or self.__spectype == 'QuerySet', 'This function is only allowed to be called by class singleton or query set.')
-end
-
-_G['I_AM_INSTANCE'] = function (self)
-	assert(self:isInstance(), 'This function is only allowed to be called by instance of class.')
-end
-
-_G['I_AM_INSTANCE_OR_QUERY_SET'] = function (self)
-	assert(self:isInstance() or self.__spectype == 'QuerySet', 'This function is only allowed to be called by instance of class.')
-end
-
-_G['isClass'] = function (t)
-	if t.isClass then
-		if type(t.isClass) == 'function' then
-			return t:isClass()
-		else
-			return false
-		end
-	else 
-		return false
-	end
-end
-
-_G['isInstance'] = function (t)
-	if t.isInstance then 
-		if type(t.isInstance) == 'function' then
-			return t:isInstance()
-		else
-			return false
-		end
-	else 
-		return false
-	end
-end
-
-
 -- 把它们自动加为全局对象，不用引入直接可以使用
 _G['List'] = require 'lglib.list'
 _G['Dict'] = require 'lglib.dict'
 _G['Set'] = require 'lglib.set'
 
+-- 获取typename属性，传入的对象必须为List, Dict, Table, Set中的一种
+_G['typename'] = function (t)
+	checkType(t, 'table')
+	if t.__typename then
+		return t.__typename
+	else 
+		return nil
+	end
+end
 
+local istabletype = function (t, name)
+	local ret = typename(t) 
+	if ret and ret == name then
+		return true
+	else
+		return false
+	end
+end
 
+_G['isList'] = function (t)
+	return istabletype(t, 'List')
+end
+
+_G['isDict'] = function (t)
+	return istabletype(t, 'Dict')
+end
+
+--------------------------------------------------------------------------------
+-- 打印辅助函数
 _G['toString'] = function (obj)
 	if "nil" == type(obj) then
         return tostring(nil)
@@ -105,10 +79,6 @@ _G['po'] = function (obj)
 	print(toString(obj))
 end
 
-_G['dump'] = function (obj, name)
-	print(toString({name or "*", obj}))
-end
-
 _G['ptable'] = function (t)
 	print('--------------------------------------------')
 	for i,v in pairs(t) do print(i,v) end
@@ -118,6 +88,7 @@ end
 _G['pptable'] = function (t)
 	print('-----------------PPTABLE--------------------')
 	for i,v in pairs(t) do 
+		print('>>', i, '<<  ', tostring(v))
 		for ii, vv in pairs(v) do
 			print(ii,vv) 
 		end
@@ -150,37 +121,9 @@ _G['checkType'] = function (...)
 	return true
 end
 
--- 获取typename属性，传入的对象必须为List, Dict, Table, Set中的一种
-_G['typename'] = function (t)
-	checkType(t, 'table')
-	if t.__typename then
-		return t.__typename
-	else 
-		return nil
-	end
-end
-
-local istabletype = function (t, name)
-	local ret = typename(t) 
-	if ret and ret == name then
-		return true
-	else
-		return false
-	end
-end
-
-_G['isList'] = function (t)
-	return istabletype(t, 'List')
-end
-
-_G['isDict'] = function (t)
-	return istabletype(t, 'Dict')
-end
-
-
 
 ---
--- checkType(a, 0, 10, b, 20, 30, c, 10, 100)
+-- checkRange(a, 0, 10, b, 20, 30, c, 10, 100)
 --
 _G['checkRange'] = function (...)
 	local args_len = select('#', ...)
@@ -198,6 +141,7 @@ _G['checkRange'] = function (...)
 
 	return true
 end
+
 
 _G['isFalse'] = function (onearg)
 	if not onearg or onearg == '' or onearg == 0 then
