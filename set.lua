@@ -76,19 +76,19 @@ end
 Set.__sub = Set.difference
 
 
-function Set:symmetric_difference (set)
+function Set:symmetricDifference (set)
     return difference(self,set,true)
 end
-Set.__pow = Set.symmetric_difference
+Set.__pow = Set.symmetricDifference
 
 
-function Set:is_subset (set)
+function Set:isSub (set)
     for k in pairs(self) do
         if not set[k] then return false end
     end
     return true
 end
-Set.__lt = Set.is_subset
+Set.__lt = Set.isSub
 
 
 -- 改变默认打印输出方式
