@@ -77,8 +77,9 @@ end
 -- @return rlist 存储分割的结果列表
 ------------------------------------------------------------------------
 function split(self, delim, count, no_patterns)
+	print(123)
     if delim == '' then error('invalid delimiter', 2) end
-    count = count or 0
+    local count = count or 0
 
     local next_delim = 1
     local i = 1
@@ -87,7 +88,7 @@ function split(self, delim, count, no_patterns)
     repeat
         local start, finish = self:find(delim, next_delim, no_patterns)
         if start and finish then
-            rlist[i] = self:sub(next_delim, start - 1)
+            rlist:append(self:sub(next_delim, start - 1))
             next_delim = finish + 1
         else
             break
@@ -95,10 +96,9 @@ function split(self, delim, count, no_patterns)
         i = i + 1
     until i == count + 1
 
-    rlist[i] = self:sub(next_delim)
+    rlist:append(self:sub(next_delim))
     return rlist
 end
-
 ------------------------------------------------------------------------
 -- 将一个字符串以给定分隔符分割
 -- @param self  被处理字符串
