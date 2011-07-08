@@ -7,7 +7,10 @@ local Set = require 'lglib.set'
 
 
 getmetatable("").__add = function (self, astr)
-    return self .. astr
+	local ret, err = pcall(function (self, astr) return self .. astr  end)
+	if not ret then error('[ERROR] passed in string is nil!', 2) end
+		
+	return ret
 end
 
 function length(self)
