@@ -1,25 +1,21 @@
 local require, getmetatable = require, getmetatable
 local string, table, unpack, select, debug, error, loadstring, assert = string, table, unpack, select, debug, error, loadstring, assert
 local type, tostring, pairs, io, error, print = type, tostring, pairs, io, error, print
-local pcall = pcall
-local UTF8_FULLSUPPORT = UTF8_FULLSUPPORT
+local pcall, debug = pcall, debug
+
 local List = require 'lglib.list'
 local Set = require 'lglib.set'
 
 
 getmetatable("").__add = function (self, astr)
 	local ok, ret = pcall(function (self, astr) return self .. astr end, self, astr)
-	if not ok then error('[ERROR] concating string is nil!', 2) end
+	if not ok then print(debug.traceback()); error('[ERROR] concating string is nil!', 2) end
 
 	return (ok and ret or self)
 end
 
 function length(self)
-    if UTF8_FULLSUPPORT then
-        return utf8len(self)
-    else
-        return self:len()
-    end
+    return utf8len(self)
 end
 
 ------------------------------------------------------------------------
@@ -232,11 +228,7 @@ function index(self, i)
 end
 
 function slice(self, i, j)
-	if UTF8_FULLSUPPORT then
-		return utf8slice(self, i, j)
-	else
-		return self:sub(i, j)
-	end
+	return utf8slice(self, i, j)
 end
 
 ------------------------------------------------------------------------

@@ -13,7 +13,6 @@ function import(wrap_table, sub_modname)
 	setmetatable(wrap_table, nil)
 end
 
-_G['UTF8_FULLSUPPORT'] = true
 -- 这一句必须写在这里，后面几个函数要用
 _G['import'] = import
 
@@ -64,25 +63,6 @@ _G['isSet'] = function (t)
 end
 
 --------------------------------------------------------------------------------
--- 打印辅助函数
-_G['toString'] = function (obj)
-	if "nil" == type(obj) then
-        return tostring(nil)
-    elseif "table" == type(obj) then
-		-- 去掉字符串末尾的', '字符，所以要来个sub(1, -3)
-        return table.pt(obj):sub(1, -3)
-    elseif  "string" == type(obj) then
-        return obj
-    else
-        return tostring(obj)
-    end
-end
-
-
-_G['po'] = function (obj)
-	print(toString(obj))
-end
-
 _G['ptable'] = function (t)
 	print('--------------------------------------------')
 	for i,v in pairs(t) do print(i,v) end
