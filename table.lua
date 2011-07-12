@@ -26,6 +26,17 @@ function takeAparts(self)
 	return List(list_part), Dict(dict_part)
 end
 
+function equal(self, another)
+	for k, v in pairs(self) do
+		if another[k] ~= v then return false end
+	end
+
+	for k, v in pairs(another) do
+		if self[k] ~= v then return false end
+	end 
+
+	return true
+end
 
 function copy(self)
 	local res = {}
