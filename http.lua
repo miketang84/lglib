@@ -43,6 +43,7 @@ end
 -- @return
 ------------------------------------------------------------------------
 function parseURL(url, sep)
+	if not url then return {} end
     local result = {}
     sep = sep or '&'
     url = ('%s%s'):format(url, sep)
@@ -59,3 +60,4 @@ function parseURL(url, sep)
 
     return result
 end
+
