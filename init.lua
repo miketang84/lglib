@@ -64,20 +64,26 @@ end
 
 --------------------------------------------------------------------------------
 _G['ptable'] = function (t)
-	print('--------------------------------------------')
-	for i,v in pairs(t) do print(i,v) end
-	print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+	local ok, ret = pcall(function (t)
+		print('--------------------------------------------')
+	    for i,v in pairs(t) do print(i,v) end
+	 	    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+		end, t)
+	if not ok then print(debug.traceback()); error('[ERROR] when do table print!', 2) end
 end
 
 _G['pptable'] = function (t)
-	print('-----------------PPTABLE--------------------')
-	for i,v in pairs(t) do 
-		print('>>', i, '<<  ', tostring(v))
-		for ii, vv in pairs(v) do
-			print(ii,vv) 
+	local ok, ret = pcall(function (t)
+		print('-----------------PPTABLE--------------------')
+		for i,v in pairs(t) do 
+			print('>>', i, '<<  ', tostring(v))
+			for ii, vv in pairs(v) do
+				print(ii,vv) 
+			end
 		end
-	end
-	print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+		print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+	end, t)
+	if not ok then print(debug.traceback()); error('[ERROR] when do table table print!', 2) end
 end
 
 
@@ -181,7 +187,7 @@ _G['seri'] = function (self, seen)
 		table.insert(seen, self)
 		local index = 1
 		for k, v in pairs(self) do
-			if not table.ifind(seen, v)
+			if not List.find(seen, v)
 			and nil ~= v and "function" ~= type(v) then
 				if first then
 					first = false
@@ -201,7 +207,7 @@ _G['seri'] = function (self, seen)
 				end
 			end
 		end
-		table.iremVal(seen, self)
+		List.remove(seen, self)
 		return ('%s}'):format(res)
 	end
 	return nil
