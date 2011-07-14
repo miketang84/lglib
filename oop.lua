@@ -104,7 +104,7 @@ Object = {
 		end
 	end;
 	-- 返回父类引用
-	parent = function (self) return self._parent end;
+--	parent = function (self) return self._parent end;
 	abstractMethod = abstractMethod;
 	maskedMethod = function () error(("Masked method "):format(debug.traceback())) end;
 	-- 用于构建类单例，类即对象，对象即类，只有一个

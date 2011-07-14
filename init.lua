@@ -256,3 +256,38 @@ end
 -- call it
 lglib_init()
 
+
+local function getname(func_info)
+	local n = func_info
+	if n.what == "C" then return n.name end
+	local lc = string.format("[%s]:%s", n.short_src, n.linedefined)
+	if n.namewhat ~= '' then
+		return string.format("%s (%s)", lc, n.name)
+	else
+		return lc
+	end 
+end 
+
+local function trace_intof(event)
+	local stable = debug.getinfo(2, 'Sn')
+	local sfile = stable.short_src
+	local sname = getname(stable)
+	if sname and (sname:match('bamboo') or sname:match('lglib') or sname:match('tests') or sname:match('workspace')) then
+		print('In file:', sfile, 'Enter function:', sname)
+	end
+end
+
+local function trace_leavef(event)
+	local stable = debug.getinfo(2, 'Sn')
+	local sfile = stable.short_src
+	local sname = getname(stable)
+	if sname and (sname:match('bamboo') or sname:match('lglib') or sname:match('tests') or sname:match('workspace')) then
+		print('In file:', sfile, 'Leave function:', sname)
+	end
+end
+
+local isdebug = os.getenv('DEBUG') 
+if isdebug then
+	debug.sethook(trace_intof, 'c')
+--	debug.sethook(trace_leavef, 'r')
+end
