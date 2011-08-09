@@ -137,7 +137,7 @@ _G['isFalse'] = function (onearg)
 	if not onearg or onearg == '' or onearg == 0 then
 		return true
 	end
-	if type(onearg) == 'table' and table.isEmpty(onearg) then
+	if type(onearg) == 'table' and #onearg == 0 then
 		return true
 	end
 	
