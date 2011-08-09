@@ -137,15 +137,25 @@ _G['isFalse'] = function (onearg)
 	if not onearg or onearg == '' or onearg == 0 then
 		return true
 	end
-	if type(onearg) == 'table' and #onearg == 0 then
+
+	if type(onearg) == 'table' and table.isEmpty(onearg) then
 		return true
 	end
 	
 	return false
 end
 
-_G['isEmpty'] = _G['isFalse']
+_G['isEmpty'] = function (onearg)
+	if type(onearg) == 'table' and #onearg == 0 then
+		return true
+	end
 
+	if not onearg or onearg == '' or onearg == 0 then
+		return true
+	end
+	
+	return false
+end
 
 _G['setProto'] = function (obj, proto)
 	checkType(obj, proto, 'table', 'table')
