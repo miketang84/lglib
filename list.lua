@@ -160,7 +160,7 @@ end
 
 -- 是否包含
 function List:contains(x)
-    return self:find(self, x) and true or false
+    return self:find(x, 1) and true or false
 end
 
 -- 检查同值元素次数

@@ -77,7 +77,7 @@ end
 -- @return rlist 存储分割的结果列表
 ------------------------------------------------------------------------
 function split(self, delim, count, no_patterns)
-	print(123)
+
     if delim == '' then error('invalid delimiter', 2) end
     local count = count or 0
 

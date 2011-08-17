@@ -84,9 +84,9 @@ Set.__pow = Set.symmetricDifference
 
 function Set:isSub (set)
     for k in pairs(self) do
-        if not set[k] then return false end
+        if not set[k] then return false, k end
     end
-    return true
+    return true, ''
 end
 Set.__lt = Set.isSub
 
