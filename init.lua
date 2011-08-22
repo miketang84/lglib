@@ -64,15 +64,17 @@ end
 
 --------------------------------------------------------------------------------
 _G['ptable'] = function (t)
+	if type(t) ~= 'table' then return print("[Error] parameter passed in is not a table.") end
 	local ok, ret = pcall(function (t)
 		print('--------------------------------------------')
 	    for i,v in pairs(t) do print(i,v) end
-	 	    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-		end, t)
-	if not ok then print(debug.traceback()); error('[ERROR] when do table print!', 2) end
+	    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+	end, t)
+	if not ok then print(debug.traceback()); error('[Error] when do table print!', 2) end
 end
 
 _G['pptable'] = function (t)
+	if type(t) ~= 'table' then return print("[Error] parameter passed in is not a table.") end
 	local ok, ret = pcall(function (t)
 		print('-----------------PPTABLE--------------------')
 		for i,v in pairs(t) do 
@@ -83,7 +85,7 @@ _G['pptable'] = function (t)
 		end
 		print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 	end, t)
-	if not ok then print(debug.traceback()); error('[ERROR] when do table table print!', 2) end
+	if not ok then print(debug.traceback()); error('[Error] when do table table print!', 2) end
 end
 
 
@@ -99,12 +101,12 @@ _G['checkType'] = function (...)
 	for i=1, half do
 		if 'string' ~= type(args[i+half]) then
 			print(debug.traceback())
-			error('The front half part of the argumet list should be string!', 2)
+			error('[Error] The front half part of the argumet list should be string!', 2)
 		end
 		
 		if args[i+half] ~= type(args[i]) then
 			print(debug.traceback())
-			error(("This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]), 2)
+			error(("[Error] This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]), 2)
 		end
 	end
 
@@ -234,7 +236,7 @@ _G['unseri'] = function (self)
 	end
 	local func = loadstring(("return %s"):format(self))
 	if not func then
-		error(("unserialize fails %s %s"):format(debug.traceback(), self))
+		error(("[Error] unserialize fails %s %s"):format(debug.traceback(), self))
 	end
 	return func()
 end
