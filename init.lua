@@ -64,30 +64,9 @@ end
 
 --------------------------------------------------------------------------------
 _G['ptable'] = function (t)
-	if type(t) ~= 'table' then return print("[Error] parameter passed in is not a table.") end
-	local ok, ret = pcall(function (t)
-		print('--------------------------------------------')
-	    for i,v in pairs(t) do print(i,v) end
-	    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-	end, t)
-	if not ok then print(debug.traceback()); error('[Error] when do table print!', 2) end
+	if type(t) ~= 'table' then return print(("[Error] parameter '%s' passed in is not a table "):format(tostring(t))) end
+    print(table.tree(t))
 end
-
-_G['pptable'] = function (t)
-	if type(t) ~= 'table' then return print("[Error] parameter passed in is not a table.") end
-	local ok, ret = pcall(function (t)
-		print('-----------------PPTABLE--------------------')
-		for i,v in pairs(t) do 
-			print('>>', i, '<<  ', tostring(v))
-			for ii, vv in pairs(v) do
-				print(ii,vv) 
-			end
-		end
-		print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-	end, t)
-	if not ok then print(debug.traceback()); error('[Error] when do table table print!', 2) end
-end
-
 
 ---
 -- checkType(a, b, c, 'string', 'table', 'number')
