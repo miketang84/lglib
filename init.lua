@@ -65,6 +65,15 @@ end
 --------------------------------------------------------------------------------
 _G['ptable'] = function (t)
 	if type(t) ~= 'table' then return print(("[Error] parameter '%s' passed in is not a table "):format(tostring(t))) end
+    print('-----------------------------------------------')
+    for k, v in pairs(t) do
+		print(k, v)
+    end
+    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+end
+
+_G['fptable'] = function (t)
+	if type(t) ~= 'table' then return print(("[Error] parameter '%s' passed in is not a table "):format(tostring(t))) end
     print(table.tree(t))
 end
 
