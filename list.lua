@@ -198,11 +198,9 @@ end
 -- 切片
 -- 支持start, stop为空，为负值
 function List:slice(start, stop, is_rev)
-	checkType(start, 'number')
-	local stop = stop or -1
 	local nt = {}
 	local start, stop = normalize_slice(self, start, stop)
-	if not start then return List() end
+	if not start or not stop then return List() end
 	
 	if is_rev ~= 'rev' then
 		for i = start, (#self > stop and stop or #self) do
