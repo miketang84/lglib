@@ -53,7 +53,16 @@ function parseURL(url, sep)
         local k,v = piece:match("%s*(.-)%s*=(.*)")
 
         if k then
-            result[decodeURL(k)] = decodeURL(v)
+			k = decodeURL(k)
+			if k:endsWith('[]') then
+				k = k:sub(1, -3)
+				if not result[k] then result[k] = {} end
+				-- table.insert(result[k], decodeURL(v))
+				result[k][#result[k] + 1] = decodeURL(v)
+				ptable(result[k])
+			else
+				result[k] = decodeURL(v)
+			end
         else
             result[#result + 1] = decodeURL(piece)
         end
