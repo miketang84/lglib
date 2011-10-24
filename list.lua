@@ -198,6 +198,8 @@ end
 -- 切片
 -- 支持start, stop为空，为负值
 function List:slice(start, stop, is_rev)
+	-- NOTICE: here, should not use checkType!
+	-- because start, stop, is_rev are all probably nil.
 	local nt = {}
 	local start, stop = normalize_slice(self, start, stop)
 	if not start or not stop then return List() end
