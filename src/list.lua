@@ -296,7 +296,14 @@ function List:transform (fn, ...)
 end
 
 
-
+-- 
+function List:isEmpty ()
+    if #self == 0 then
+		return true
+	else
+		return false
+	end
+end
 
 return List
 
