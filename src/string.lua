@@ -6,6 +6,33 @@ local pcall, debug = pcall, debug
 local List = require 'lglib.list'
 local Set = require 'lglib.set'
 
+--
+getmetatable("").__mul = function(a, b)
+	if not b then
+		return a
+	elseif type(b) == "table" then
+		return string.format(a, unpack(b))
+	else
+		return string.format(a, b)
+	end
+end
+
+--
+-- print( "${name} is ${value}" % {name = "foo", value = "bar"} )
+-- Outputs "foo is bar"
+getmetatable("").__mod = function (s, tab)
+  return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end))
+end
+
+-- 
+-- print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} )
+-- outputs "concentration is   56.28%"
+getmetatable("").__div = function (s, tab)
+  return (s:gsub('%%%((%a%w*)%)([-0-9%.]*[cdeEfgGiouxXsq])',
+            function(k, fmt) return tab[k] and ("%"..fmt):format(tab[k]) or
+                '%('..k..')'..fmt end))
+end
+
 
 getmetatable("").__add = function (self, astr)
 	local ok, ret = pcall(function (self, astr) return self .. astr end, self, astr)

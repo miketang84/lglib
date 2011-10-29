@@ -157,6 +157,9 @@ _G['T'] = function (t)
 	return setProto(t, table)
 end
 
+_G['printf'] = function (...) 
+	print(string.format(...)) 
+end
 
 ------------------------------------------------------------------------
 -- 序列化lua对象
