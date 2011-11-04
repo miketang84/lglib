@@ -84,7 +84,7 @@ end
 -- 每个list的元素个数都必须相同
 function List.mapn(fn,...)
     --fun = function_arg(1,fun)
-    local res = {}
+    local res = List()
     local lists = {...}
     
 	for i = 1, #lists do
@@ -200,7 +200,7 @@ end
 function List:slice(start, stop, is_rev)
 	-- NOTICE: here, should not use checkType!
 	-- because start, stop, is_rev are all probably nil.
-	local nt = {}
+	local nt = List()
 	local start, stop = normalize_slice(self, start, stop)
 	if not start or not stop then return List() end
 	
