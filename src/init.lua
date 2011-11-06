@@ -1,4 +1,4 @@
-
+5D
 -- 设置全局变量使用检查，加载执行了这个文件后。所有的全局变量使用前必须声明
 require 'lglib.strict'
 
@@ -167,7 +167,7 @@ end
 -- @param seen  .....
 -- @return 字符串|nil  如果处理成功返回字符串，否则，返回nil
 ------------------------------------------------------------------------
-_G['seri'] = function (self, seen)
+_G['serialize'] = function (self, seen)
 	seen = seen or {}
 	local selfType = type(self)
 	if "string" == selfType then
@@ -187,7 +187,7 @@ _G['seri'] = function (self, seen)
 					res = ('%s,'):format(res)
 				end
 				if k == index then
-					res = ('%s%s'):format(res, seri(v, seen))
+					res = ('%s%s'):format(res, serialize(v, seen))
 					index = index + 1
 				else
 					if "number" == type(k) then
@@ -195,7 +195,7 @@ _G['seri'] = function (self, seen)
 					else
 						res = ("%s[%s]="):format(res, ("%q"):format(k))
 					end
-					res = ('%s%s'):format(res, seri(v, seen))
+					res = ('%s%s'):format(res, serialize(v, seen))
 				end
 			end
 		end
@@ -210,13 +210,13 @@ end
 -- @param self  被处理字符串
 -- @return lua对象
 ------------------------------------------------------------------------
-_G['unseri'] = function (self)
+_G['deserialize'] = function (self)
 	if not self then
 		return nil
 	end
 	local func = loadstring(("return %s"):format(self))
 	if not func then
-		error(("[Error] unserialize fails %s %s"):format(debug.traceback(), self))
+		error(("[Error] deserialize fails %s %s"):format(debug.traceback(), self))
 	end
 	return func()
 end
