@@ -3,18 +3,19 @@
 ##Introduction to lglib
 lglib is a cornerstone for the lua-based web framework [bamboo](https://github.com/daogangtang/bamboo). Generally speaking, it provides a high-level API for customized use on the following aspects:   
 
-1. Extension of several lua standard libraries, like string, table and io   
-2. Add several data structures for use, i.e., Dict, Set, List, Queue, etc   
-3. Implementation of Object-Oriented Programming mechanism     
-4. Global helper functions, like http-related methods       
+1. Extension of several lua standard libraries, like string, table and io;   
+2. Add several data structures for use, i.e., Dict, Set, List, Queue, etc;  
+3. Implementation of Object-Oriented Programming mechanism;     
+4. Global helper functions, like http-related methods.       
 
-Injecting methods of lglib.string, lglib.table, lglib.io into namespaces of lua standard libraries, string, table and io separately. This means that we extend three lua standard libraries a little bit. 
+After injecting methods of lglib.string, lglib.table, lglib.io into namespaces of lua standard libraries, string, table and io separately, the three lua standard libraries have been used much easier and powerful. For example, io.loadFile() can load source file into memory directly, table.deepCopy() could make an exact copy of one table even with nested structures, and much more. In the later sections, we will discuss them in details.
 
-Object is the final parent for all lua class instances. BY local Dog = Object:extend{....}
-List: list API should be splited into list and queue/stack further 
-Dict: map API, its sorted version should be also developed
-Set: set API, its sorted version should be also constructed
-T: config a prototype for given lua instance/object ??????
+
+Object is the final parent for all lua class instances. BY local Dog = Object:extend{....}   
+List: list API should be splited into list and queue/stack further     
+Dict: map API, its sorted version should be also developed    
+Set: set API, its sorted version should be also constructed     
+T: config a prototype for given lua instance/object ??????   
 
 setProto()
 config a prototype for a given object/instance
