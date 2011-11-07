@@ -1,11 +1,12 @@
 #Appendix lglib 
 
 ##Introduction to lglib
-lglib is the cornerstone for lua-based web framework bamboo. Generally speaking, it provides a high-level API for customized use on the following aspects:   
+lglib is a cornerstone for the lua-based web framework [bamboo](https://github.com/daogangtang/bamboo). Generally speaking, it provides a high-level API for customized use on the following aspects:   
 
 1. Extension of several lua standard libraries, like string, table and io   
-2. Add several data structures for use, i.e., Dict, Set, List, Queue, etc    
-3. Global helper functions, like http-related methods       
+2. Add several data structures for use, i.e., Dict, Set, List, Queue, etc   
+3. Implementation of Object-Oriented Programming mechanism     
+4. Global helper functions, like http-related methods       
 
 Injecting methods of lglib.string, lglib.table, lglib.io into namespaces of lua standard libraries, string, table and io separately. This means that we extend three lua standard libraries a little bit. 
 
@@ -14,6 +15,9 @@ List: list API should be splited into list and queue/stack further
 Dict: map API, its sorted version should be also developed
 Set: set API, its sorted version should be also constructed
 T: config a prototype for given lua instance/object ??????
+
+setProto()
+config a prototype for a given object/instance
 
 typename()
 returning type name of data structures, like List, Dict, Table, Set, etc
@@ -28,12 +32,6 @@ isSet()
 checking whether an object is an instance of SET
 
 
-ptable()
-print one-layer of table information
-
-fptable()
-print all details of table in the nested structure
-
 checkType()
 checkType(a, b, c, 'string', 'table', 'number')
 works only for basic data type, boolean, number, string, table, function, etc. 
@@ -47,11 +45,14 @@ isFalse()
 nil, false, 0, "", {}, etc
 FOR conditional testing????
 
-setProto()
-config a prototype for a given object/instance
-
 printf()
 printf as an alias of string.format()
+
+ptable()
+print one-layer of table information
+
+fptable()
+print all details of table in the nested structure
 
 seri(obj)
 serialize lua instances/objects into a lua-table format
