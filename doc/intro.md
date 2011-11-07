@@ -74,6 +74,7 @@ Some pattern matching and replacement methods follows as:
 	mapreplace (self, mapping, n)  -- multiple replacements by mapping from old substring to new one
 	
 sometimes you will concatenate list of strings together. On the contrary, you want to split a long string into multiple smaller ones by delimiters. The following is a group of methods with spliting functionality, and `split()` is a specific one.     
+	
 	split(self, delim, count, no_patterns)   	-- spliting a given string by a delimiter and returning a list of splited pieces   
 	splitOut(self, delim, count, no_patterns)   -- unpack a list of splited pieces that returned by split()   
 	splitBy(self, ...)    						-- spliting a given string by several delimiters   
