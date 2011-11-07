@@ -56,11 +56,7 @@ Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are adde
 	print( "${name} is ${value}" % {name = "foo", value = "bar"} ) 				----> "foo is bar"
 	print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} )  ----> "concentration is   56.28%"
 	
-index(self, i)
-select a letter from given string 
-
-slice(self, i, j)
-select a continous piece of letters from given string
+string can be treated as an array of characters. Therefore, random accessing and slicing operations are also better APIs for lua-string. They are `index(self, i)` that selecting a letter from a given string and `slice(self, i, j)` that selecting a continous piece of letters from a given string.
 
 
 Some pattern matching and replacement methods follows as:
@@ -74,11 +70,12 @@ Some pattern matching and replacement methods follows as:
 	mapreplace (self, mapping, n)  -- multiple replacements by mapping from old substring to new one
 	
 sometimes you will concatenate list of strings together. On the contrary, you want to split a long string into multiple smaller ones by delimiters. The following is a group of methods with spliting functionality, and `split()` is a specific one.     
+	
 	split(self, delim, count, no_patterns)   	-- spliting a given string by a delimiter and returning a list of splited pieces   
 	splitOut(self, delim, count, no_patterns)   -- unpack a list of splited pieces that returned by split()   
 	splitBy(self, ...)    						-- spliting a given string by several delimiters   
 	
-where `self` is the splited string, `delim` for delimiter, `count` for times that the delimiter could be replaced, `no_patterns` can be choosed as true|false|nil, which could turn off regular expression in delimiter or not.
+where `self` is the splited string, `delim` for delimiter, `count` for times that the delimiter could be replaced and `no_patterns` can be choosed as `true|false|nil`, which could turn off regular expression in delimiter or not.
 
 
 Sometimes, there are some blank spaces at head or tail of handled strings. For security issue, we should clean them firstly before processing. `ltrim(self)` trims out the blank space at the head of string `self`, `rtrim(self)` trims out blank space at the tail of string `self` and `trim(self)` trims out blank space at both sides of string `self`.
