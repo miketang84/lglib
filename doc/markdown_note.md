@@ -58,8 +58,8 @@ __double underscores__
 
 
 ###images
-+inline: ![Alt text](/path/to/img.jpg "Optional title")
-+reference: ![Alt text][id]
++ inline: ![Alt text](/path/to/img.jpg "Optional title")
++ reference: ![Alt text][id]
 			[id]: url/to/image  "Optional title attribute"
 			
 
