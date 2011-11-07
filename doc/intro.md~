@@ -3,24 +3,21 @@
 ##Introduction to lglib
 lglib is a cornerstone for the lua-based web framework [bamboo](https://github.com/daogangtang/bamboo). Generally speaking, it provides a high-level API for customized use on the following aspects:   
 
-1. Extension of several lua standard libraries, like string, table and io;   
-2. Add several data structures for use, i.e., Dict, Set, List, Queue, etc;  
-3. Implementation of Object-Oriented Programming mechanism (OOP);     
-4. Global helper functions, like http-related methods.       
++ Extension of several lua standard libraries, like string, table and io;   
++ Add several data structures for use, i.e., Dict, Set, List, Queue, etc;  
++ Implementation of Object-Oriented Programming mechanism (OOP);     
++ Global helper functions, like http-related methods.       
 
-After injecting methods of lglib.string, lglib.table, lglib.io into namespaces of lua standard libraries, string, table and io separately, the three lua standard libraries have been used much easier and powerful. For example, `io.loadFile()` can load source file into memory directly, `table.deepCopy()` could make an exact copy of one table even with nested structures, and much more. In later sections, we will discuss them in details.
+After injecting methods of lglib.string, lglib.table, lglib.io into namespaces of lua standard libraries, string, table and io separately, the three lua standard libraries could be used much easier and powerful. For example, `io.loadFile()` can load source file into memory directly, `table.deepCopy()` could make an exact copy of one table even with nested structures, and much more. In later sections, we will discuss them in details.
 
-Based on the extended table library, several data structures with high-level API, including Dict, Set, List, Queue and extra sorted versions, have been implemented. At the same time, OOP mechanism is also implemented on the top of the powerful lua-table. Now we introduce several global API for these two parts:
+Based on the extended table library, several data structures with high-level API, including Dict, Set, List, Queue and extra sorted versions, have been implemented. At the same time, OOP mechanism is also implemented on the top of the powerful lua-table. Now we introduce several global APIs for these two parts:
 
 >>List: list API should be splited into list and queue/stack further     
 
 
-
+`setProto()` is just to config a prototype for a given object/instance. `T()` is the special case of `setProto()` that its prototype is always lua-table. For example, 
 Object is the final parent for all lua class instances. BY local Dog = Object:extend{....}   
-T: config a prototype for given lua instance/object ??????   
 
-setProto()
-config a prototype for a given object/instance
 
 typename()
 returning type name of data structures, like List, Dict, Table, Set, etc
