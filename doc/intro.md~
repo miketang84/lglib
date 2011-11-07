@@ -15,10 +15,10 @@ Based on the extended table library, several data structures with high-level API
 >>List: list API should be splited into list and queue/stack further     
 
 
-`setProto()` is just to config a prototype for a given object/instance.  `T()` is a special case of `setProto()` that its prototype is always lua-table. For example, `setProto(obj, proto/table)`means 'obj' could access methods and fields of instance `proto/table` for reuse. Object is the rooted parent for all lua class instances, you can use it to define a new class as following:		
+`setProto()` is just to config a prototype for a given object/instance.  `T()` is a special case of `setProto()` that its prototype is always lua-table. For example, `setProto(obj, proto/table)`means `obj` could access methods and fields of instance `proto/table` for reuse. Object is the rooted parent for all lua class instances, you can use it to define a new class as following:		
 
 	local Message = Object:extend{....}
-		 __name = 'Message';  
+		__name = 'Message';  
 		__desc = 'General message definition.';  
 	  
 		-- constructor
@@ -40,23 +40,10 @@ Based on the extended table library, several data structures with high-level API
   
 
 
-typename()
-returning type name of data structures, like List, Dict, Table, Set, etc
-
-isList()
-checking whether an object is an instance of LIST
-
-isDict()
-checking whether an object is an instance of DICT
-
-isSet()
-checking whether an object is an instance of SET
-
-
-checkType()
-checkType(a, b, c, 'string', 'table', 'number')
+`typename()` returns the field of `__typename` of data structures, like List, Dict, Queue and Set. More conveniently, methods like `isList()`, `isDict()` or `isSet()` can check whether an object is an instance of List/Dict/Set or not. For basic data types that lua provided, `checkType()` is employed for assertion, like 
+	checkType(a, b, c, 'string', 'table', 'number')
 works only for basic data type, boolean, number, string, table, function, etc. 
-It should be extended to user-defined data type, like Dict, set, list, queue, etc  ?????
+
 
 checkRange()
 checkRange(a, 0, 10, b, 20, 30, c, 10, 100)
