@@ -44,7 +44,7 @@ Based on the extended table library, several data structures with high-level API
 	checkType(a, b, c, 'string', 'table', 'number')
 pass only if a is string, b for table and c for nubmber.
 
-Finally, 
+Finally, some helper functions 
 
 checkRange()
 checkRange(a, 0, 10, b, 20, 30, c, 10, 100)
