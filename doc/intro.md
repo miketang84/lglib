@@ -51,10 +51,13 @@ Finally, some helper functions are explained here. `checkRange()`can be used as 
 
 ## Extension of lua standard libraries
 ####string    
-Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are added or modified. Let'd explain them from the simper one, `__add`. This definition of `__add` is overrided, and `a + b` is the same as `a .. b`. `__mul(formatstr, str/listOfStr)` just formatting one string or list of string. 
-
-cap(self)
-Capitalizing first letter of word "self" 
+Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are added or modified. Let'd explain them from the simper one, `__add`. This definition of `__add` is overrided, and `a + b` is the same as `a .. b`. `__mul(formatstr, str/listOfStr)` just formatting one string or list of string.  `__mod` and `__div` are special wrappers of string substitutions. For example,      
+	
+	print( "${name} is ${value}" % {name = "foo", value = "bar"} ) ----> "foo is bar"
+	print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} ) ----> "concentration is   56.28%"
+	
+       
+`cap(self)` capitalizing first letter of word `self`.
 
 contains(self, substr)
 check whether string "self" contains "substr" or not 
