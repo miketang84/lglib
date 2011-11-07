@@ -40,14 +40,14 @@ Based on the extended table library, several data structures with high-level API
   
 
 
-`typename()` returns the field of `__typename` of data structures, like List, Dict, Queue and Set. More conveniently, methods like `isList()`, `isDict()` or `isSet()` can check whether an object is an instance of List/Dict/Set or not. For basic data types that lua provided, `checkType()` is employed for assertion, like 
+`typename()` returns the field of `__typename` of data structures, like List, Dict, Queue and Set. More conveniently, methods like `isList()`, `isDict()` or `isSet()` can check whether an object is an instance of List/Dict/Set or not. For basic data types that lua provided, `checkType()` is employed for assertion, like		 
 	checkType(a, b, c, 'string', 'table', 'number')
 pass only if a is string, b for table and c for nubmber.
 
+Finally, some helper functions 
 
 checkRange()
 checkRange(a, 0, 10, b, 20, 30, c, 10, 100)
-
 
 isFalse()
 nil, false, 0, "", {}, etc
