@@ -50,9 +50,8 @@ Finally, some helper functions are explained here. `checkRange()`can be used as 
 
 
 ## Extension of lua standard libraries
-####string
-add/modify definitions of magic methods
-__mul, __mod, __div, __add
+####string    
+Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are added or modified. 
 
 cap(self)
 Capitalizing first letter of word "self" 
