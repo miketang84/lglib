@@ -51,7 +51,7 @@ Finally, some helper functions are explained here. `checkRange()`can be used as 
 
 ## Extension of lua standard libraries
 ####string    
-Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are added or modified. 
+Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are added or modified. Let'd explain them from the simper one, `__add`. This definition of `__add` is overrided, and `a + b` is the same as `a .. b`. `__mul(formatstr, str/listOfStr)` just formatting one string or list of string. 
 
 cap(self)
 Capitalizing first letter of word "self" 
