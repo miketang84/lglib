@@ -57,24 +57,15 @@ Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are adde
 	print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} ) ----> "concentration is   56.28%"
 	
        
-`cap(self)` capitalizing first letter of word `self`.
+`cap(self)` capitalizing first letter of word `self`. `contains(self, substr)` check whether string `self` contains `substr` or not. `startsWith(self, begin)` check whether string `self` starts with `begin` or not, while `endsWith(self, tail)`  check whether string `self` ends with `tail` or not. 
 
-contains(self, substr)
-check whether string "self" contains "substr" or not 
-
-startsWith(self, begin)
-check whether string "self" starts with "begin" or not
-
-endsWith(self, tail)
-check whether string "self" ends with "tail" or not
-
-split(self, delim, count, no_patterns)
--- spliting a given string by a delimiter
--- @param self 		splited sting
--- @param delim		delimiter
--- @param count	 	how many times that the delimiter could be replaced
--- @param no_patterns   true|false|nil    whether turn off regular expression in delimiter or not 
--- @return rlist 	list of splited pieces
+**split(self, delim, count, no_patterns)**
+-- spliting a given string by a delimiter    
+-- @param self 		splited sting    
+-- @param delim		delimiter    
+-- @param count	 	how many times that the delimiter could be replaced    
+-- @param no_patterns   true|false|nil    whether turn off regular expression in delimiter or not     
+-- @return rlist 	list of splited pieces     
 
 splitOut(self, delim, count, no_patterns)
 unpack a list of splited pieces that returned by split()
