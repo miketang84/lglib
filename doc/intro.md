@@ -46,30 +46,17 @@ Based on the extended table library, several data structures with high-level API
 	 		
 passes only if a is string, b for table and c for nubmber.
 
-Finally, some helper functions 
+Finally, some helper functions will explained here. `checkRange()`can be used as `checkRange(a, 0, 10, b, 20, 30, c, 10, 100)` for range assertion. `isFalse()` will treat `nil`, `false`, `0`, `""` and`{}` as false for conditional testing. Some io related methods follows as:    
 
-checkRange()
-checkRange(a, 0, 10, b, 20, 30, c, 10, 100)
++ `printf()` printf as an alias of string.format()
 
-isFalse()
-nil, false, 0, "", {}, etc
-FOR conditional testing????
++ `ptable()` print one-layer of table information
 
-printf()
-printf as an alias of string.format()
++ `fptable()` print all details of table in the nested structure
 
-ptable()
-print one-layer of table information
++  `serialize(obj)` serialize lua instances/objects into a lua-table format
 
-fptable()
-print all details of table in the nested structure
-
-serialize(obj)
-serialize lua instances/objects into a lua-table format
-
-deserialize(obj_str)
-deserialization is just loading serialized string into memory
-the point is that format of serialzation are just lua code of assignment of lua-tables
++  `deserialize(obj_str)` deserialization is just loading serialized string into memory the point is that format of serialzation are just lua code of assignment of lua-tables. 
 
 
 
