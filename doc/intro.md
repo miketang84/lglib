@@ -15,10 +15,10 @@ Based on the extended table library, several data structures with high-level API
 >>List: list API should be splited into list and queue/stack further     
 
 
-`setProto()` is just to config a prototype for a given object/instance.  `T()` is a special case of `setProto()` that its prototype is always lua-table. For example, `setProto(obj, proto/table)`means 'obj' could access methods and fields of instance `proto/table` for reuse. Object is the rooted parent for all lua class instances, you can use it to define a new class as following:
-	local Message = Object:extend{....}
+`setProto()` is just to config a prototype for a given object/instance.  `T()` is a special case of `setProto()` that its prototype is always lua-table. For example, `setProto(obj, proto/table)`means 'obj' could access methods and fields of instance `proto/table` for reuse. Object is the rooted parent for all lua class instances, you can use it to define a new class as following:		
 
-		 __name = 'Message';  
+	local Message = Object:extend{....}
+		__name = 'Message';  
 		__desc = 'General message definition.';  
 	  
 		-- constructor
