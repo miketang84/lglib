@@ -53,18 +53,18 @@ Finally, some helper functions are explained here. `checkRange()`can be used as 
 ####string    
 Definitions of some magic methods `__mul`, `__mod`, `__div` and `__add` are added or modified. Let'd explain them from the simper one, `__add`. This definition of `__add` is overrided, and `a + b` is the same as `a .. b`. `__mul(formatstr, str/listOfStr)` just formatting one string or list of string.  `__mod` and `__div` are special wrappers of string substitutions. For example,      
 	
-	print( "${name} is ${value}" % {name = "foo", value = "bar"} ) ----> "foo is bar"
-	print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} ) ----> "concentration is   56.28%"
+	print( "${name} is ${value}" % {name = "foo", value = "bar"} ) 				----> "foo is bar"
+	print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} )  ----> "concentration is   56.28%"
 	
 
 Some pattern matching and replacement methods follows as:
 
-	cap(self)  --capitalizing first letter of word "self"
-	rfind(self, substr)  --find location of the last substring in a given string
-	contains(self, substr)   --check whether string "self" contains "substr" or not
-	startsWith(self, begin)  --check whether string "self" starts with "begin" or not
-	endsWith(self, tail)     --check whether string "self" ends with "tail" or not
-	replace(self, ori, new, n) --replace substring with new substring
+	cap(self)  					   --capitalizing first letter of word "self"
+	rfind(self, substr)  		   --find location of the last substring in a given string
+	contains(self, substr)   	   --check whether string "self" contains "substr" or not
+	startsWith(self, begin)  	   --check whether string "self" starts with "begin" or not
+	endsWith(self, tail)     	   --check whether string "self" ends with "tail" or not
+	replace(self, ori, new, n) 	   --replace substring with new substring
 	mapreplace (self, mapping, n)  -- multiple replacements by mapping from old substring to new one
 	
 
