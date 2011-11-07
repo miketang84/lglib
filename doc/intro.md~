@@ -5,7 +5,7 @@ lglib is the cornerstone for lua-based web framework bamboo. Generally speaking,
 
 1. Extension of several lua standard libraries, like string, table and io   
 2. Add several data structures for use, i.e., Dict, Set, List, Queue, etc    
-3. Global helper functions, like http-related methods       
+3. Global helper functions, like     
 
 Injecting methods of lglib.string, lglib.table, lglib.io into namespaces of lua standard libraries, string, table and io separately. This means that we extend three lua standard libraries a little bit. 
 
