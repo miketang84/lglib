@@ -46,17 +46,9 @@ Based on the extended table library, several data structures with high-level API
 	 		
 passes only if a is string, b for table and c for nubmber.
 
-Finally, some helper functions will explained here. `checkRange()`can be used as `checkRange(a, 0, 10, b, 20, 30, c, 10, 100)` for range assertion. `isFalse()` will treat `nil`, `false`, `0`, `""` and`{}` as false for conditional testing. Some io related methods follows as:    
+Finally, some helper functions are explained here. `checkRange()`can be used as `checkRange(a, 0, 10, b, 20, 30, c, 10, 100)` for range assertion. `isFalse()` will treat  any of `nil`, `false`, `0`, `""` and`{}` as false for conditional testing. Some io-related methods follows as:    
 
-+ `printf()` printf as an alias of string.format()
-
-+ `ptable()` print one-layer of table information
-
-+ `fptable()` print all details of table in the nested structure
-
-+  `serialize(obj)` serialize lua instances/objects into a lua-table format
-
-+  `deserialize(obj_str)` deserialization is just loading serialized string into memory the point is that format of serialzation are just lua code of assignment of lua-tables. 
+`printf()` as an alias of `string.format()` can be used in a C-printf way. `ptable()` only prints one-layer of table information, while `fptable()` printing all details of a table even with nested structures. `serialize(obj)` serializes lua instances/objects into a long string but in a lua-table format, while `deserialize(obj_str)` as deserialization just loading serialized string into memory. And the point is that format of serialzation are just lua code of assignment of lua-tables. 
 
 
 
