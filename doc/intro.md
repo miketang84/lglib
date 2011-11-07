@@ -15,8 +15,29 @@ Based on the extended table library, several data structures with high-level API
 >>List: list API should be splited into list and queue/stack further     
 
 
-`setProto()` is just to config a prototype for a given object/instance. `T()` is the special case of `setProto()` that its prototype is always lua-table. For example,    
-Object is the final parent for all lua class instances. BY local Dog = Object:extend{....}   
+`setProto()` is just to config a prototype for a given object/instance.  `T()` is a special case of `setProto()` that its prototype is always lua-table. For example, `setProto(obj, proto/table)`means 'obj' could access methods and fields of instance `proto/table` for reuse. Object is the rooted parent for all lua class instances, you can use it to define a new class as following:
+	local Message = Object:extend{....}
+
+		 __name = 'Message';  
+		__desc = 'General message definition.';  
+	  
+		-- constructor
+		init = function (self, t)  
+		    if not t then return self end     
+	  
+		    self.type = t.type  
+		    self.author = t.author  
+		    self.content = t.content  
+		    self.timestamp = t.timestamp or os.time()  
+	  
+		    return self  
+		end;  
+	  
+		doSomething = function (self)  
+		    .....  
+		end;
+	}  
+  
 
 
 typename()
@@ -54,17 +75,14 @@ print one-layer of table information
 fptable()
 print all details of table in the nested structure
 
-seri(obj)
+serialize(obj)
 serialize lua instances/objects into a lua-table format
 
-unseri(obj_str)
+deserialize(obj_str)
 deserialization is just loading serialized string into memory
 the point is that format of serialzation are just lua code of assignment of lua-tables
 
 
-deserialization/serialization
-
-API, usage, (implementation)
 
 ### Data structure 
 ####table ----to be reused in terms of implementation rather than interface  
