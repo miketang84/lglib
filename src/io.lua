@@ -2,10 +2,10 @@ local table, io = table, io
 local assert = assert
 
 
--- 辅助函数，将一个文件加载到内存
+-- loading files into memory
 -- @param from_dir
 -- @param name
--- @return content 字符串
+-- @return content long string
 function loadFile(from_dir, name)
     local fd = assert(io.open(('%s/%s'):format(from_dir, name), 'r'))
     local content = fd:read('*a')

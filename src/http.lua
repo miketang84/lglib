@@ -3,7 +3,7 @@ local string = string
 module(..., package.seeall)
 
 ------------------------------------------------------------------------
--- 简单的HTML转义
+-- simple HTML escape sequence
 -- @param 
 -- @return
 ------------------------------------------------------------------------
@@ -14,11 +14,10 @@ function escapeHTML(s)
 end
 
 ------------------------------------------------------------------------
--- 简单的URL解码，能处理带+号的情况（替换为空白符）
+-- Simplistic URL decoding that can handle + space encoding too.
 -- @param 
 -- @return
 ------------------------------------------------------------------------
--- Simplistic URL decoding that can handle + space encoding too.
 function decodeURL(url)
 	checkType(url, 'string')
     return url:gsub("%+", ' '):gsub('%%(%x%x)', function (s)
@@ -27,7 +26,7 @@ function decodeURL(url)
 end
 
 ------------------------------------------------------------------------
--- 简单的URL编码
+-- simple URL encoding 
 -- @param 
 -- @return
 ------------------------------------------------------------------------
@@ -39,7 +38,7 @@ function encodeURL(url)
 end
 
 ------------------------------------------------------------------------
--- 解析URL带的参数
+-- parse parameters of URL
 -- @param 
 -- @return
 ------------------------------------------------------------------------
@@ -70,4 +69,3 @@ function parseURL(url, sep)
 
     return result
 end
-

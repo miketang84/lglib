@@ -6,7 +6,9 @@ local pcall, debug = pcall, debug
 local List = require 'lglib.list'
 local Set = require 'lglib.set'
 
---
+-- unpack() only acting on list-part of table ??
+-- formatting one string or list of string  
+-- therefore, we can do 1). extend the function of unpack  2). checkType(list) to make sure b is a LIST
 getmetatable("").__mul = function(a, b)
 	if not b then
 		return a
@@ -17,7 +19,7 @@ getmetatable("").__mul = function(a, b)
 	end
 end
 
---
+-- modify the regular expression for robustness, like "${ name} is ${  value}"  ?????
 -- print( "${name} is ${value}" % {name = "foo", value = "bar"} )
 -- Outputs "foo is bar"
 getmetatable("").__mod = function (s, tab)
@@ -26,7 +28,7 @@ end
 
 -- 
 -- print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} )
--- outputs "concentration is   56.28%"
+-- outputs "concentration is   56.28%" 
 getmetatable("").__div = function (s, tab)
   return (s:gsub('%%%((%a%w*)%)([-0-9%.]*[cdeEfgGiouxXsq])',
             function(k, fmt) return tab[k] and ("%"..fmt):format(tab[k]) or
@@ -46,10 +48,10 @@ function length(self)
 end
 
 ------------------------------------------------------------------------
--- 单词首字母大写
--- @param self 单词字符串
+-- capitalizing first letter of word  
+-- @param self one string word
 -- @usage 'example':cap()
--- @return 首字母大写的单词
+-- @return first letter of word to be capitalized
 ------------------------------------------------------------------------
 function cap(self)
     if #self == 0 then return self end
@@ -57,10 +59,10 @@ function cap(self)
 end
 
 ------------------------------------------------------------------------
--- 检查字串包含指定子串
--- @param self  被检查字串
--- @param substr   子串
--- @return true|false   如果self包含substr，返回true，否则返回false
+-- check whether string "self" contains "substr" or not 
+-- @param self  checked string 
+-- @param substr   sub-string
+-- @return true|false  true for containing, otherwise false
 ------------------------------------------------------------------------
 function contains(self, substr)
     if self:find(substr, 1, true) then
@@ -70,23 +72,23 @@ function contains(self, substr)
 end
 
 ------------------------------------------------------------------------
--- 检查字串以指定子串开始
--- @param self  被检查字串
--- @param beg   子串
--- @return true|false   如果self以beg开始，返回true，否则返回false
+-- check whether string starts with substring or not
+-- @param self  checked string 
+-- @param beg   substring
+-- @return true|false   
 ------------------------------------------------------------------------
-function startsWith(self, beg)
-    if 1 ~= self:find(beg, 1, true) then
+function startsWith(self, begin)
+    if self:sub(1, #begin) ~= begin then
         return false
     end
     return true
 end
 
 ------------------------------------------------------------------------
--- 检查字串以指定子串结束
--- @param self  被检查字串
--- @param tail   子串
--- @return true|false   如果self以tail结束，返回true，否则返回false
+-- check whether string ends with substring or not
+-- @param self  checked string
+-- @param tail   substring
+-- @return true|false   
 ------------------------------------------------------------------------
 function endsWith(self, tail)
 	if self:sub(-#tail) ~= tail then
@@ -96,12 +98,12 @@ function endsWith(self, tail)
 end
 
 ------------------------------------------------------------------------
--- 将一个字符串以给定分隔符分割
--- @param self  被处理字符串
--- @param delim 分隔符
--- @param count 限定分隔符被替换的次数
--- @param no_patterns   true|false|nil 是否关闭delim中的样式匹配
--- @return rlist 存储分割的结果列表
+-- spliting a given string by a delimiter
+-- @param self 		splited sting
+-- @param delim		delimiter
+-- @param count	 	how many times that the delimiter could be replaced
+-- @param no_patterns   true|false|nil    whether turn off regular expression in delimiter or not 
+-- @return rlist 	list of splited pieces
 ------------------------------------------------------------------------
 function split(self, delim, count, no_patterns)
 
@@ -127,22 +129,22 @@ function split(self, delim, count, no_patterns)
     return rlist
 end
 ------------------------------------------------------------------------
--- 将一个字符串以给定分隔符分割
--- @param self  被处理字符串
--- @param delim 分隔符
--- @param count 限定分隔符被替换的次数
--- @param no_patterns   true|false|nil 是否关闭delim中的样式匹配
--- @return 解开列表包裹的多值返回
+-- spliting a given string by a delimiter
+-- @param self  	splited string 
+-- @param delim 	delimiter
+-- @param count 	times that a delimiter could be replaced
+-- @param no_patterns   true|false|nil 	turn off regular expression in delimiter or not 
+-- @return unpack a list of splited pieces
 ------------------------------------------------------------------------
 function splitOut(self, delim, count, no_patterns)
     return unpack(split(self, delim, count, no_patterns))
 end
 
 ------------------------------------------------------------------------
--- 将一个字符串以给定分隔符分割
--- @param self  被处理字符串
--- @param ...   多个分隔符
--- @return 解开列表包裹的多值返回
+-- spliting a given string by several delimiters
+-- @param self  splited string
+-- @param ...   several delimiters
+-- @return 		unpack a list of splited pieces
 ------------------------------------------------------------------------
 function splitBy(self, ...)
 	local res = List()
@@ -161,12 +163,12 @@ end
 
 
 ------------------------------------------------------------------------
--- 找到字符串中最后一个出现子串的始末位置
--- @param self  被处理字符串
--- @param substr    子串
--- @return lastBegPos   子串最后出现的起始位置
---         lastEndPos   子串最后出现的结束位置
--- @note 这函数函数的效率并不高，需要改进
+-- find location of the last substring in a given string
+-- @param self  checked string
+-- @param substr    substring
+-- @return lastBegPos   the starting position of last substring
+--         lastEndPos   the end position of last substring
+-- @note   SHOULD be optimized by pattern matching in the reversed direction
 ------------------------------------------------------------------------
 function rfind(self, substr)
 	local i, lastBegPos, lastEndPos = 1
@@ -180,12 +182,12 @@ function rfind(self, substr)
 	return lastBegPos, lastEndPos
 end
 
--- 空白字符集
+-- character set of blank spaces
 local TRIM_CHARS = Set {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();("\n"):byte();0}
 ------------------------------------------------------------------------
--- 清除字符串首部的空白
--- @param self  被处理字符串
--- @return 去除首部空白的字符串
+-- trim out the blank space at the head of string
+-- @param self  trimed string
+-- @return	 	clean string without blank space at the head
 ------------------------------------------------------------------------
 function ltrim(self)
 	local index = 1
@@ -199,9 +201,9 @@ function ltrim(self)
 end
 
 ------------------------------------------------------------------------
--- 清除字符串尾部的空白
--- @param self  被处理字符串
--- @return 去除尾部空白的字符串
+-- trim out blank space at the tail of string
+-- @param self  trimed string
+-- @return 		clean stirng without blank space at the tail
 ------------------------------------------------------------------------
 function rtrim(self)
 	local index = 1
@@ -215,32 +217,33 @@ function rtrim(self)
 end
 
 ------------------------------------------------------------------------
--- 清除字符串两端的空白
--- @param self  被处理字符串
--- @return 去除两端空白的字符串
+-- trim out blank space at both sides string
+-- @param self  trimed string
+-- @return 		clean string without blank space on both sides
 ------------------------------------------------------------------------
 function trim(self)
 	return self:ltrim():rtrim()
 end
 
 ------------------------------------------------------------------------
--- 替换字符串中的子串为新串
--- @param self  被处理字符串
--- @param ori   将要被替换的子串（可为正则表达式）
--- @param new   用于替换的新串
--- @param n     可选。指定替换几次
--- @return 替换后的新串
+-- replace substring with new substring
+-- @param self  long string to be handled
+-- @param ori   substring to be replaced
+-- @param new   new substring
+-- @param n     times of replacements
+-- @return 		string after replacement
+-- not necessary I think
 ------------------------------------------------------------------------
 function replace(self, ori, new, n)
     return self:gsub(ori, new, n)
 end
 
 ------------------------------------------------------------------------
--- 映射替换。一次替换多个子串
--- @param self 被替换的字符串
--- @param mapping 子串映射表。形式为 {['ori'] = 'new', ['foo'] = 'bar'}
--- @param n     可选。指定替换几次
--- @return UTF8字符|nil 如果找到了，就返回UTF8字符，否则返回nil
+-- multiple replacements by mapping from old substring to new one
+-- @param self 		long string to be handled
+-- @param mapping	mapping table between old substring to new ones, like {['ori'] = 'new', ['foo'] = 'bar'}
+-- @param n   		times of replacements
+-- @return 			utf8 string or nil
 ------------------------------------------------------------------------
 function mapreplace (self, mapping, n)
     for k, v in pairs(mapping) do
@@ -466,11 +469,6 @@ function utf8slice(self, i, j)
     return self:sub(ibegPos, jendPos-1)
     
 end
-
-
-
-
-
 
 -- identical to string.reverse except that it supports UTF-8
 function utf8reverse (self)

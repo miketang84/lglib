@@ -7,11 +7,19 @@ local math = math
 ------------------------------------------------------------------------
 __typename = 'Table'
 
--- 将序列部分和字典部分分离开来
--- 注：返回的是两个对象，每一个为序列，第二个为字典
+-- To use the lua-table more efficiently, we could divide lua-table into list-part and dictionary-part when necessary.
+-- From the implementation perspective of view, lua-table is a combination of C-array and Hash-table coded in C language.
+-- list-part---->array
+-- dict-part---->hash table
+
+
+-- two objects returned, List and Dict. 
+-- takeAparts function only handle one layer, how about a multi-layer case?
 function takeAparts(self)
 	local list_len = #self
 	local list_part, dict_part = {}, {}
+	
+	-- old implementation
 	for i=1, list_len do
 		table.insert(list_part, self[i])
 	end
@@ -22,11 +30,24 @@ function takeAparts(self)
 		end
 	end
 	
+	-- new implementation
+	--[[
+	for k, v in pairs(self) do
+	    if type(k)== 'number' and k%1 == 0 and k <= list_len and k > 0 then
+	        table.insert(list_part, self[k])
+	    else
+	        dict_part[k] = v
+	    end
+	end
+	--]]
+	
 	local List, Dict = require 'lglib.list', require 'lglib.dict'
 	return List(list_part), Dict(dict_part)
 end
 
+
 function equal(self, another)
+    -- old implementation
 	for k, v in pairs(self) do
 		if another[k] ~= v then return false end
 	end
@@ -34,9 +55,20 @@ function equal(self, another)
 	for k, v in pairs(another) do
 		if self[k] ~= v then return false end
 	end 
-
+    
+    -- new implementation
+    --[[
+    if self.size ~= another.size then
+        return false
+    else
+        for k, v in pairs(self) do
+            if another[k] ~= v then return false end
+        end
+    end
+    --]]
 	return true
 end
+
 
 function copy(self)
 	local res = {}
@@ -46,7 +78,8 @@ function copy(self)
 	return res
 end
 
-function deepcopy(self, seen)
+
+function deepCopy(self, seen)
 	local res = {}
 	seen = seen or {}
 	seen[self] = res
@@ -146,7 +179,8 @@ function tree(t, name, indent)
          else
             saved[value] = name
             --if tablecount(value) == 0 then
-            if isemptytable(value) then
+	    if isemptytable(value) then
+            --if table.isEmpty(value) then
                cart = cart .. " = {};\n"
             else
                cart = cart .. " = {\n"
@@ -175,11 +209,11 @@ end
 
 
 ------------------------------------------------------------------------
--- 将source表中的keys值更新到self中去
--- @param self      被处理字符串
--- @param source    源表
--- @param keys      要更新哪些键值
--- @return self     自身
+-- update the specific key-values of self BY the source table
+-- @param self      the table to be updated
+-- @param source    source table
+-- @param keys      specific keys to be updated; if keys is nil, update will be reduced to the copy function.
+-- @return self     the updated table 
 ------------------------------------------------------------------------
 function update(self, source, keys)
     if keys then 
@@ -197,6 +231,9 @@ end
 
 -- 要求传入的t1, t2必须为表格
 -- dup为true表示并运算，为false表示差运算
+-- dup=true for union operation, values of common keys from first table t1 will be repalced/covered by the later one t2.
+-- it also means, some info will disappear anyway.
+-- dup=false for intersection, values of res are those of the later one t2. Be careful when using it!
 function merge (t1, t2, dup)
     local res = {}
     for k,v in pairs(t1) do
@@ -210,6 +247,8 @@ end
 
 -- 要求传入的t1, t2必须为表格
 -- symm为true表示求共有部分，symm为false表示异或运算
+-- both A and B are lua-table
+-- symm=true for symmetric difference AUB-AnB = (A-B)U(B-A), while symm=false for complement(anti-symmetric difference) A-B
 function difference (s1, s2, symm)
     local res = {}
     for k,v in pairs(s1) do
@@ -226,3 +265,5 @@ end
 function isEmpty(self)
     return nil == next(self)
 end
+
+

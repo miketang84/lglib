@@ -1,10 +1,11 @@
-
--- 设置全局变量使用检查，加载执行了这个文件后。所有的全局变量使用前必须声明
+-- after loading lglib.strict, all global variables should be declared before use
 require 'lglib.strict'
 
 module(..., package.seeall)
 local modname = ...
 
+-- register extended methods into lua standard library, like string, table, io, etc 
+-- DO NOT UNDERSTAND the code of implementation
 function import(wrap_table, sub_modname)
 	local info = debug.getinfo(1, 'S')
 	local filedir = info.source:sub(2, -10)
@@ -13,25 +14,21 @@ function import(wrap_table, sub_modname)
 	setmetatable(wrap_table, nil)
 end
 
--- 这一句必须写在这里，后面几个函数要用
+-- explicitly setting global variables
 _G['import'] = import
 
 --======================================================================
---==                     其它一些全局辅助函数                          ==
+--==                  some global helper functions     	              ==
 --======================================================================
-local Object = require 'lglib.oop'
-
--------------------------------------------------
--- Define some global callable functions
--------------------------------------------------
--- 类树最基础的节点
-_G['Object'] = Object
--- 把它们自动加为全局对象，不用引入直接可以使用
+-- Define some global callable functions and use them directly later without "require"
+-- the only root or parent of all class objects
+_G['Object'] = require 'lglib.oop'
 _G['List'] = require 'lglib.list'
 _G['Dict'] = require 'lglib.dict'
 _G['Set'] = require 'lglib.set'
 
--- 获取typename属性，传入的对象必须为List, Dict, Table, Set中的一种
+-- accessing the field of "typename"，the object passed into should be one of List, Dict, Table, Set, etc.
+-- then we also define "checkType" for List, Dict, Set, Table???---->just isList(), isDict(), isSet()
 _G['typename'] = function (t)
 	checkType(t, 'table')
 	if t.__typename then
@@ -41,6 +38,7 @@ _G['typename'] = function (t)
 	end
 end
 
+-- checking the type of instance
 local istabletype = function (t, name)
 	local ret = typename(t) 
 	if ret and ret == name then
@@ -63,6 +61,7 @@ _G['isSet'] = function (t)
 end
 
 --------------------------------------------------------------------------------
+-- print one layer of table information
 _G['ptable'] = function (t)
 	if type(t) ~= 'table' then return print(("[Error] parameter '%s' passed in is not a table "):format(tostring(t))) end
     print('-----------------------------------------------')
@@ -72,6 +71,7 @@ _G['ptable'] = function (t)
     print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 end
 
+-- print all layers of table information 
 _G['fptable'] = function (t)
 	if type(t) ~= 'table' then return print(("[Error] parameter '%s' passed in is not a table "):format(tostring(t))) end
     print(table.tree(t))
@@ -79,7 +79,7 @@ end
 
 ---
 -- checkType(a, b, c, 'string', 'table', 'number')
---
+-- add several more types, like set, dict, list, queue, etc  ????
 _G['checkType'] = function (...)
 	local args_len = select('#', ...)
 	local args = {...}
@@ -89,10 +89,10 @@ _G['checkType'] = function (...)
 	for i=1, half do
 		if 'string' ~= type(args[i+half]) then
 			print(debug.traceback())
-			error('[Error] The front half part of the argumet list should be string!', 2)
+			error('[Error] The lower half part of the argumet list should be string!', 2)
 		end
 		
-		if args[i+half] ~= type(args[i]) then
+		if args[i+half] ~= type(args[i]) then  -- args[i+half] ~= typename(args[i])
 			print(debug.traceback())
 			error(("[Error] This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]), 2)
 		end
@@ -122,7 +122,8 @@ _G['checkRange'] = function (...)
 	return true
 end
 
-
+-- use for what?
+-- nil, false, 0, "", {}, etc
 _G['isFalse'] = function (onearg)
 	if not onearg or onearg == '' or onearg == 0 then
 		return true
@@ -135,16 +136,16 @@ _G['isFalse'] = function (onearg)
 	return false
 end
 
-
+-- config a prototype for a given object/instance
 _G['setProto'] = function (obj, proto)
 	checkType(obj, proto, 'table', 'table')
 	
 	local mt = getmetatable(obj) or {}
 	local old_meta = mt.__index
 	
-	-- 当old_meta为nil或表格时，才进行函数绑定
+	-- methods binding when old_meta is nil or table
 	if not old_meta or type(old_meta) == 'table' then
-		mt.__index = function(t, k)
+		mt.__index = function(t, k)  --- why should we introduce a parameter t here??? it seems we don't use it at all.
 			return (old_meta and old_meta[k]) or proto[k] 
 		end
 	end
@@ -152,20 +153,22 @@ _G['setProto'] = function (obj, proto)
 	return setmetatable(obj, mt)
 end
 
+-- setting lua-table as a prototype for any instance
 _G['T'] = function (t)
 	local t = t or {}
 	return setProto(t, table)
 end
 
+-- printf as an alias of string.format()
 _G['printf'] = function (...) 
 	print(string.format(...)) 
 end
 
 ------------------------------------------------------------------------
--- 序列化lua对象
--- @param self  被处理的对象
--- @param seen  .....
--- @return 字符串|nil  如果处理成功返回字符串，否则，返回nil
+-- serialize lua instances/objects into a lua-table format
+-- @param self  object to be serialized
+-- @param seen  holding tables that have been serialized 
+-- @return string|nil  if works. string returned. otherwise for nil
 ------------------------------------------------------------------------
 _G['seri'] = function (self, seen)
 	seen = seen or {}
@@ -206,24 +209,29 @@ _G['seri'] = function (self, seen)
 end
 
 ------------------------------------------------------------------------
--- 将序列化的字符串加载到内存中，生成lua对象
--- @param self  被处理字符串
--- @return lua对象
+-- deserialization is just loading serialized string into memory
+-- the point is that format of serialzation are just lua code of assignment of lua-tables
+-- @param self  serialized string 
+-- @return lua tables/instance
 ------------------------------------------------------------------------
-_G['unseri'] = function (self)
+_G['unseri'] = function (self)  ---deseri-alization
 	if not self then
 		return nil
 	end
+	
+	-- just loading them into memory
 	local func = loadstring(("return %s"):format(self))
 	if not func then
 		error(("[Error] unserialize fails %s %s"):format(debug.traceback(), self))
 	end
+	
+	-- running the string as lua-code
 	return func()
 end
 
 
 ------------------------------------------------------------------------
--- 几个注入操作
+-- Injection of several methods into standard library 
 ------------------------------------------------------------------------
 function loadStringModule()
 	import(string, 'string')
@@ -249,6 +257,8 @@ end
 lglib_init()
 
 
+-- DO NOT UNDERSTAND 
+-- for debug issue
 local function getname(func_info)
 	local n = func_info
 	if n.what == "C" then return n.name end

@@ -1,6 +1,6 @@
 local table = table
 local loadstring, assert = loadstring, assert
-local tostring, getmetatable, setmetatable, error, io, debug, type, pairs, rawget, rawset = tostring, getmetatable, setmetatable, error, io, debug, type, pairs, rawget, rawset
+local tostring, getmetatable, setmetatable, error, io, type, pairs, rawget, rawset = tostring, getmetatable, setmetatable, error, io, type, pairs, rawget, rawset
 local ipairs, debug, require, select = ipairs, debug, require, select
 local type, print = type, print
 
@@ -14,11 +14,11 @@ Object = {
 	__tag = "Object";
 	_parent = Object;
 
-	--- init function must be override by every child class.
-	-- in init function, do really field creataton and assgined
+	-- init function must be overridden by each of its child class.
+	-- inside init() function, doing declaration and assginment for each field
 	init = nil;
 
-	--- inheritation function, here 'self' is the parent class
+	-- inheritation function, here 'self' is the parent class
 	extend = function (self, tbl)
 		local this = rawget(self, 'extend')
 		assert(this and type(this) == 'function', "[ERROR] Only class can use extend method.")
@@ -39,40 +39,43 @@ Object = {
 		local obj = {}
 		
 		local magic_methods = {"__add";"__sub";"__mul";"__div";"__mod";"__pow";"__unm";"__concat";"__len";"__eq";"__lt";"__le";"__tostring"}
-		-- 获得原型的元表，并复制一份
+		
+		-- make a copy of metatable of prototype (self)
+		-- pls remember that this is just one-layer copy, mostly references
 		local mt = table.copy(getmetatable(self) or {})
-		-- 创建实例对象的时候，把原型的特殊方法定义复制过来（函数代码保持同一份，但多了一个引用）
-		-- 这一段可以提高效率，但同时也丧失了部分动态灵活性
+		-- for magic methods, a reference/index cache could accelarate callback processes
+		-- once callback functions modified, the change can not propagate into the reference cache?? lost a little of flexibility 
 		for _, v in ipairs(magic_methods) do
 			local method = self[v]
 			if method then
-				rawset(mt, v, method)
+				rawset(mt, v, method)   
 			end
 		end
-		-- 回溯路径指向原型本身
+		-- pointing back to the prototype itself "self"
 		mt.__index = self
-		-- 设定原型关系
+		-- setting table and meta-table relationship
 		setmetatable(obj, mt)
-		-- 检查是否有初始化函数，没有就报错。
+		-- check if the init() function exists. if not, reporting the error.
 		assert(self.init, '[ERROR] Class must implement init() function while defined.')
 		
-		-- 存储继承链关系
+		-- store the inherited chain
 		local proto_chain = List()
 		local p = self
 		repeat
 			proto_chain:append(p)
-			-- 往上回溯，找到所有类的继承链
+			-- go backward 
 			p = p._parent
-		-- 当回溯到Object这个原始原型的时候，就停止
+		-- stop unless back to primitive prototype, like Object or other root parent class
+		-- it also means this oop structure is not single rooted??
 		until p == Object or not p
 		
-		-- 由于继承类型是从下向上回溯的，子类放在链表前端，父类放在后端，
-		-- 在执行初始化的时候，是从上向下依次执行init，所以要反向执行
+		-- the inheritance relation is from bottom to top, child at head of list and parent at the tail
+		-- for init process, it should run in the backward direction
 		-- This feature makes every initial function in child class do its own new
 		-- fields' initialization only.
 		for i = #proto_chain, 1, -1 do
-			-- 不断对新生成的obj对象进行初始化操作，可依次添加属性
-			-- 要求，非末端初始化函数返回值必须是self本身，不能是其它值
+			-- adding fields one group by another
+			-- non-last one should return self itself
 			obj = proto_chain[i].init(obj, ...)
 		end
 		
@@ -80,18 +83,19 @@ Object = {
 		
 		-- 这是上面的简化版：用最近一级原型的init方法以及传入的参数，来初始化这个实例对象
 		-- 并返回新对象
+		-- simplified version. 
 		-- return self.init(obj, ...)
 	end;
 	
 	clone = function (self)
-		local new = table.copy(self)
+		local new = table.copy(self)  --why not call table.deepCopy(self)??
 		setmetatable(new, getmetatable(self))
 		return new
 	end;
 	
-	-- 这个函数，可以判断一个对象是不是实例
+	-- whether an instance or not
 	isInstance = function (self)
-		-- 如果获取到了，就是类
+		-- only 
 		local this = rawget(self, 'new')
 		if this and type(this) == 'function' then
 			return false
@@ -99,7 +103,8 @@ Object = {
 			return true
 		end
 	end;
-
+	
+	-- whether a class or not 
 	isClass = function (self)
 		local this = rawget(self, 'new')
 		if this and type(this) == 'function' then
@@ -108,7 +113,8 @@ Object = {
 			return false
 		end
 	end;
-
+	
+	-- only the class object exist
 	singleton = function (self) return self end;
 }
 

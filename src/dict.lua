@@ -1,17 +1,18 @@
 local string, table = string, table
 local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat,table.sort
-local normalize_slice = table.normalize_slice
 local List = require('lglib.list')
 
 module(..., package.seeall)
 
--- 让所有List的实例都继承自这个List原型
+-- this is a Dict prototype, and all instances of Dict must inherit it
 local Dict = {}
-	-- 它自身就是元表，本体与元表合二为一
+
+--itself as its metatable
 Dict.__index = Dict
 Dict.__typename = "Dict"
 
 
+--
 local function is_key(self, key)
 	local list_len = #self
 	if type(key) ~= 'number' or (type(key) == 'number' and key > list_len) then
@@ -21,11 +22,14 @@ local function is_key(self, key)
 	end
 end
 
--- 创建实例
+-- constructor for Dict objects
 local function new (tbl)
-	-- 如果没传入表作参数，则生成一个空表
+	-- if tbl is nil，then empty table returned
 	local t = {}
-	-- 只抽取
+	
+	-- only separate the dictionary part from the lua-table as input
+	-- seems repeated coding w.r.t. table.lua
+	-- just directly call table.takeAparts(tbl)---->dict part
 	if tbl then
 		checkType(tbl, 'table')
 		for k, v in pairs(tbl) do
@@ -38,7 +42,8 @@ local function new (tbl)
 	return setmetatable(t, Dict)
 end
 
--- 使可使用Dict()语法
+-- binding constructor new(tbl) with Dict sytanx
+-- table can be accessed via __index from its/Dict metatable 
 setmetatable(Dict, {
     __call = function (self, tbl)
         return new(tbl)
@@ -48,11 +53,11 @@ setmetatable(Dict, {
 
 
 
--- 创建一个list，将Dict的key搜集进去
+-- collecting all keys of Dict and puting them into a List
 function Dict:keys()
 	local res = List()
 	for key, _ in pairs(self) do
-		-- 只找符合字典定义的键
+		-- select the keys with the dictionary type
 		if is_key(self, key) then
 			tinsert(res, key)
 		end
@@ -82,12 +87,25 @@ end
 function Dict:values()
 	local res = List()
 	for key, v in pairs(self) do
-		-- 只找符合字典定义的键
+		-- select the keys with the dictionary type
 		if is_key(self, key) then
 			tinsert(res, v)
 		end
 	end
 	return res
 end
+
+function Dict:isDict() 
+	if table.isEmpty(self) then
+		return "empty"
+	end
+	
+	if #self == 0 then
+		return true
+	else
+		return false
+	end
+end
+
 
 return Dict

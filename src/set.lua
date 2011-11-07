@@ -1,38 +1,43 @@
+require('lglib')
 local string = string
 local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat,table.sort
-local merge, difference = table.merge, table.difference 
+merge, difference = table.merge, table.difference 
 local List = require('lglib.list')
 local Dict = require('lglib.dict')
 
+
 module(..., package.seeall)
 
--- 让所有List的实例都继承自这个List原型
+-- this is a set prototype, and all of Set instances will inherit it
 local Set = {}
-	-- 它自身就是元表，本体与元表合二为一
+
+--itself as its metatable
 Set.__index = Set
 Set.__typename = "Set"
 
--- 创建实例
+-- constructor of Set objects
 local function new (tbl)
-	-- 如果没传入表作参数，则生成一个空表
+	-- if tbl is nil, empty table returned
 	local t = {}
 	if tbl then
 		checkType(tbl, 'table')
-		-- 传入的列表要求是一个list，这里只找list部分
+		-- the input parameter "tbl" should be a LIST, BUT how to check it????? 
 		for _, v in ipairs(tbl) do
-			t[v] = true
+			t[v] = true  
 		end
 	end
 
 	return setmetatable(t, Set)
 end
 
--- 使可使用List()语法
+-- binding constructor new(tbl) with Set() sytanx
+-- Dict can be accessed via __index from its/Set metatable ?????
 setmetatable(Set, {
     __call = function (self, tbl)
         return new(tbl)
     end,
-	-- Set是一种特殊的Dict，即values全为true或nil, false的dict
+	-- Set is a special Dict, whose values are true or nil. 
+	-- Be careful that the value can not be false!!!
 	__index = Dict,
 })
 
@@ -53,13 +58,11 @@ function Set:has (key)
 	end
 end
 
-
 Set.members = Dict.keys
 
-
-
+-- if set value can be false, it will be wrong somehow because of values overwritten..?????????
 function Set:union (set)
-    return Set(merge(self, set, true))
+    return Set(merge(self, set, true))  -- the type of data that merge() returned is not LIST...?????????
 end
 Set.__add = Set.union
 
@@ -82,6 +85,8 @@ end
 Set.__pow = Set.symmetricDifference
 
 
+-- two cases of returned values, each one has two values
+-- the first one indicates true and empty string, while the second is false and element that is the first element is not contained in set. 
 function Set:isSub (set)
     for k in pairs(self) do
         if not set[k] then return false, k end
@@ -91,12 +96,11 @@ end
 Set.__lt = Set.isSub
 
 
--- 改变默认打印输出方式
+-- override the tostring() function
+-- join is a method of LIST
 function Set:__tostring ()
     return '['..self:members():join(',')..']'
 end
 
 
 return Set
-
-
