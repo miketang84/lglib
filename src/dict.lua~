@@ -57,7 +57,7 @@ you can make sure/guarantee that the dict feature of instances can be kept all t
 delete the is_key() method, 
 add insert()/delete() for checking the dict feature
 add extra length parameter when initialization
-or table tt["abc"] = "cde" and tt["cba"] = nil
+or table tt["abc"] = "cde" and tt[cba]
 --]]
 
 -- collecting all keys of Dict and puting them into a List
