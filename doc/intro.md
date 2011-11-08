@@ -192,7 +192,7 @@ As for basic operations, same issue of keys with string type should be taken car
 	seta:add("12") NOT seta:add(12)  		--->{"23" = true}
 	setb:delete("2")  NOT setb:delete(2)    --->{"one", "two","three", "four"}
 
-You can also use the table default APIs, like `seta["23"] = true` or `seta["abc"] = nil` to do the same things. Actually, methods add() and delete() are implemented in this way internally, that can be treated as raw APIs. `has(key)` tests whether a element `key` exist or not, `members()` just returns all of elements in random order. Finally, five logical operations of set follows as:
+You can also use the table default APIs, like `seta["23"] = true` or `seta["abc"] = nil` to do the same things. Actually, methods `add()` and `delete()` are implemented in this way internally, that can be treated as raw APIs. `has(key)` tests whether a element `key` exist or not, `members()` just returns all of elements in random order. Finally, five logical operations of set follows as:
 	
 	Set:union(another)					-- standard union operation, can be written as A + B
 	Set:intersection(another)			-- standard intersection operation, can be written as A * B
@@ -201,14 +201,7 @@ You can also use the table default APIs, like `seta["23"] = true` or `seta["abc"
 	Set:isSub(another)					-- check whether "self" is a sub-set of "another" or not, can be written as A < B
 	
 
-[remove the inheritance relationship, now Set is at the same foot of Dict.]
-If the size of set is stored as a parameter, we should maintain such a parameter in add() and delete() that can not be easily done in raw API. + Q3- how about adding an extra parameter, length/size of set? + Q4- Call isEmpty() from table?? simple wrapper will be much better.
-
-
-+ Q2- how to make sure list type
-
-
-
+>>remarks: removing the inheritance relationship, Set should be at the same foot of Dict. isEmpty() constructed as a simple wrapper or re-implemented will be much better. Also reusing the length parameter of lua table as its size, the difficult task is to maintain the parameter. 
 
 
 ###Extra advanced ordered data structure, like self-balanced binary tree    
