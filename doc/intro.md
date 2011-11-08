@@ -120,13 +120,12 @@ One more thing that you should keep in mind is the spliting done here only in on
 ###list
 Actually, list here contains two parts of APIs, array-part and queue/stack-part. It may be splited in the future. We will introduce common part, array part and queue part one by one in the following. 
 
-initialization
-local lista = List()  
-local listb = List {1,2,3,4,5,6}  
-    
-@class method
-List.range(start, finish)
-start parameter is optional, and the default value is 1. Both sides are inclusive and a sequence of integers from "start" to "finish" are generated.
+For initialization, you can create an empty list by `List()` or a list holding several elements by `List(tbl)`. For later one, constructor only selects list-type of elements in table to fill in a list. For example, 
+	
+	local lista = List()
+	local listb = List {1,2,3,4,5,6}
+	
+`range(start, finish)` is a class method, where `start` parameter is optional, and its default value is 1. Both sides are inclusive and a sequence of integers from `start` to `finish` are generated.
 
 __eq()
 test whether two lists are equal or not, and can be written as l2 == l1
