@@ -317,13 +317,12 @@ Composition reuses implementation, and inheritance defined here reuses implement
 ## Helper methods
 ###Http          
 `escapeHTML(s)`    
-simple HTML escape sequence, like converting \"<" into \"&lt;"
-
+simple HTML escape sequence
 `encodeURL(url)`     
 simple URL encoding  
 
 `decodeURL(url)`    
-Simplistic URL decoding that can handle "plus" and "space" encoding too. ???
+Simplistic URL decoding that can handle "plus" and "space" encoding too. ??
 
 `parseURL(url, sep)`     
 parse parameters of URL and store key-value pairs into lua-table
