@@ -293,10 +293,26 @@ After definition, we can use it as following:
 	msg_obj2:doSomething();     -- calling method defined in class instance  
 
 
-**polymorphism**
-Composition reuses implementation, and inheritance defined here reuses implementation and interface at the same time. Now, 
+####polymorphism
+Composition reuses implementation, and inheritance defined here reuses implementation and interface at the same time. Now, we can also write code in the style of reusing interface only. 
+	
+	require "Cube"
+	require "Sphere"
 
+	shapes = {
+		    Cube.new(10,15,20),
+		    Cube.new(12,14,16),
+		    Sphere.new(10),
+		    Sphere.new(17),
+		    Cube.new(2,4,26) }
 
+	for i,target in ipairs(shapes) do
+		    s_area = target:getsurface()
+		    volume = target:getvolume()
+		    print (s_area, volume)
+	end
+	
+	
 ## Helper methods
 ###Http          
 `escapeHTML(s)`    
