@@ -131,53 +131,29 @@ returns the size/length of a list. From the perspective of performance, storing 
 
 For the array part of APIs, let's explain the basic operations firstly, that is, insert/delete/read/update.
 	
-	List:splice(idx, list)   --insert another *list* at the location *idx*
-	List:extend(another) [is a special case of List:splice(idx, list)] list expansion by another one, appending at the tail of "self" list. it can be written as lnew = l1 + l2.
-	List:iremove (i)  -- delete by index
-	List:remove(x) 		-- [is a special csae of List:remove(x, numOfDeletion)] delete elements that have the value "x"
-	List:chop(i1,i2)    -- deleted by indexing interval
+	List:splice(idx, list)   -- inserting another "list" at the location "idx" of List "self", and just list expansion by another one
+	List:extend(another) 	 -- list concatenation can be written as lnew = l1 + l2, and a special case of List:splice(idx, list) appending at the tail of "self" list. 
+	List:iremove (i)  		 -- deleting by index
+	List:remove(x) 			 -- deleting all elements that have the value "x", which is a special case of List:remove(x, numOfDeletion)
+	List:chop(i1,i2)    	 -- deleting by indexing interval
 	
-
-
-
-List:find(val, idx)
-starting from idx index and trying to find the first element with value=val
-
-List:contains(x)
-check whether a list instance has the element "x"
-
-List:slice(start, stop, is_rev)
--- select a piece of list with index from "start" to "stop"
--- start, stop maybe nil, negative integer, or other values. the default value of "start" is 1, while #list for "stop" 
--- if is_rev is "rev", the returned list is in reversing order.
-
-List:sliceAssign(i1, i2, seq)
-assignment in the style of slicing
-
-List:count(x)
-counting times that element "x" repeats in the list "self"
-
-List:join(sep)
-simpe wrapper of table.concat() method
-
-List:sort(cmp)
-sort a list w.r.t. an order function "cmp", and it is a simple wrapper of table.sort(orderFunction)
-
-List:reverse()
-reversing the element order 
-
-queue-part [implemented as a lua-table]
-List:append(val)
-appending an extra element at the tail of list
-
-List:prepend(val)
-appending an extra element at the head of list
- 
-List.push
-push a new element into list at the right-hand side
-
-List:pop
-pop a element from list at the right-hand side
+For `List:remove(x, numOfDeletion)`, if numOfDeletion is negative integer,then counting from the last one in reversing order. As for read and update operations, `List:find(val, idx)` find the first element with `value = val` by starting from index `idx`. `List:slice(start, stop, is_rev)` selects a piece of list with index from `start` to `stop`, where `start`, `stop` maybe nil, negative integer, or other values, the default value of `start` is 1, `#list` for `stop`. If `is_rev` is "rev", the returned list is in reversing order. List:sliceAssign(i1, i2, seq) is an assignment operation in the style of slicing. In addition to basic operations, there are some helper methods for each list instance:
+	
+	List:contains(x)  --check whether a list instance has the element "x"
+	List:count(x)  	  -- counting times that element "x" repeats in the list "self"
+	List:join(sep)    -- simpe wrapper of table.concat() method 
+	List:sort(cmp)    -- sort a list w.r.t. an order function "cmp", and it is a simple wrapper of table.sort(orderFunction)
+	List:reverse()    -- reversing the element order 
+	
+	
+Now we arrive at the queue-part of list section, which will be implemented as a lua-table later. The standard API follows as:
+	
+	List:append(val)  -- appending an extra element at the tail of list
+	List:prepend(val)  -- appending an extra element at the head of list
+	List.push   -- push a new element into list at the right-hand side
+	List:pop   -- pop a element from list at the right-hand side
+	
+	
 
 
 ###dict      
