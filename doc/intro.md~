@@ -217,7 +217,7 @@ Only sorted set and dict have not been discussed yet. For the sorted version, th
 
 
 ## Object-Oriented Programming
-Implementation of OOP mechanism has been constructed by lua table and metatable. `Object` is the most oldest parent for all of other class instance. It has several primitive fields (**__tag** and **__parent**) and methods (**new(), extend(), clone, equal(), init()**) built-in. Usually the class that user defined has the following structure:
+Implementation of OOP mechanism has been constructed by lua table and metatable. `Object` is the most oldest parent for all of other class instance. It has several primitive fields [**__tag** and **__parent**] and methods [**new(), extend(), clone, equal(), init()**] built-in. Usually the class that user defined has the following structure:
 	
 	__tag  				-- description of a class, usually its name
 	__parent    		-- the name of its parent class, stored the inheritance relationship
@@ -233,17 +233,39 @@ Implementation of OOP mechanism has been constructed by lua table and metatable.
 	
 Magic methods, like `__add`, `__mod`, `__div` and `__mul`, are used frequently because of convenience. Actually, magic methods still has the same issue of built-in methods call when searching methods in metatable in the backward direction. Our implementation of magic methods adds a reference/index cache, which could accelarate method call processes. Once methods modified, the change can not propagate into the reference cache, it will lost a little of flexibility. In a word, it just trade off between performance and flexibility.
 
-Ordinary methods, `dosomething()` method could be defined for your customized usage. Up to now, the inheritance and composition of OOP have been discussed. We just use an example to illustrate the above concepts. 
+Ordinary methods, `doSomething()` method could be defined for your customized usage. Up to now, the inheritance and composition of OOP have been discussed. We just use an example to illustrate the above concepts. 
 	
-	local Message = Object:extend{....}
-		__name = 'Message';  
-		__desc = 'General message definition.';  
+	local Comment = Object:extend{....}		-- inheritance relationship
+		__name = 'Comment';  
+		__desc = 'General comment definition.';  
 	  
 		-- constructor
 		init = function (self, t)  
 		    if not t then return self end     
 	  
 		    self.type = t.type  
+		    self.author = t.author  
+		    self.content = t.content  
+		    self.posts = Post()		-- instance composition
+		    self.timestamp = t.timestamp or os.time()  
+	  
+		    return self  
+		end;  
+	  
+		doSomething = function (self)  
+		    .....  
+		end;
+	}  
+
+	local Post = Object:extend{....}		-- inheritance relationship
+		__name = 'Post';  
+		__desc = 'General post definition.';  
+	  
+		-- constructor
+		init = function (self, t)  
+		    if not t then return self end     
+	  
+		    self.title = t.title  
 		    self.author = t.author  
 		    self.content = t.content  
 		    self.timestamp = t.timestamp or os.time()  
@@ -257,18 +279,23 @@ Ordinary methods, `dosomething()` method could be defined for your customized us
 	}  
  
 
-usage
+After definition, we can use it as following:
 	
-	local msg_obj = Message()   -- 创建一个空消息  
-	local msg_obj2 = Message {  -- 创建一个有内容的消息  
+	local post_obj = Post()			-- create an empty post
+	local msg_obj = Message()  		-- create an empty message
+	local msg_obj2 = Message {  	-- create a message with contents  
 		    type = '100',  
-	    author = 'daoge',  
-	    content = 'hello',  
+		    author = 'daoge',  
+		    content = 'hello',  
+		    posts = post_obj,
 		}  
-  
-msg_obj2:doSomething();     -- 调用类中定义的方法  
+
+	msg_obj2:doSomething();     -- calling method defined in class instance  
+
 
 **polymorphism**
+Composition reuses implementation, and inheritance defined here reuses implementation and interface at the same time. Now, 
+
 
 ## Helper methods
 ###Http          
