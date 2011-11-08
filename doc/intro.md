@@ -151,9 +151,9 @@ Now we arrive at the queue-part of list section, which will be implemented as a 
 	List:append(val)   -- appending an extra element at the tail of list
 	List:prepend(val)  -- appending an extra element at the head of list
 	List.push   	   -- push a new element into list from the right-hand side
-	List:pop   		   -- pop a element from list from the right-hand side
+	List:pop   		   -- pop and remove a element from list from the right-hand side
 	
-	
+Maybe some methods, like pushLeft(), popLeft()， elementHead() and elementTail(), will be added later for better use. 
 
 
 ###dict      
