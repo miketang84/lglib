@@ -170,7 +170,7 @@ For the basic operations of single key-value pair, we had better to use table AP
 	tt["singled"] = nil		-- delete operation
 	tt["double"]  			-- read operation
 	
-For better performance, the key of key-value pair should be choosen as lua string. If key in key-value pair is string, the pair is guaranteed to be stored inside hash table internally. For Dict-specific methods,
+To achieve better performance, the key of key-value pair should be choosen as lua string. If key in key-value pair is string, the pair is guaranteed to be stored inside hash table internally. For Dict-specific methods,
 	
 	Dict:keys()    -- return all the keys of Dict instance **without** keeping any order because of feature of hash table.
 	Dict:values()  -- return all the values of Dict instance, still without keeping any order
