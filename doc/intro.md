@@ -157,11 +157,12 @@ Maybe some methods, like pushLeft(), popLeft(), elementHead() and elementTail(),
 
 
 ###Dict      
-Dict is the prototype of all Dict instances. It inherits extended version of lua-table. [remove this inheritance relationship] 
+Dict is the prototype of all Dict instances. It inherits the extended version of lua-table. Like List prototype, the initialization of a Dict object/instance follows as:     
+	
+	dicta = {}
+	dictb = {one = 1, two = 2, three = 3, four = 4}
+	
 
-initializing a Dict object 
-dicta = {}
-dictb = {one = 1, two = 2, three = 3, four = 4}
 
 suggestion: 
 call table.takeAparts() method directly, and initialize Dict instance by returned Dict part. At the same time, you can make sure/guarantee that the instance feature can be kept all the way. 
@@ -175,7 +176,9 @@ insert()/delete()
 
 **relationship between Dict and table**
 Try to implement the Dict API by table-extended methods
-
+ [remove this inheritance relationship] 
+ 
+ 
 isDict()
 for non-empty dict, true means Dict instance, false as non-Dict instance.
 
