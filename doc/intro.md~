@@ -296,8 +296,8 @@ After definition, we can use it as following:
 ####polymorphism
 Composition reuses implementation, and inheritance defined here reuses implementation and interface at the same time. Now we can also write code in the style of reusing interface only. 
 	
-	require "Cube"		-- getSurface() and getVolume() 
-	require "Sphere"	-- getSurface() and getVolume() 
+	require "Cube"		-- getSurface() and getVolume() defined in a Cube class
+	require "Sphere"	-- getSurface() and getVolume() also defined in a Sphere class
 
 	shapes = {
 			Cube{10,15,20},
