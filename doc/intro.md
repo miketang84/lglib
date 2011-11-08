@@ -223,7 +223,7 @@ Implementation of OOP mechanism has been constructed by lua table and metatable.
 	__parent    		-- the name of its parent class, stored the inheritance relationship
 	name/age/sex/  		-- other usual fields that customers can defined
 
-`__parent` holds the name of its parent class. This OOP mechanism is single-rooted, which means all of classes must be traced back to the `Object' class. When the length of inheritance chain is too long, methods called like `new()` and `extend()` take long time because of jumping several times in the backtrace. Maybe this issue can be solved if they can be treated as moudle methods to be called directly.
+`__parent` holds the name of its parent class. This OOP mechanism is single-rooted, which means all of classes must be traced back to the `Object` class. When the length of inheritance chain is too long, methods called like `new()` and `extend()` take long time because of jumping several times in the backtrace. Maybe this issue can be solved if they can be treated as moudle methods to be called directly.
 	
 	new()		 -- a constructor of any class
 	extend()	 -- method that only parent class has
