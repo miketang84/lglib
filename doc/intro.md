@@ -114,10 +114,6 @@ where 1, 2, 3, 4 and 5 are stored as array/list, and others including 0->0, -1->
 
 One more thing that you should keep in mind is the spliting done here only in one layer. The list/dict type that you get can also contains nesting lua-table internally. SOMETIMES one-layer is enough??? I think we should try to use customized APIs (**List, Dict, Set, Queue**) as much as possible rather than lua-table directly. 
 
-private API??
-tbl:merge():semi-union and intersection operations for two tables 
-tbl:difference():semi-complement and symmetric difference operations
-take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) between two tables. 
 
 ## Data structure 
 ###List

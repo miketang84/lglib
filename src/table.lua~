@@ -229,7 +229,7 @@ function update(self, source, keys)
     return self
 end
 --[[
-	take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) 		between two tables. 
+take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) between two tables. 
 --]]
 
 -- 要求传入的t1, t2必须为表格
