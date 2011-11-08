@@ -318,6 +318,7 @@ Composition reuses implementation, and inheritance defined here reuses implement
 ###Http          
 `escapeHTML(s)`    
 simple HTML escape sequence
+
 `encodeURL(url)`     
 simple URL encoding  
 
