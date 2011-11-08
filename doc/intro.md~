@@ -153,25 +153,29 @@ Now we arrive at the queue-part of list section, which will be implemented as a 
 	List:push(val) 	   -- push a new element into list from the right-hand side
 	List:pop() 		   -- pop and remove a element from list from the right-hand side
 	
-Maybe some methods, like pushLeft(), popLeft(), elementHead() and elementTail(), will be added later for better use. 
+Maybe some methods, like pushLeft(), popLeft(), elementHead() and elementTail(), will be added later for better use. One more thing that should be kept in mind is the element `x/val` is a basic value or reference.
 
 
 ###Dict      
-Dict is the prototype of all Dict instances. It inherits the extended version of lua-table. Like List prototype, the initialization of a Dict object/instance follows as:     
+Dict is the prototype of all Dict instances. It inherits the extended version of lua-table. Therefore Dict instance can use table API, especially dict-type of them. Like List prototype, the initialization of a Dict object/instance follows as:     
 	
 	dicta = {}
 	dictb = {one = 1, two = 2, three = 3, four = 4}
 	
-remarks: the relationship between Dict and table is try to implement the Dict API by table-extended methods and remove this inheritance relationship] 
- 
- 
-isDict()
-for non-empty dict, true means Dict instance, false as non-Dict instance.
+>>Remarks: the relationship between Dict and table shoud be redefined as implementing the Dict API by extensive library of lua table and removing this inheritance relationship.
+
+For the basic operations of single key-value pair, we had better to use table API, that is, 
 	
-	Dict:keys()    -- return all the keys of Dict instance, but without keeping any order because of the feature of hash table.
+	tt["abc"] = "cde" 		-- treated as insert or update
+	tt["singled"] = nil		-- delete operation
+	tt["double"]  			-- read operation
+	
+For better performance, the key of key-value pair should be choosen as lua string. If key in key-value pair is string, the pair is guaranteed to be stored inside hash table internally. For Dict-specific methods,
+	
+	Dict:keys()    -- return all the keys of Dict instance **without** keeping any order because of feature of hash table.
 	Dict:values()  -- return all the values of Dict instance, still without keeping any order
-	Dict:hasKey()  -- check whether the specific key exist in the Dict object or not
-	Dict:size()    -- return the length of Dict instance 
+	Dict:hasKey()  -- check whether a specific key exist in a Dict instance or not
+	Dict:size()    -- return the length of Dict instance, 
 	
 
 
