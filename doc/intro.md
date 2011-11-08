@@ -117,8 +117,9 @@ One more thing that you should keep in mind is the spliting done here only in on
 
 
 ## Data structure 
-###list     
-list-part
+###list
+Actually, list here contains two parts of APIs, array-part and queue/stack-part. It may be splited in the future. We will introduce common part, array part and queue part one by one in the following. 
+
 initialization
 local lista = List()  
 local listb = List {1,2,3,4,5,6}  
@@ -127,25 +128,32 @@ local listb = List {1,2,3,4,5,6}
 List.range(start, finish)
 start parameter is optional, and the default value is 1. Both sides are inclusive and a sequence of integers from "start" to "finish" are generated.
 
-mapn() and zip() CAN NOT be understood yet. 
-transform() and map() 
-
-@instance methods
-List:splice(idx, list)
-insert another *list* at the location *idx*
-
-
-List:sliceAssign(i1, i2, seq)
-assignment in the style of slicing
-
 __eq()
 test whether two lists are equal or not, and can be written as l2 == l1
 
 isEmpty()
 whether a list is empty or not 
 
-isList()
-checking whether it is a instance of List prototype BY checking the typename = LIST where LIST is a global constant?
+List:clear()
+clear all elements of list
+
+List:len()
+return the size/length of list
+
+List:len() [storing and maintaining an extra parameter is a better choice]
+return the size/length of list. 
+
+mapn() and zip() CAN NOT be understood yet. 
+transform() and map() 
+
+
+@instance methods
+List:splice(idx, list)
+insert another *list* at the location *idx*
+
+List:sliceAssign(i1, i2, seq)
+assignment in the style of slicing
+
 
 List:extend(another) [is a special case of List:splice(idx, list)]
 list expansion by another one, appending at the tail of "self" list. it can be written as lnew = l1 + l2.
@@ -183,12 +191,6 @@ List:slice(start, stop, is_rev)
 -- if is_rev is "rev", the returned list is in reversing order.
 
 
-List:clear()
-clear all elements of list
-
-List:len() [storing and maintaining an extra parameter is a better choice]
-return the size/length of list. 
-
 queue-part [implemented as a lua-table]
 List:append(val)
 appending an extra element at the tail of list
@@ -201,12 +203,6 @@ push a new element into list at the right-hand side
 
 List:pop
 pop a element from list at the right-hand side
-
-List:clear()
-clear all elements of list
-
-List:len()
-return the size/length of list
 
 
 ###dict      
