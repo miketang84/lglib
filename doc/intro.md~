@@ -206,16 +206,14 @@ You can also use the table default APIs, like `seta["23"] = true` or `seta["abc"
 
 ###Advanced ordered data structures    
 lua-table with extension can be treated as building blocks for interface of [list, queue, set(sorted set), dict(sorted dict)].  The ordered and unordered verions of data structures form the following [tree] (http://loop.luaforge.net/library/collection/PriorityQueue.html), 
-
-	  --------collection---------				  dict
-	  |		      |				|					|
-	list 	     set  		   queue			ordered set			
-	  			  |	  			 				  
-	  		  sorted set  					  
 	
-
-
-In addition to single key-value pair, each table treated as one node can also hold extra weight parameter. In the constructor of ordered interface, client should choose/provide a weight parameter and related order function. THEN all methods will refer to them when insert/delete/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sort dict/map (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
+							  --------collection---------				  dict
+							  |		      |				|					|
+							list 	     set  		   queue			ordered dict			
+							  			  |	  			 				  
+							  		  sorted set  					  
+	
+Only sorted set and dict have not been discussed yet. For the sorted version, the key point is weight parameter, which can be key, value or extra weight parameter. For the implementation, each table treated as one node can also hold extra weight parameter. In the constructor of ordered interface, client should choose/provide a weight parameter and related order function. THEN all methods will refer to them when insert/delete/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sort dict/map (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
 
 
 ## Object-Oriented Programming
