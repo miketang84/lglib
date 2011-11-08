@@ -294,21 +294,22 @@ After definition, we can use it as following:
 
 
 ####polymorphism
-Composition reuses implementation, and inheritance defined here reuses implementation and interface at the same time. Now, we can also write code in the style of reusing interface only. 
+Composition reuses implementation, and inheritance defined here reuses implementation and interface at the same time. Now we can also write code in the style of reusing interface only. 
 	
-	require "Cube"
-	require "Sphere"
+	require "Cube"		-- getSurface() and getVolume() defined in a Cube class
+	require "Sphere"	-- getSurface() and getVolume() also defined in a Sphere class
 
 	shapes = {
-		    Cube.new(10,15,20),
-		    Cube.new(12,14,16),
-		    Sphere.new(10),
-		    Sphere.new(17),
-		    Cube.new(2,4,26) }
+			Cube{10,15,20},
+			Cube{12,14,16},
+			Sphere{10},
+			Sphere{17},
+			Cube{2,4,26}
+	    }
 
-	for i,target in ipairs(shapes) do
-		    s_area = target:getsurface()
-		    volume = target:getvolume()
+	for i, target in ipairs(shapes) do
+		    s_area = target:getSurface()
+		    volume = target:getVolume()
 		    print (s_area, volume)
 	end
 	
