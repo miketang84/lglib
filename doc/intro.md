@@ -222,38 +222,35 @@ Implementation of OOP mechanism has been constructed by lua table and metatable.
 	__tag  				-- description of a class, usually its name
 	__parent    		-- the name of its parent class, stored the inheritance relationship
 	name/age/sex/  		-- other usual fields that customers can defined
+
+`__parent` holds the name of its parent class. This OOP mechanism is single-rooted, which means all of classes must be traced back to the `Object' class. When the length of inheritance chain is too long, methods called like `new()` and `extend()` take long time because of jumping several times in the backtrace. Maybe this issue can be solved if they can be treated as moudle methods to be called directly.
 	
-	new()
-	extend()
-	clone() 	 -- only do it in one-layer deep
-	equal()		 -- hashCode() is used to be equal().. equal by value or reference ??
+	new()		 -- a constructor of any class
+	extend()	 -- method that only parent class has
+	clone() 	 -- only dond it in one-layer deep, be careful about shared-references
+	equal()		 -- hashCode() is used to be equal().. equal by value or reference??
 	init()		 -- process along the inheritance relationship
 	
-	__add, __mod, __div, __mul
-	
-	ordinary methods
-	
+Magic methods, like `__add`, `__mod`, `__div` and `__mul`, are used frequently because of convenience. Actually, magic methods still has the same issue of built-in methods call when searching methods in metatable in the backward direction. Our implementation of magic methods adds a reference/index cache, which could accelarate callback processes. Once callback functions modified, the change can not propagate into the reference cache, it will lost a little of flexibility. In a word, it just trade off between performance and flexibility.
 
-1. single-rooted structure? From the statement, "p == Object or not p", it seems that the parent of some class is not Object!!
+
+ordinary methods
+	
  
-
-
->> remarks: the length of inheritance chain should be not too long? ALSO, new() and extend() methods should be treated as moudle methods to be called directly rather than jumping several times.
-
 
 usage
  
 
 ## Helper methods
 ###Http          
-`escapeHTML(s)`
+`escapeHTML(s)`    
 simple HTML escape sequence, like converting "<" into "&lt;"
 
-`encodeURL(url)`
+`encodeURL(url)`     
 simple URL encoding  
 
-`decodeURL(url)`
+`decodeURL(url)`    
 Simplistic URL decoding that can handle "plus" and "space" encoding too. ???
 
-`parseURL(url, sep)`
+`parseURL(url, sep)`     
 parse parameters of URL and store key-value pairs into lua-table
