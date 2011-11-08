@@ -118,29 +118,17 @@ One more thing that you should keep in mind is the spliting done here only in on
 
 ## Data structure 
 ###list
-Actually, list here contains two parts of APIs, array-part and queue/stack-part. It may be splited in the future. We will introduce common part, array part and queue part one by one in the following. 
+Actually, list here contains two parts of APIs, array-part and queue/stack-part. It may be splited further in the future. In the following we will introduce common-part, array-part and queue-part one by one. 
 
-For initialization, you can create an empty list by `List()` or a list holding several elements by `List(tbl)`. For later one, constructor only selects list-type of elements in table to fill in a list. For example, 
+For initialization, you can create an empty list by `List()` or a list holding several elements by `List(tbl)`. For later one, constructor only selects list-type of elements of table `tbl` to fill in a list. For example, 
 	
 	local lista = List()
 	local listb = List {1,2,3,4,5,6}
 	
-`range(start, finish)` is a class method, where `start` parameter is optional, and its default value is 1. Both sides are inclusive and a sequence of integers from `start` to `finish` are generated.
+`range(start, finish)` is a class method, where `start` parameter is optional, and its default value is 1. Both sides are inclusive and a sequence of integers from `start` to `finish` are generated. All others are object methods that operated on a specific object. `List:len()`
+returns the size/length of a list. From the perspective of performance, storing and maintaining a length parameter may be a better choice. `List:isEmpty()` checks whether a list is empty or not and `List:clear()` can clear all elements of list. The magic method `__eq()` tests whether two lists are equal or not, and can be written as l2 == l1. 
 
-__eq()
-test whether two lists are equal or not, and can be written as l2 == l1
 
-isEmpty()
-whether a list is empty or not 
-
-List:clear()
-clear all elements of list
-
-List:len()
-return the size/length of list
-
-List:len() [storing and maintaining an extra parameter is a better choice]
-return the size/length of list. 
 
 mapn() and zip() CAN NOT be understood yet. 
 transform() and map() 
