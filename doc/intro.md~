@@ -213,37 +213,51 @@ lua-table with extension can be treated as building blocks for interface of [lis
 							  			  |	  			 				  
 							  		  sorted set  					  
 	
-Only sorted set and dict have not been discussed yet. For the sorted version, the key point is weight parameter, which can be key, value or extra weight parameter. As for the implementation, each table treated as one node can hold an extra weight parameter. In the constructor of ordered versions, client should choose/provide a weight parameter and related order function. THEN all methods building the ordered data structure will refer to them when inserting/deletion/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sorted dict (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
+Only sorted set and dict have not been discussed yet. For the sorted version, the key point is weight parameter, which can be key, value or extra weight parameter. As for the implementation, each table treated as one node can hold an extra weight parameter. In the constructor of ordered versions, client should choose/provide a weight parameter and related order function. Internally, all methods building the ordered data structure will refer to them when inserting/deletion/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sorted dict (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
 
 
 ## Object-Oriented Programming
-new()
-extend()
-1. single-rooted structure? From the statement, "p == Object or not p", it seems that the parent of some class is not Object!!
-2. __index: override issue, it just searches its metatable in the backward. 
-3. the length of inheritance chain should be not too long? ALSO, new() and extend() methods should be treated as moudle methods to be called directly rather than jumping several times.
+Implementation of OOP mechanism has been constructed by lua table and metatable. `Object` is the most oldest parent for all of other class instance. It has several primitive fields (**__tag** and **__parent**) and methods (**new(), extend(), clone, equal(), init()**) built-in. Usually the class that user defined has the following structure:
+	
+	__tag  				-- description of a class, usually its name
+	__parent    		-- the name of its parent class, stored the inheritance relationship
+	name/age/sex/  		-- other usual fields that customers can defined
+	
+	new()
+	extend()
+	clone() 	 -- only do it in one-layer deep
+	equal()		 -- hashCode() is used to be equal().. equal by value or reference ??
+	init()
+	
+	__add, __mod, __div, __mul
+	
+	ordinary methods
+	
+	1. single-rooted structure? From the statement, "p == Object or not p", it seems that the parent of some class is not Object!!
+3.
 4. init() process along the inheritance relationship
 
-fields[__tag, __parent, usual ones], special methods[new() and extend()], magic methods and ordinary methods ????
-
-5. clone() only do it in one-layer deep
-6. hashCode() is used to be equal().. equal by value or reference ??
 
 
+
+6. 
+
+>> remarks: the length of inheritance chain should be not too long? ALSO, new() and extend() methods should be treated as moudle methods to be called directly rather than jumping several times.
+
+
+usage
+ 
 
 ## Helper methods
 ###Http          
-escapeHTML(s)
+`escapeHTML(s)`
 simple HTML escape sequence, like converting "<" into "&lt;"
 
- 
-encodeURL(url)
+`encodeURL(url)`
 simple URL encoding  
 
-
-decodeURL(url)
+`decodeURL(url)`
 Simplistic URL decoding that can handle "plus" and "space" encoding too. ???
 
-
-parseURL(url, sep)
+`parseURL(url, sep)`
 parse parameters of URL and store key-value pairs into lua-table
