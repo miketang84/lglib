@@ -204,20 +204,19 @@ You can also use the table default APIs, like `seta["23"] = true` or `seta["abc"
 >>remarks: removing the inheritance relationship, Set should be at the same foot of Dict. isEmpty() constructed as a simple wrapper or re-implemented will be much better. Also reusing the length parameter of lua table as its size, the difficult task is to maintain the parameter. 
 
 
-###Advanced ordered data structure    
-lua-table with extension can be treated as building blocks for interface of [collection(list, queue, set(sorted set))
-map(sorted map)].
+###Advanced ordered data structures    
+lua-table with extension can be treated as building blocks for interface of [list, queue, set(sorted set), dict(sorted dict)].  The ordered and unordered verions of data structures form the following [tree] (http://loop.luaforge.net/library/collection/PriorityQueue.html), 
+	
+	  --------collection---------				  dict
+	  |		      |				|					|
+	list 	     set  		   queue			ordered set			
+	  			  |	  			 				  
+	  		  sorted set  					  
+	
+
 
 In addition to single key-value pair, each table treated as one node can also hold extra weight parameter. In the constructor of ordered interface, client should choose/provide a weight parameter and related order function. THEN all methods will refer to them when insert/delete/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sort dict/map (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
 
-collection(list, queue, set(sorted set))
-map(sorted map)---ordered by key or ordered by value
-http://loop.luaforge.net/library/collection/PriorityQueue.html
-	
-	list 	   set  		   dict			queue
-	  			|	  			 |
-	  		sorted set  	ordered set
-	
 
 ## Object-Oriented Programming
 new()
