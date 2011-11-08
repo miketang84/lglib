@@ -232,8 +232,6 @@ end
 	take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) 		between two tables. 
 --]]
 
--- 要求传入的t1, t2必须为表格
--- dup为true表示并运算，为false表示差运算
 -- dup=true for union operation, values of common keys from first table t1 will be repalced/covered by the later one t2.
 -- it also means, some info will disappear anyway.
 -- dup=false for intersection, values of res are those of the later one t2. Be careful when using it!
@@ -248,8 +246,6 @@ function merge (t1, t2, dup)
     return res
 end
 
--- 要求传入的t1, t2必须为表格
--- symm为true表示求共有部分，symm为false表示异或运算
 -- both A and B are lua-table
 -- symm=true for symmetric difference AUB-AnB = (A-B)U(B-A), while symm=false for complement(anti-symmetric difference) A-B
 function difference (s1, s2, symm)

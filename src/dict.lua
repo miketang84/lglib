@@ -102,17 +102,5 @@ function Dict:values()
 	return res
 end
 
-function Dict:isDict() 
-	if table.isEmpty(self) then
-		return "empty"
-	end
-	
-	if #self == 0 then
-		return true
-	else
-		return false
-	end
-end
-
 
 return Dict

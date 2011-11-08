@@ -81,8 +81,6 @@ Object = {
 		
 		return obj
 		
-		-- 这是上面的简化版：用最近一级原型的init方法以及传入的参数，来初始化这个实例对象
-		-- 并返回新对象
 		-- simplified version. 
 		-- return self.init(obj, ...)
 	end

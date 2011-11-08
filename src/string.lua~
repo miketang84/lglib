@@ -276,10 +276,10 @@ end
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
--- 用于返回一个UTF8字符串中从某一个位置开始UTF8字符的长度，也可用于检测是否是UTF8字节
--- @param self 被搜索的字符串
--- @param i 字符串中的位置指针
--- @return 1|2|3|4|nil 数字1～4，如果i指向的字节不是一个有效的UTF8字节，则返回nil
+-- counting length of the UTF8 char located at i-position of UTF8 string, or check whether it is a UTF8 char
+-- @param self 	   checked UTF8 string
+-- @param i        indexing a UTF8 char
+-- @return 1|2|3|4|nil   1～4 for number of bytes, nil for invalid UTF8 char
 ------------------------------------------------------------------------
 local function utf8charbytes(self, i)
 	-- argument defaults
@@ -378,9 +378,9 @@ local function utf8charbytes(self, i)
 end
 
 ------------------------------------------------------------------------
--- 计算一个UTF8字符串的UTF8字符个数，也即字符长度，而不是字节长度
--- @param self 被计算的字符串
--- @return len 长度
+-- counting the number of UTF8 chars for given UTF8 string, rather than number of bytes
+-- @param self 	UTF8 strng
+-- @return len 	length of UTF8 string
 ------------------------------------------------------------------------
 function utf8len(self)
 	local pos = 1
@@ -396,10 +396,10 @@ function utf8len(self)
 end
 
 ------------------------------------------------------------------------
--- 计算一个UTF8字符串的UTF8字符个数，也即字符长度，而不是字节长度
--- @param self 被计算的字符串
--- @param i 第i个字符，要求，0<i<len（后面，要对传入函数的参数做统一的检查）
--- @return UTF8字符|nil 如果找到了，就返回UTF8字符，否则返回nil
+-- random accessing a UTF8 char from given string
+-- @param self   UTF8 string 
+-- @param i  indexing i-th UTF8 char, i should statisfy 0<i<=len
+-- @return  UTF8 char or nil if not found
 ------------------------------------------------------------------------
 function utf8index(self, i)
 	local pos = 1
@@ -421,11 +421,11 @@ function utf8index(self, i)
 end
 
 ------------------------------------------------------------------------
--- 取一个UTF8字符串的长度片断
--- @param self 被计算的字符串
--- @param i 第i个字符，要求，0<i<len（后面，要对传入函数的参数做统一的检查）
--- @param j 第j个字符，要求，0<j<len, j >= i
--- @return UTF8字符|nil 如果找到了，就返回UTF8字符，否则返回nil
+-- slicing a UTF8 string
+-- @param self  UTF8 string 
+-- @param i   	starting position at given UTF8 string, i should statisfy 0<i<=len
+-- @param j   	ending position at given UTF8 string, j should statisfy 0<j<=len and j>=i
+-- @return   	UTF8 char or nil if not found 
 ------------------------------------------------------------------------
 function utf8slice(self, i, j)
 	if i > j then
