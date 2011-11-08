@@ -213,7 +213,7 @@ lua-table with extension can be treated as building blocks for interface of [lis
 							  			  |	  			 				  
 							  		  sorted set  					  
 	
-Only sorted set and dict have not been discussed yet. For the sorted version, the key point is weight parameter, which can be key, value or extra weight parameter. For the implementation, each table treated as one node can also hold extra weight parameter. In the constructor of ordered interface, client should choose/provide a weight parameter and related order function. THEN all methods will refer to them when insert/delete/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sort dict/map (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
+Only sorted set and dict have not been discussed yet. For the sorted version, the key point is weight parameter, which can be key, value or extra weight parameter. As for the implementation, each table treated as one node can hold an extra weight parameter. In the constructor of ordered versions, client should choose/provide a weight parameter and related order function. THEN all methods building the ordered data structure will refer to them when inserting/deletion/iteration/has/etc. Once implemented, sorted set (ordered by keys or weight parameter) and sorted dict (ordered by keys, values or weight parameter) are just simple wrappers or special cases of this implementation. In some sense, this implementation is at the same foot of lua-table.
 
 
 ## Object-Oriented Programming
