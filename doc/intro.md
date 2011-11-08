@@ -231,15 +231,44 @@ Implementation of OOP mechanism has been constructed by lua table and metatable.
 	equal()		 -- hashCode() is used to be equal().. equal by value or reference??
 	init()		 -- process along the inheritance relationship
 	
-Magic methods, like `__add`, `__mod`, `__div` and `__mul`, are used frequently because of convenience. Actually, magic methods still has the same issue of built-in methods call when searching methods in metatable in the backward direction. Our implementation of magic methods adds a reference/index cache, which could accelarate callback processes. Once callback functions modified, the change can not propagate into the reference cache, it will lost a little of flexibility. In a word, it just trade off between performance and flexibility.
+Magic methods, like `__add`, `__mod`, `__div` and `__mul`, are used frequently because of convenience. Actually, magic methods still has the same issue of built-in methods call when searching methods in metatable in the backward direction. Our implementation of magic methods adds a reference/index cache, which could accelarate method call processes. Once methods modified, the change can not propagate into the reference cache, it will lost a little of flexibility. In a word, it just trade off between performance and flexibility.
 
-
-ordinary methods
+Ordinary methods, `dosomething()` method could be defined for your customized usage. Up to now, the inheritance and composition of OOP have been discussed. We just use an example to illustrate the above concepts. 
 	
+	local Message = Object:extend{....}
+		__name = 'Message';  
+		__desc = 'General message definition.';  
+	  
+		-- constructor
+		init = function (self, t)  
+		    if not t then return self end     
+	  
+		    self.type = t.type  
+		    self.author = t.author  
+		    self.content = t.content  
+		    self.timestamp = t.timestamp or os.time()  
+	  
+		    return self  
+		end;  
+	  
+		doSomething = function (self)  
+		    .....  
+		end;
+	}  
  
 
 usage
- 
+	
+	local msg_obj = Message()   -- 创建一个空消息  
+	local msg_obj2 = Message {  -- 创建一个有内容的消息  
+		    type = '100',  
+		    author = 'daoge',  
+		    content = 'hello',  
+		}  
+  msg_obj2:doSomething();     -- 调用类中定义的方法  
+
+
+**polymorphism**
 
 ## Helper methods
 ###Http          
