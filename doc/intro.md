@@ -126,33 +126,19 @@ For initialization, you can create an empty list by `List()` or a list holding s
 	local listb = List {1,2,3,4,5,6}
 	
 `range(start, finish)` is a class method, where `start` parameter is optional, and its default value is 1. Both sides are inclusive and a sequence of integers from `start` to `finish` are generated. All others are object methods that operated on a specific object. `List:len()`
-returns the size/length of a list. From the perspective of performance, storing and maintaining a length parameter may be a better choice. `List:isEmpty()` checks whether a list is empty or not and `List:clear()` can clear all elements of list. The magic method `__eq()` tests whether two lists are equal or not, and can be written as l2 == l1. 
+returns the size/length of a list. From the perspective of performance, storing and maintaining a length parameter may be a better choice. `List:isEmpty()` checks whether a list is empty or not and `List:clear()` can clear all elements of list. The magic method `__eq()` tests whether two lists are equal or not, and can be written as `l2 == l1`. For this magic method, there is the same issue of **value or reference** to be taken care of. That is all for the common part of APIs.
 
 
-
-mapn() and zip() CAN NOT be understood yet. 
-transform() and map() 
-
-
-@instance methods
-List:splice(idx, list)
-insert another *list* at the location *idx*
-
-List:sliceAssign(i1, i2, seq)
-assignment in the style of slicing
+For the array part of APIs, let's explain the basic operations firstly, that is, insert/delete/read/update.
+	
+	List:splice(idx, list)   --insert another *list* at the location *idx*
+	List:extend(another) [is a special case of List:splice(idx, list)] list expansion by another one, appending at the tail of "self" list. it can be written as lnew = l1 + l2.
+	List:iremove (i)  -- delete by index
+	List:remove(x) 		-- [is a special csae of List:remove(x, numOfDeletion)] delete elements that have the value "x"
+	List:chop(i1,i2)    -- deleted by indexing interval
+	
 
 
-List:extend(another) [is a special case of List:splice(idx, list)]
-list expansion by another one, appending at the tail of "self" list. it can be written as lnew = l1 + l2.
-
-List:iremove (i)
-delete by index
-
-List:remove(x) [is a special csae of List:remove(x, numOfDeletion)]
-delete elements that have the value "x"
-
-List:chop(i1,i2)
-deleted by indexing interval 
 
 List:find(val, idx)
 starting from idx index and trying to find the first element with value=val
@@ -160,23 +146,20 @@ starting from idx index and trying to find the first element with value=val
 List:contains(x)
 check whether a list instance has the element "x"
 
-List:count(x)
-counting times that element "x" repeats in the list "self"
-
-List:join(sep)
-simpe wrapper of table.concat() method
-
-List:sort(cmp)
-sort a list w.r.t. an order function "cmp", and it is a simple wrapper of table.sort(orderFunction)
-
-List:reverse()
-reversing the element order 
-
 List:slice(start, stop, is_rev)
 -- select a piece of list with index from "start" to "stop"
 -- start, stop maybe nil, negative integer, or other values. the default value of "start" is 1, while #list for "stop" 
 -- if is_rev is "rev", the returned list is in reversing order.
 
+List:sliceAssign(i1, i2, seq)
+assignment in the style of slicing
+
+	List:count(x)  -- counting times that element "x" repeats in the list "self"
+	List:join(sep)  -- simpe wrapper of table.concat() method 
+	List:sort(cmp)  -- sort a list w.r.t. an order function "cmp", and it is a simple wrapper of table.sort(orderFunction)
+	List:reverse()  -- reversing the element order 
+	
+	
 
 queue-part [implemented as a lua-table]
 List:append(val)
