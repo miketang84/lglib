@@ -114,7 +114,10 @@ where 1, 2, 3, 4 and 5 are stored as array/list, and others including 0->0, -1->
 
 One more thing that you should keep in mind is the spliting done here only in one layer. The list/dict type that you get can also contains nesting lua-table internally. SOMETIMES one-layer is enough??? I think we should try to use customized APIs (**List, Dict, Set, Queue**) as much as possible rather than lua-table directly. 
 
-
+private API??
+tbl:merge():semi-union and intersection operations for two tables 
+tbl:difference():semi-complement and symmetric difference operations
+take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) between two tables. 
 
 ## Data structure 
 ###List
@@ -170,7 +173,7 @@ For the basic operations of single key-value pair, we had better to use table AP
 	tt["singled"] = nil		-- delete operation
 	tt["double"]  			-- read operation
 	
-To achieve better performance, the key of key-value pair should be choosen as lua string. If key in key-value pair is string, the pair is guaranteed to be stored inside hash table internally. For Dict-specific methods,
+To achieve better performance, the key of key-value pair should be chosen as **lua string**. If key in key-value pair is string, the pair is guaranteed to be stored inside hash table internally. For Dict-specific methods,
 	
 	Dict:keys()    -- return all the keys of Dict instance **without** keeping any order because of feature of hash table.
 	Dict:values()  -- return all the values of Dict instance, still without keeping any order
@@ -178,58 +181,32 @@ To achieve better performance, the key of key-value pair should be choosen as lu
 	Dict:size()    -- return the length of Dict instance, counting once again when called
 	
 
-
 ###Set     
-Set is the prototype of all Set instances. It inherits the prototype of Dict. [remove the inheritance relationship, now Set is at the same foot of Dict.]
+Set is the prototype of all Set instances. It inherits the prototype of Dict. Therefore Set instance can use table and Dict APIs, especially dict-style of them. Like List prototype, the initialization of a Set object/instance follows as: 
+	
+	seta = {} 
+	setb = {"one", "two", "2", "three", "four"}
+	
+As for basic operations, same issue of keys with string type should be taken care. When encounting positive integers as elements, you should first explicitly convert them into string and then do necessary operations. This requirement results from the consideration of performance. We would like to store all elements into hash table internally. The same argument also holds for Dict type. For example, 
+	
+	seta:add("12") NOT seta:add(12)  		--->{"23" = true}
+	setb:delete("2")  NOT setb:delete(2)    --->{"one", "two","three", "four"}
 
-initializing a Set object 
-seta = {}
-setb = {"one", "two", "2", "three", "four"}
-seta:add("12") NOT seta:add(12)
+You can also use the table default APIs, like `seta["23"] = true` or `seta["abc"] = nil` to do the same things. Actually, methods add() and delete() are implemented in this way internally, that can be treated as raw APIs. `has(key)` tests whether a element `key` exist or not, `members()` just returns all of elements in random order. Finally, five logical operations of set follows as:
+	
+	Set:union(another)					-- standard union operation, can be written as A + B
+	Set:intersection(another)			-- standard intersection operation, can be written as A * B
+	Set:difference(another)				-- standard difference operation, can be written as A - B
+	Set:symmetricDifference(another) 	-- standard symmetric difference operations, can be written as A ^ B
+	Set:isSub(another)					-- check whether "self" is a sub-set of "another" or not, can be written as A < B
+	
 
-when encounting positive integers as elements, you should first explicitly convert them into string and then do necessary operations. This requirement results from the consideration of performance. We would like to store all elements into hash table internally. The same argument also holds for Dict type.
-
-basic operations
-add(key)
-seta:add("23") --->{"23" = true}
-
-delete(key)
-delete one element "key"
-
-Do not use the table default API, like seta["23"] = true or seta["abc"] = nil. Actually, methods add() and delete() are implemented in this way internally, that can be treated as raw API. If the size of set is stored as a parameter, we should maintain such a parameter in add() and delete() that can not be easily done in raw API.  <this is another way to handle the implementation of extra length parameter>
-
-has(key)
-test whether a element "key" exist or not
-
-members()
-return all of elements in random order
-
-Five logical operations of set
-Set:union(another)
-standard union operation, can be written as A + B
-
-Set:intersection(another)
-standard intersection operation, can be written as A * B
-
-Set:difference(another)
-standard difference operation, can be written as A - B
-
-Set:symmetricDifference(another)
-standard symmetric difference operations, can be written as A ^ B
-
-Set:isSub(another)
-check whether "self" is a sub-set of "another" or not
-can be written as A < B
-
-private API??
-tbl:merge():semi-union and intersection operations for two tables 
-tbl:difference():semi-complement and symmetric difference operations
-take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) between two tables.   
-
-+ Q1- use nil instead of false
+[remove the inheritance relationship, now Set is at the same foot of Dict.]
+If the size of set is stored as a parameter, we should maintain such a parameter in add() and delete() that can not be easily done in raw API. + Q3- how about adding an extra parameter, length/size of set? + Q4- Call isEmpty() from table?? simple wrapper will be much better.
+\
 + Q2- how to make sure list type
-+ Q3- how about adding an extra parameter, length/size of set?
-+ Q4- Call isEmpty() from table?? simple wrapper will be much better.
+
+
 
 
 
