@@ -83,7 +83,8 @@ Object = {
 		
 		-- simplified version. 
 		-- return self.init(obj, ...)
-	end
+	end; 
+	
 	clone = function (self)
 		local new = table.copy(self)  --why not call table.deepCopy(self)??
 		setmetatable(new, getmetatable(self))
