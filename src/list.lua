@@ -293,9 +293,10 @@ function List:__eq(L)
     return true
 end
 
-function List:__tostring()
-     return '{' .. self:join(',') .. '}'
-end
+
+--function List:__tostring()
+--     return '{' .. self:join(',') .. '}'
+--end
 
 --%%%%%%%%%%%%%%%%%%%
 -- keep my eye on it
