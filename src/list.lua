@@ -322,6 +322,10 @@ end
 
 -- 
 function List:isEmpty ()
+	if type(self) ~= 'table' then
+		error('You use isEmpty(), but the parameter is not a list.', 2)
+	end
+	
     if #self == 0 then
 		return true
 	else
