@@ -18,12 +18,14 @@ Set.__typename = "Set"
 local function new (tbl)
 	-- if tbl is nil, empty table returned
 	local t = {}
-	if tbl then
+	if #tbl > 0 then
 		checkType(tbl, 'table')
-		-- the input parameter "tbl" should be a LIST, BUT how to check it????? 
+		-- passed in params is a list
 		for _, v in ipairs(tbl) do
 			t[v] = true  
 		end
+	elseif not table.isEmpty(tbl) then
+		t = tbl
 	end
 
 	return setmetatable(t, Set)
