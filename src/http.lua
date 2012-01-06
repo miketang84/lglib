@@ -58,7 +58,6 @@ function parseURL(url, sep)
 				if not result[k] then result[k] = {} end
 				-- table.insert(result[k], decodeURL(v))
 				result[k][#result[k] + 1] = decodeURL(v)
-				ptable(result[k])
 			else
 				result[k] = decodeURL(v)
 			end
