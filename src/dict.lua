@@ -20,6 +20,7 @@ end
 
 -- constructor for Dict objects
 local function new (tbl)
+	tbl = tbl or {}
 	assert(type(tbl) == 'table', "[Error] paramerter passed in Dict constructor should be table.")
 	for k, v in pairs(tbl) do
 		if type(k) ~= 'string' then
@@ -67,5 +68,8 @@ function Dict:values()
 	return res
 end
 
+Dict_meta.__tostring = function (self)
+    return table.tree(self)
+end
 
 return Dict

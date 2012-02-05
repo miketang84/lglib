@@ -2,6 +2,7 @@ local require, getmetatable = require, getmetatable
 local string, table, unpack, select, debug, error, loadstring, assert = string, table, unpack, select, debug, error, loadstring, assert
 local type, tostring, pairs, io, error, print = type, tostring, pairs, io, error, print
 local pcall, debug = pcall, debug
+local ipairs = ipairs
 
 require 'lgstring'
 
@@ -150,8 +151,8 @@ rtrim = lgstring.rtrim
 trim = lgstring.trim
 
 
-splittrim = function (str, delimiters)
-	local r = str:split(delimiters)
+splittrim = function (str, delimiters, count)
+	local r = str:split(delimiters, count)
 	for i, v in ipairs(r) do
 		r[i] = trim(v)
 	end

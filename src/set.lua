@@ -1,5 +1,6 @@
 local string = string
 local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat, table.sort
+local assert = assert
 local List = require('lglib.list')
 local Dict = require('lglib.dict')
 
@@ -11,20 +12,25 @@ local Set = {}
 local Set_meta = {}
 Set_meta.__index = Set
 Set_meta.__typename = "set"
---Set_meta.__newindex = function (self, k, v)
---end
+Set_meta.__newindex = function (self, k, v)
+	assert(isStrOrNum(k), '[Error] the key passed in to Set should only be string or number.')
+	rawset(self, k, v)
+end
 
 -- constructor of Set objects
--- now, the key of the set is not suit for table/object
+-- now, the key of the set is not suit for table/object, only for number and string, 
+-- and the stored type is always string
 local function new (tbl)
+	tbl = tbl or {}
 	assert(type(tbl) == 'table', "[Error] paramerter passed in Set constructor should be table.")
 
 	-- retreive list item, left the key-value part
-	for _, v in ipairs(tbl) do
-		t[v] = true
+	for i, v in ipairs(tbl) do
+		tbl[tostring(v)] = true
+		tbl[i] = nil
 	end
 
-	return setmetatable(t, Set)
+	return setmetatable(tbl, Set_meta)
 end
 
 -- binding constructor new(tbl) with Set() sytanx
@@ -36,8 +42,8 @@ setmetatable(Set, {
 })
 
 
-function Set:add (key)
-    self[key] = true
+function Set:add (key, value)
+    self[key] = value or true
 end
 
 function Set:delete (key)
@@ -52,7 +58,7 @@ function Set:has (key)
 	end
 end
 
-function Set:members(self)
+function Set:members()
 	local r = List()
 	for k, _ in pairs(self) do
 		tinsert(r, k)
@@ -117,7 +123,7 @@ Set_meta.__lt = isSub
 -- override the tostring() function
 -- join is a method of LIST
 function Set_meta:__tostring ()
-    return '{' .. self:members():join(',') .. '}'
+    return '{' .. self:members():join(', ') .. '}'
 end
 
 

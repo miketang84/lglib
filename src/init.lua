@@ -56,7 +56,7 @@ end
 function import(wrap_table, sub_modname)
 	local info = debug.getinfo(1, 'S')
 	local filedir = info.source:sub(2, -10)
-	print(filedir, sub_modname)
+
 	setfenv(assert(loadfile( ('%s/%s.lua'):format(filedir, sub_modname))), setmetatable(wrap_table, {__index=_G}))(filedir)
 	setmetatable(wrap_table, nil)
 end
@@ -73,7 +73,7 @@ _G['Set'] = require 'lglib.set'
 
 -- accessing the field of "typename"，the object passed into should be one of List, Dict, Table, Set, etc.
 -- then we also define "checkType" for List, Dict, Set, Table???---->just isList(), isDict(), isSet()
-_G['typename'] = function (t)
+local typename = function (t)
 	local typet = type(t)
 
 	local tmeta = getmetatable(t)
@@ -83,9 +83,10 @@ _G['typename'] = function (t)
 		return typet
 	end
 end
+_G['typename'] = typename
 
 -- checking the type of instance
-local istype = function (t, name)
+local isType = function (t, name)
 	local ret = typename(t) 
 	if ret and ret == name then
 		return true
@@ -94,16 +95,18 @@ local istype = function (t, name)
 	end
 end
 
+_G['isType'] = isType
+
 _G['isList'] = function (t)
-	return istype(t, 'List')
+	return isType(t, 'list')
 end
 
 _G['isDict'] = function (t)
-	return istype(t, 'Dict')
+	return isType(t, 'dict')
 end
 
 _G['isSet'] = function (t)
-	return istype(t, 'Set')
+	return isType(t, 'set')
 end
 
 --------------------------------------------------------------------------------
@@ -132,11 +135,12 @@ _G['checkType'] = function (...)
 	assert(args_len % 2 == 0, 'Argument types and objs are not matched.')
 	
 	local half = args_len / 2;
-	local typev;
+	local typev, targettype
 	for i=1, half do
-		typev = typename(args[i]) or type(args[i])
-		assert('string' == type(args[i+half]), '[Error] The lower half part of the argumet list should be string!')
-		assert(args[i+half] == typev , ("[Error] This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]))
+		typev = typename(args[i])
+		targettype = args[i+half]
+		assert('string' == type(targettype), '[Error] The lower half part of the argumet list should be string!')
+		assert(targettype == typev , ("[Error] This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), targettype))
 	end
 
 	return true
@@ -185,25 +189,19 @@ end
 
 -- config a prototype for a given object/instance
 _G['setProto'] = function (obj, proto)
-	checkType(obj, proto, 'table', 'table')
+	checkType(proto, 'table')
 	
 	local mt = getmetatable(obj) or {}
 	local old_meta = mt.__index
 	
 	-- methods binding when old_meta is nil or table
 	if not old_meta or type(old_meta) == 'table' then
-		mt.__index = function(t, k)  --- why should we introduce a parameter t here??? it seems we don't use it at all.
-			return (old_meta and old_meta[k]) or proto[k] 
+		mt.__index = function(t, k)  	-- here, 't' is the table self
+			return old_meta and old_meta[k] or proto[k] 
 		end
 	end
 	
 	return setmetatable(obj, mt)
-end
-
--- setting lua-table as a prototype for any instance
-_G['T'] = function (t)
-	local t = t or {}
-	return setProto(t, table)
 end
 
 -- printf as an alias of string.format()

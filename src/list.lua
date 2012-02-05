@@ -18,6 +18,7 @@ end
 
 -- constructor of List object
 local function new (tbl)
+	tbl = tbl or {}
 	assert(type(tbl) == 'table', "[Error] paramerter passed in List constructor should be table.")
 	-- here, we keep the thing simple to keep speed
 	-- setting the inheritance relationship
@@ -148,7 +149,11 @@ end
 
 -- simple wrapper of table.concat() method
 function List:join(sep)
-	return concat(self, sep)
+	local _t = {}
+	for _, v in ipairs(self) do
+		tinsert(_t, tostring(v))
+	end
+	return concat(_t, sep)
 end
 
 -- sorting, a simple wrapper of table.sort()
