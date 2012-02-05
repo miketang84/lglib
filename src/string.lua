@@ -3,6 +3,8 @@ local string, table, unpack, select, debug, error, loadstring, assert = string, 
 local type, tostring, pairs, io, error, print = type, tostring, pairs, io, error, print
 local pcall, debug = pcall, debug
 
+require 'lgstring'
+
 local List = require 'lglib.list'
 local Set = require 'lglib.set'
 
@@ -43,9 +45,6 @@ getmetatable("").__add = function (self, astr)
 	return (ok and ret or self)
 end
 
-function length(self)
-    return utf8len(self)
-end
 
 ------------------------------------------------------------------------
 -- capitalizing first letter of word  
@@ -77,12 +76,7 @@ end
 -- @param beg   substring
 -- @return true|false   
 ------------------------------------------------------------------------
-function startsWith(self, begin)
-    if self:sub(1, #begin) ~= begin then
-        return false
-    end
-    return true
-end
+startsWith = lgstring.startsWith
 
 ------------------------------------------------------------------------
 -- check whether string ends with substring or not
@@ -90,77 +84,37 @@ end
 -- @param tail   substring
 -- @return true|false   
 ------------------------------------------------------------------------
-function endsWith(self, tail)
-	if self:sub(-#tail) ~= tail then
-		return false
-	end
-	return true
-end
+endsWith = lgstring.endsWith
 
 ------------------------------------------------------------------------
 -- spliting a given string by a delimiter
 -- @param self 		splited sting
 -- @param delim		delimiter
 -- @param count	 	how many times that the delimiter could be replaced
--- @param no_patterns   true|false|nil    whether turn off regular expression in delimiter or not 
 -- @return rlist 	list of splited pieces
 ------------------------------------------------------------------------
-function split(self, delim, count, no_patterns)
+split = lgstring.split
 
-    if delim == '' then error('invalid delimiter', 2) end
-    local count = count or 0
-
-    local next_delim = 1
-    local i = 1
-    local rlist = List()
-
-    repeat
-        local start, finish = self:find(delim, next_delim, no_patterns)
-        if start and finish then
-            rlist:append(self:sub(next_delim, start - 1))
-            next_delim = finish + 1
-        else
-            break
-        end
-        i = i + 1
-    until i == count + 1
-
-    rlist:append(self:sub(next_delim))
-    return rlist
-end
 ------------------------------------------------------------------------
 -- spliting a given string by a delimiter
 -- @param self  	splited string 
 -- @param delim 	delimiter
 -- @param count 	times that a delimiter could be replaced
--- @param no_patterns   true|false|nil 	turn off regular expression in delimiter or not 
 -- @return unpack a list of splited pieces
 ------------------------------------------------------------------------
-function splitOut(self, delim, count, no_patterns)
-    return unpack(split(self, delim, count, no_patterns))
+function splitout(self, delim, count)
+    return unpack(split(self, delim, count))
 end
 
-------------------------------------------------------------------------
--- spliting a given string by several delimiters
--- @param self  splited string
--- @param ...   several delimiters
--- @return 		unpack a list of splited pieces
-------------------------------------------------------------------------
-function splitBy(self, ...)
-	local res = List()
-	local tail, values = self, {select(1, ...)}
-	for i = 1, select("#", ...) do
-		if not tail then break end
-		local begPos, endPos = tail:find(values[i], 1, true)
-		if begPos then
-			table.insert(res, tail:sub(1, begPos-1))
-			tail = tail:sub(endPos+1)
-		end
-	end
-	table.insert(res, tail)
-	return unpack(res)
-end
 
+------------------------------------------------------------------------
+-- spliting a given string by some delimiters
+-- @param self  	splited string 
+-- @param delim 	delimiter
+-- @param count 	times that a delimiter could be replaced
+-- @return unpack a list of splited pieces
+------------------------------------------------------------------------
+splitset = lgstring.splitset
 
 ------------------------------------------------------------------------
 -- find location of the last substring in a given string
@@ -170,17 +124,7 @@ end
 --         lastEndPos   the end position of last substring
 -- @note   SHOULD be optimized by pattern matching in the reversed direction
 ------------------------------------------------------------------------
-function rfind(self, substr)
-	local i, lastBegPos, lastEndPos = 1
-	local begPos, endPos = self:find(substr, i, true)
-	while begPos do
-		lastBegPos = begPos
-		lastEndPos = endPos
-		i = begPos+1
-		begPos, endPos = self:find(substr, i, true)
-	end
-	return lastBegPos, lastEndPos
-end
+rfind = lgstring.rfind
 
 -- character set of blank spaces
 local TRIM_CHARS = Set {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();("\n"):byte();0}
@@ -189,76 +133,29 @@ local TRIM_CHARS = Set {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();(
 -- @param self  trimed string
 -- @return	 	clean string without blank space at the head
 ------------------------------------------------------------------------
-function ltrim(self)
-	local index = 1
-	for i = 1, #self do
-		if not TRIM_CHARS:has(self:byte(i)) then
-			index = i
-			break
-		end
-	end
-	return self:sub(index)
-end
+ltrim = lgstring.ltrim
 
 ------------------------------------------------------------------------
 -- trim out blank space at the tail of string
 -- @param self  trimed string
 -- @return 		clean stirng without blank space at the tail
 ------------------------------------------------------------------------
-function rtrim(self)
-	local index = 1
-	for i = #self, 1, -1 do
-		if not TRIM_CHARS:has(self:byte(i)) then
-			index = i
-			break
-		end
-	end
-	return self:sub(1, index)
-end
+rtrim = lgstring.rtrim
 
 ------------------------------------------------------------------------
 -- trim out blank space at both sides string
 -- @param self  trimed string
 -- @return 		clean string without blank space on both sides
 ------------------------------------------------------------------------
-function trim(self)
-	return self:ltrim():rtrim()
-end
+trim = lgstring.trim
 
-------------------------------------------------------------------------
--- replace substring with new substring
--- @param self  long string to be handled
--- @param ori   substring to be replaced
--- @param new   new substring
--- @param n     times of replacements
--- @return 		string after replacement
--- not necessary I think
-------------------------------------------------------------------------
-function replace(self, ori, new, n)
-    return self:gsub(ori, new, n)
-end
 
-------------------------------------------------------------------------
--- multiple replacements by mapping from old substring to new one
--- @param self 		long string to be handled
--- @param mapping	mapping table between old substring to new ones, like {['ori'] = 'new', ['foo'] = 'bar'}
--- @param n   		times of replacements
--- @return 			utf8 string or nil
-------------------------------------------------------------------------
-function mapreplace (self, mapping, n)
-    for k, v in pairs(mapping) do
-        self:gsub(k, v, n)
-    end
-    
-    return self
-end
-
-function index(self, i)
-    return self:sub(i, i)
-end
-
-function slice(self, i, j)
-	return utf8slice(self, i, j)
+splittrim = function (str, delimiters)
+	local r = str:split(delimiters)
+	for i, v in ipairs(r) do
+		r[i] = trim(v)
+	end
+	return r
 end
 
 ------------------------------------------------------------------------
@@ -495,57 +392,3 @@ function utf8reverse (self)
 end
 
 
-function findpart(str, start, endwhich)
-	if endwhich < start then return '' end
-	if endwhich <= 0 or start <= 0 then return '' end
-	
-	local str = str:trim()
-	local count = 0
-	local p = 0
-
-	local i = 0
-	while i do
-		i = str:find(' ', i+1)
-		if i then
-			count = count + 1
-			if count == start - 1 then
-				p = i + 1
-				break
-			end
-		end
-	end
-	
-	if p == 0 then return '' end
-	
-	i = 0
-	count = 0		
-	str = str:sub(p)
-	p = 0
-	while i do
-		i = str:find(' ', i+1)
-		if i then
-			count = count + 1
-			if count == endwhich - start + 1 then
-				p = i - 1
-				break
-			end
-		end
-	end
-	
-	if p == 0 then 
-		return str 
-	else
-		return str:sub(1, p)
-	end
-end
-
-
-
-function trailingPath(path)
-	local path = path:gsub('//+', '/')
-	if path:sub(-1) ~= '/' then
-		path = ('%s/'):format(path)
-	end
-	
-	return path
-end

@@ -4,6 +4,15 @@ require 'lglib.strict'
 module(..., package.seeall)
 local modname = ...
 
+
+_G['assert'] = function (bool, error_prompt)
+	if not bool then
+		print(error_prompt)
+		print(debug.traceback())
+		os.exit(-1);
+	end
+end
+
 -- register extended methods into lua standard library, like string, table, io, etc 
 -- DO NOT UNDERSTAND the code of implementation
 function import(wrap_table, sub_modname)
@@ -137,7 +146,7 @@ _G['isFalse'] = function (onearg)
 end
 
 -- check if is string or number
-_G['isStringOrNumber'] = function (arg)
+_G['isStrOrNum'] = function (arg)
 	local ctype = type(arg)
 	return ctype == 'string' or ctype == 'number'
 end
@@ -169,6 +178,7 @@ end
 _G['printf'] = function (...) 
 	print(string.format(...)) 
 end
+
 
 ------------------------------------------------------------------------
 -- serialize lua instances/objects into a lua-table format
