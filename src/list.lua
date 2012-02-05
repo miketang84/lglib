@@ -1,30 +1,26 @@
 local string, table = string, table
 local tinsert, tremove, concat, tsort = table.insert, table.remove, table.concat, table.sort
+local assert = assert
+local equal = equal
 
 module(..., package.seeall)
 
 -- this is a LIST prototype, and all of list instances inherit it
 local List = {}
-
---itself as  its metatable
-List.__index = List
-List.__typename = "List"
+local List_meta = {}
+List_meta.__index = List
+List_meta.__typename = "List"
+List_meta.__newindex = function (self, k, v)
+	assert(type(k) == 'number', "[Error] List can only accept number as index.")
+	self[k] = v
+end
 
 -- constructor of List object
 local function new (tbl)
-	-- if tbl is nil, then empty table returned
-	local t = {}
-	
-	if tbl then
-		checkType(tbl, 'table')
-		--only List part are passed into/// call takeAparts() directly
-		for _, v in ipairs(tbl) do
-			tinsert(t, v)
-		end
-	end
-	
+	assert(type(tbl) == 'table', "[Error] paramerter passed in List constructor should be table.")
+	-- here, we keep the thing simple to keep speed
 	-- setting the inheritance relationship
-	return setmetatable(t, List)
+	return setmetatable(tbl, List_meta)
 end
 
 -- binding constructor new(tbl) with List() sytanx
@@ -33,7 +29,6 @@ setmetatable(List, {
     __call = function (self, tbl)
         return new(tbl)
     end,
-	__index = table
 })
 
 
@@ -42,7 +37,7 @@ function normalize_slice( self, start, stop )
 	local start = start or 1
 	local stop = stop or #self
 	
-	if (stop > 0 and start > 0) or (stop < 0 and start < 0) then assert( stop >= start) end
+	if stop > 0 and start > 0 or stop < 0 and start < 0 then assert(stop >= start) end
 	if start > #self then return nil, nil end
 	
 	-- the negative index
@@ -84,30 +79,6 @@ function List.range(start, finish)
 end
 
 
--- CAN NOT UNDERSTAND mapn and zip class methods
--- 将函数作用到多个List上
--- 每个list的元素个数都必须相同
-function List.mapn(fn,...)
-    --fun = function_arg(1,fun)
-    local res = List()
-    local lists = {...}
-    
-	for i = 1, #lists do
-        local args = {}
-        for j = 1, #lists do
-            args[#args+1] = lists[j][i]
-        end
-        res[#res+1] = fun(unpack(args))
-    end
-    return res
-end
-
-
--- @usage zip({10,20,30},{100,200,300}) is {{10,100},{20,200},{30,300}}
-function List.zip(...)
-    return List.mapn(function(...) return {...} end, ...)
-end
-
 ------------------------------------------------------------------------
 -- @object methods
 
@@ -117,7 +88,6 @@ function List:append(val)
     return self
 end
 
--- 前加元素
 -- super slow, time complexity is O(N). IF implemented by lua-table, it will be much better
 function List:prepend(val)
     tinsert(self, 1, val)
@@ -132,9 +102,8 @@ function List:extend( another )
 end
 
 -- delete by index
-function List:iremove (i)
-    checkType(i, 'number')
-    tremove(self, i)
+function List:pop (i)
+	tremove(self, i)
     return self
 end
 
@@ -151,10 +120,6 @@ end
 -- push a new element into list at right-hand side
 List.push = List.append
 
--- pop a element from list at right-hand side
-function List:pop()
-    return tremove(self)
-end
 
 -- starting from idx index and trying to find the first element with value=val, 
 function List:find(val, idx)
@@ -215,11 +180,11 @@ function List:slice(start, stop, is_rev)
 	
 	if is_rev ~= 'rev' then
 		for i = start, (#self > stop and stop or #self) do
-			table.insert(nt, self[i])
+			tinsert(nt, self[i])
 		end
 	else
 		for i = (#self > stop and stop or #self), start, -1 do
-			table.insert(nt, self[i])
+			tinsert(nt, self[i])
 		end
 	end
 	
@@ -229,7 +194,7 @@ end
 -- delete all of list elements
 function List:clear()
 	for i=1, #self do tremove(self, i) end
-	return self  --if works, self should be nil
+	return self
 end
 
 -- length/size of list
@@ -248,7 +213,7 @@ end
 
 -- insert another *list* at the location *idx*
 function List:splice(idx, list)
-    checkType(idx, list, 'number', 'table')
+    checkType(idx, list, 'number', 'List')
     local i = idx
     for _, v in ipairs(list) do
         tinsert(self, i, v)
@@ -275,48 +240,18 @@ function List:sliceAssign(i1, i2, seq)
     return self
 end
 
--- + can be used as linking/expanding sign, like lnew = l1 + l2
 function List:__add(another)
-    checkType(another, 'table')
+    checkType(another, 'List')
     
-	local ls = List(self)
     ls:extend(another)
     return ls
 end
 
--- equality operator in the context of  list, like l2 == l1?
-function List:__eq(L)
-    if #self ~= #L then return false end
-    for i = 1, #self do
-        if self[i] ~= L[i] then return false end
-    end
-    return true
-end
-
+List.__eq = equal
 
 --function List:__tostring()
 --     return '{' .. self:join(',') .. '}'
 --end
-
---%%%%%%%%%%%%%%%%%%%
--- keep my eye on it
---%%%%%%%%%%%%%%%%%%%
--- perform the operation fn for each element of list, and a new list returned
-function List:map(fn, ...)
-	list = {...}
-	res = {}
-	for i = 1, #list do
-		res[#res + 1] = fn(list[i])
-	end	
-	return res
-end
-
--- 对所有元素执行函数操作，在自身上改变
-function List:transform (fn, ...)
-    
-	return self
-end
-
 
 
 

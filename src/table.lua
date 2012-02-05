@@ -2,10 +2,10 @@ local table, pairs, next, type, require, ipairs = table, pairs, next, type, requ
 local tostring, debug, assert, error, setmetatable = tostring, debug, assert, error, setmetatable
 local string = string
 local math = math
-
+local tinsert = table.insert
+local equal = equal
 
 ------------------------------------------------------------------------
-__typename = 'Table'
 
 -- To use the lua-table more efficiently, we could divide lua-table into list-part and dictionary-part when necessary.
 -- From the implementation perspective of view, lua-table is a combination of C-array and Hash-table coded in C language.
@@ -13,60 +13,21 @@ __typename = 'Table'
 -- dict-part---->hash table
 
 
--- two objects returned, List and Dict. 
--- takeAparts function only handle one layer, how about a multi-layer case?
-function takeAparts(self)
+-- two objects returned, List and Dict. Process only one layer 
+function separate(self)
 	local list_len = #self
 	local list_part, dict_part = {}, {}
 	
-	-- old implementation
-	for i=1, list_len do
-		table.insert(list_part, self[i])
-	end
-	
-	for k, v in pairs(self) do
-		if type(k) ~= 'number' or (type(k) == 'number' and k > list_len) then
-			dict_part[k] = v
-		end
-	end
-	
-	-- new implementation
-	--[[
 	for k, v in pairs(self) do
 	    if type(k)== 'number' and k%1 == 0 and k <= list_len and k > 0 then
-	        table.insert(list_part, self[k])
+	        tinsert(list_part, self[k])
 	    else
 	        dict_part[k] = v
 	    end
 	end
-	--]]
 	
 	local List, Dict = require 'lglib.list', require 'lglib.dict'
 	return List(list_part), Dict(dict_part)
-end
-
-
-function equal(self, another)
-    -- old implementation
-	for k, v in pairs(self) do
-		if another[k] ~= v then return false end
-	end
-
-	for k, v in pairs(another) do
-		if self[k] ~= v then return false end
-	end 
-    
-    -- new implementation
-    --[[
-    if self.size ~= another.size then
-        return false
-    else
-        for k, v in pairs(self) do
-            if another[k] ~= v then return false end
-        end
-    end
-    --]]
-	return true
 end
 
 
