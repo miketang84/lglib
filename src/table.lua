@@ -7,12 +7,6 @@ local equal = equal
 
 ------------------------------------------------------------------------
 
--- To use the lua-table more efficiently, we could divide lua-table into list-part and dictionary-part when necessary.
--- From the implementation perspective of view, lua-table is a combination of C-array and Hash-table coded in C language.
--- list-part---->array
--- dict-part---->hash table
-
-
 -- two objects returned, List and Dict. Process only one layer 
 function separate(self)
 	local list_len = #self
@@ -189,41 +183,16 @@ function update(self, source, keys)
 
     return self
 end
---[[
-	take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) 		between two tables. 
---]]
-
--- dup=true for union operation, values of common keys from first table t1 will be repalced/covered by the later one t2.
--- it also means, some info will disappear anyway.
--- dup=false for intersection, values of res are those of the later one t2. Be careful when using it!
-function merge (t1, t2, dup)
-    local res = {}
-    for k,v in pairs(t1) do
-        if dup or t2[k] then res[k] = v end
-    end
-    for k,v in pairs(t2) do
-        if dup or t1[k] then res[k] = v end
-    end
-    return res
-end
-
--- both A and B are lua-table
--- symm=true for symmetric difference AUB-AnB = (A-B)U(B-A), while symm=false for complement(anti-symmetric difference) A-B
-function difference (s1, s2, symm)
-    local res = {}
-    for k,v in pairs(s1) do
-        if not s2[k] then res[k] = v end
-    end
-    if symm then
-        for k,v in pairs(s2) do
-            if not s1[k] then res[k] = v end
-        end
-    end
-    return res
-end
 
 function isEmpty(self)
     return nil == next(self)
 end
 
 
+function size()
+	local count = 0
+	while next(self) do
+		count = count + 1
+	end
+	return count
+end

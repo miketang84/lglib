@@ -9,10 +9,11 @@ module(..., package.seeall)
 local List = {}
 local List_meta = {}
 List_meta.__index = List
-List_meta.__typename = "List"
+List_meta.__typename = "list"
 List_meta.__newindex = function (self, k, v)
 	assert(type(k) == 'number', "[Error] List can only accept number as index.")
-	self[k] = v
+	assert(k > 0 and k <= #self + 1 , "[Error] index overflow.")
+	rawset(self, k, v)
 end
 
 -- constructor of List object
@@ -96,7 +97,7 @@ end
 
 --list expansion by another one
 function List:extend( another )
-	checkType(another, 'table') -- checkType(another, 'List')
+	checkType(another, 'list')
 	for i = 1, #another do tinsert(self, another[i]) end
 	return self
 end
@@ -123,7 +124,6 @@ List.push = List.append
 
 -- starting from idx index and trying to find the first element with value=val, 
 function List:find(val, idx)
-    checkType(self, 'table')
     local idx = idx or 1
     if idx < 0 then idx = #self + idx + 1 end
     for i = idx, #self do
@@ -213,7 +213,7 @@ end
 
 -- insert another *list* at the location *idx*
 function List:splice(idx, list)
-    checkType(idx, list, 'number', 'List')
+    checkType(idx, list, 'number', 'list')
     local i = idx
     for _, v in ipairs(list) do
         tinsert(self, i, v)
@@ -240,8 +240,8 @@ function List:sliceAssign(i1, i2, seq)
     return self
 end
 
-function List:__add(another)
-    checkType(another, 'List')
+function List_meta:__add(another)
+    checkType(another, 'list')
     
     ls:extend(another)
     return ls
@@ -249,9 +249,9 @@ end
 
 List.__eq = equal
 
---function List:__tostring()
---     return '{' .. self:join(',') .. '}'
---end
+function List_meta:__tostring()
+	return '[' .. self:join(', ') .. ']'
+end
 
 
 

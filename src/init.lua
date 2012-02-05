@@ -13,6 +13,7 @@ _G['assert'] = function (bool, error_prompt)
 		print(debug.traceback())
 		os.exit(-1);
 	end
+	return bool
 end
 
 -- is equal for all type
@@ -72,15 +73,14 @@ _G['Set'] = require 'lglib.set'
 
 -- accessing the field of "typename"，the object passed into should be one of List, Dict, Table, Set, etc.
 -- then we also define "checkType" for List, Dict, Set, Table???---->just isList(), isDict(), isSet()
-local TYPE_NAMES = { ['table'] = 'Table', ['string'] = 'String', ['number'] = 'Number', ['nil'] = 'Nil', ['thread'] = 'Thread', ['userdata'] = 'Userdata' }
 _G['typename'] = function (t)
 	local typet = type(t)
 
 	local tmeta = getmetatable(t)
-	if tmeta and rawget(tmeta, __typename) then
+	if tmeta and rawget(tmeta, '__typename') then
 		return tmeta.__typename
 	else
-		return TYPE_NAMES[typet]
+		return typet
 	end
 end
 

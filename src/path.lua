@@ -1,6 +1,6 @@
 module(..., package.seeall)
 
-function trailingPath(path)
+function normalize(path)
 	local path = path:gsub('//+', '/')
 	if path:sub(-1) ~= '/' then
 		path = ('%s/'):format(path)

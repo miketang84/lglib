@@ -1,6 +1,5 @@
-require('lglib')
 local string = string
-local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat,table.sort
+local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat, table.sort
 local List = require('lglib.list')
 local Dict = require('lglib.dict')
 
@@ -9,25 +8,20 @@ module(..., package.seeall)
 
 -- this is a set prototype, and all of Set instances will inherit it
 local Set = {}
-
---itself as its metatable
-Set.__index = Set
-Set.__typename = "Set"
+local Set_meta = {}
+Set_meta.__index = Set
+Set_meta.__typename = "set"
+--Set_meta.__newindex = function (self, k, v)
+--end
 
 -- constructor of Set objects
+-- now, the key of the set is not suit for table/object
 local function new (tbl)
-	-- if tbl is nil, empty table returned
-	local t = {}
-	if type(tbl) == 'table' then
-		if #tbl > 0 then
-			checkType(tbl, 'table')
-			-- passed in params is a list
-			for _, v in ipairs(tbl) do
-				t[v] = true  
-			end
-		elseif not table.isEmpty(tbl) then
-			t = tbl
-		end
+	assert(type(tbl) == 'table', "[Error] paramerter passed in Set constructor should be table.")
+
+	-- retreive list item, left the key-value part
+	for _, v in ipairs(tbl) do
+		t[v] = true
 	end
 
 	return setmetatable(t, Set)
@@ -39,9 +33,6 @@ setmetatable(Set, {
     __call = function (self, tbl)
         return new(tbl)
     end,
-	-- Set is a special Dict, whose values are true or nil. 
-	-- Be careful that the value can not be false!!!
-	__index = Dict,
 })
 
 
@@ -61,48 +52,72 @@ function Set:has (key)
 	end
 end
 
-Set.members = Dict.keys
+function Set:members(self)
+	local r = List()
+	for k, _ in pairs(self) do
+		tinsert(r, k)
+	end
+	return r
+end
 
 -- if set value can be false, it will be wrong somehow because of values overwritten..?????????
-function Set:union (set)
-    return Set(table.merge(self, set, true))  -- the type of data that merge() returned is not LIST...?????????
+function union (self, set)
+    assert(isSet(set), '[Error] the #2 passed in union is not set.')
+    for k, v in pairs(set) do
+        if not self[k] then self[k] = v end
+    end
+    return self
 end
-Set.__add = Set.union
+Set_meta.__add = union
 
 
-function Set:intersection (set)
-    return Set(table.merge(self,set,false))
+function intersection (self, set)
+    for k, v in pairs(self) do
+        if not set[k] then self[k] = nil end
+    end
+	return self
 end
-Set.__mul = Set.intersection
+Set_meta.__mul = intersection
 
 
-function Set:difference (set)
-    return Set(table.difference(self,set,false))
+function difference (self, set)
+    for k, v in pairs(set) do
+        if self[k] then self[k] = nil end
+    end
+    return self
 end
-Set.__sub = Set.difference
+Set_meta.__sub = difference
 
 
-function Set:symmetricDifference (set)
-    return Set(table.difference(self,set,true))
+function symmetricDifference (self, set)
+    for k, v in pairs(set) do
+        if self[k] then 
+			self[k] = nil 
+		else	
+			self[k] = v
+		end
+    end
+
+    return self
 end
-Set.__pow = Set.symmetricDifference
+Set_meta.__pow = symmetricDifference
 
 
 -- two cases of returned values, each one has two values
 -- the first one indicates true and empty string, while the second is false and element that is the first element is not contained in set. 
-function Set:isSub (set)
+function isSub (self, set)
     for k in pairs(self) do
         if not set[k] then return false, k end
     end
     return true, ''
 end
-Set.__lt = Set.isSub
+Set_meta.__lt = isSub
 
 
 -- override the tostring() function
 -- join is a method of LIST
-function Set:__tostring ()
-    return '['..self:members():join(',')..']'
+function Set_meta:__tostring ()
+    return '{' .. self:members():join(',') .. '}'
 end
 
 
