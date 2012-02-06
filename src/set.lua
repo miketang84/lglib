@@ -67,35 +67,35 @@ function Set:members()
 end
 
 -- if set value can be false, it will be wrong somehow because of values overwritten..?????????
-function union (self, set)
+function Set:union (set)
     assert(isSet(set), '[Error] the #2 passed in union is not set.')
     for k, v in pairs(set) do
         if not self[k] then self[k] = v end
     end
     return self
 end
-Set_meta.__add = union
+Set_meta.__add = Set.union
 
 
-function intersection (self, set)
+function Set:intersection (set)
     for k, v in pairs(self) do
         if not set[k] then self[k] = nil end
     end
 	return self
 end
-Set_meta.__mul = intersection
+Set_meta.__mul = Set.intersection
 
 
-function difference (self, set)
+function Set:difference (set)
     for k, v in pairs(set) do
         if self[k] then self[k] = nil end
     end
     return self
 end
-Set_meta.__sub = difference
+Set_meta.__sub = Set.difference
 
 
-function symmetricDifference (self, set)
+function Set:symmetricDifference (set)
     for k, v in pairs(set) do
         if self[k] then 
 			self[k] = nil 
@@ -106,18 +106,18 @@ function symmetricDifference (self, set)
 
     return self
 end
-Set_meta.__pow = symmetricDifference
+Set_meta.__pow = Set.symmetricDifference
 
 
 -- two cases of returned values, each one has two values
 -- the first one indicates true and empty string, while the second is false and element that is the first element is not contained in set. 
-function isSub (self, set)
+function Set:isSub (set)
     for k in pairs(self) do
         if not set[k] then return false, k end
     end
     return true, ''
 end
-Set_meta.__lt = isSub
+Set_meta.__lt = Set.isSub
 
 
 -- override the tostring() function
