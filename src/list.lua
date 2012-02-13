@@ -113,8 +113,8 @@ end
 -- maybe a better API is List:remove(x, numOfDeletion)
 -- if numOfDeletion is negative integer,then counting from the last one in reversing order.
 function List:remove(x)
-    for i,v in ipairs(self) do
-        if self[i] == x then tremove(self,i) end
+    for i = #self, 1, -1 do
+        if self[i] == x then tremove(self, i) end
     end
     return self
 end
