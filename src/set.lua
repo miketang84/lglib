@@ -26,8 +26,8 @@ local function new (tbl)
 
 	-- retreive list item, left the key-value part
 	for i, v in ipairs(tbl) do
-		tbl[tostring(v)] = true
-		tbl[i] = nil
+		rawset(tbl, tostring(v), true)
+		rawset(tbl, i, nil)
 	end
 
 	return setmetatable(tbl, Set_meta)
