@@ -259,6 +259,16 @@ function List_meta:__tostring()
 end
 
 
+function List:each(self, func)
+	local ret = List()
+	if self then
+		for _, v in ipairs(self) do
+			ret:append(func(v))
+		end
+	end
+	return ret	
+end
+
 
 -- 
 function List:isEmpty ()
