@@ -128,7 +128,7 @@ end
 
 function Set:size()
 	local count = 0
-	while next(self) do
+	for _, _ in pairs(self) do
 		count = count + 1
 	end
 	return count
