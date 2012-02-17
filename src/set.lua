@@ -126,5 +126,14 @@ function Set_meta:__tostring ()
     return '{' .. self:members():join(', ') .. '}'
 end
 
+function Set:size()
+	local count = 0
+	while next(self) do
+		count = count + 1
+	end
+	return count
+end
+Set_meta.__len = Set.size
+
 
 return Set

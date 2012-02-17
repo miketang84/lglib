@@ -59,6 +59,7 @@ function Dict:size()
 	end
 	return count
 end
+Dict_meta.__len = Dict.size
 
 function Dict:values()
 	local res = List()
