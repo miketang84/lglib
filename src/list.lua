@@ -275,7 +275,7 @@ function List:dump(count)
 			print(i, self[i])
 		else
 			if self[i].dump then
-				self[i].dump(count)
+				self[i]:dump(count)
 			end
 		end
 	end
