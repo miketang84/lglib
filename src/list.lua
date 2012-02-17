@@ -259,7 +259,7 @@ function List_meta:__tostring()
 end
 
 
-function List:each(self, func)
+function List:each(func)
 	local ret = List()
 	if self then
 		for _, v in ipairs(self) do
