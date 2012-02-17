@@ -269,6 +269,18 @@ function List:each(self, func)
 	return ret	
 end
 
+function List:dump(count)
+	for i=1, #self do
+		if type(self[i]) == 'string' then
+			print(i, self[i])
+		else
+			if self[i].dump then
+				self[i].dump(count)
+			end
+		end
+	end
+end
+
 
 -- 
 function List:isEmpty ()
