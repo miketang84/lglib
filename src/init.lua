@@ -193,12 +193,18 @@ _G['setProto'] = function (obj, proto)
 	checkType(proto, 'table')
 	
 	local mt = getmetatable(obj) or {}
-	local old_meta = mt.__index
+	local old_t = mt.__index
 	
 	-- methods binding when old_meta is nil or table
-	if not old_meta or type(old_meta) == 'table' then
-		mt.__index = function(t, k)  	-- here, 't' is the table self
-			return old_meta and old_meta[k] or proto[k] 
+	if old_t == nil then
+		mt.__index = proto
+	elseif type(old_t) == 'table' then
+		mt.__index = function (t, k)  	-- here, 't' is the table self
+			return old_t and old_t[k] or proto[k] 
+		end
+	elseif type(old_t) == 'function' then
+		mt.__index = function (t, k)
+			return old_t(t, k) or proto[k]
 		end
 	end
 	
