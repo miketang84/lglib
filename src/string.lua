@@ -39,11 +39,9 @@ getmetatable("").__div = function (s, tab)
 end
 
 
-getmetatable("").__add = function (self, astr)
-	local ok, ret = pcall(function (self, astr) return self .. astr end, self, astr)
-	if not ok then print(debug.traceback()); error('[ERROR] concating string is nil!', 2) end
-
-	return (ok and ret or self)
+getmetatable("").__add = function (self, str)
+	assert(str, "[Error] #2 of the string concating is nil.")
+	return self .. str
 end
 
 
