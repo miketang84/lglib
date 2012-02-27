@@ -7,7 +7,7 @@ module(..., package.seeall)
 --==                  some global helper functions     	              ==
 --======================================================================
 
---[[ local orig_assert = assert
+local orig_assert = assert
 _G['assert'] = function (bool, error_prompt)
 	if not bool then
 		if error_prompt then print(error_prompt) end
@@ -15,7 +15,7 @@ _G['assert'] = function (bool, error_prompt)
 		orig_assert(bool)
 	end
 	return bool
-end --]]
+end
 
 -- is equal for all type
 _G['equal'] = function (a, b)
