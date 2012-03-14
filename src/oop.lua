@@ -29,6 +29,17 @@ Object = {
 		-- define the local a = Model(...) syntax 
 		setmetatable(tbl, {__index=self; __call=function (self, ...) return self:new(...) end})
 
+		-- combine the fields, merely copy difference keys
+		local new_fields = tbl.__fields
+		local old_fields = self.__fields
+		if new_fields and type(new_fields) == 'table' and old_fields and type(old_fields) == 'table' then
+			for key, fdt in pairs(old_fields) do
+				if not new_fields[key] then
+					new_fields[key] = fdt
+				end
+			end
+		end
+		
 		return tbl
 	end;
 
