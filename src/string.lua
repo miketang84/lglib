@@ -52,6 +52,7 @@ end
 -- @return first letter of word to be capitalized
 ------------------------------------------------------------------------
 function cap(self)
+    assert(self, '[Error] @cap - string #1 to be caped should not be nil.')
     if #self == 0 then return self end
     return ('%s%s'):format(self:sub(1, 1):upper(), self:sub(2))
 end
@@ -63,6 +64,9 @@ end
 -- @return true|false  true for containing, otherwise false
 ------------------------------------------------------------------------
 function contains(self, substr)
+    assert(self, '[Error] @contains - string #1 should not be nil.')    
+    assert(substr, '[Error] @contains - substr #2 should not be nil.')
+    
     if self:find(substr, 1, true) then
         return true
     end
@@ -92,7 +96,10 @@ endsWith = lgstring.endsWith
 -- @param count	 	how many times that the delimiter could be replaced
 -- @return rlist 	list of splited pieces
 ------------------------------------------------------------------------
-split = lgstring.split
+split = function (self, delim, count)
+    assert(self, '[Error] @split - string #1 to be split should not be nil.')
+    return lgstring.split(self, delim, count)
+end
 
 ------------------------------------------------------------------------
 -- spliting a given string by a delimiter
@@ -102,6 +109,7 @@ split = lgstring.split
 -- @return unpack a list of splited pieces
 ------------------------------------------------------------------------
 function splitout(self, delim, count)
+    assert(self, '[Error] @splitout - str #1 to be split should not be nil.')
     return unpack(split(self, delim, count))
 end
 
@@ -150,6 +158,7 @@ trim = lgstring.trim
 
 
 splittrim = function (str, delimiters, count)
+    assert(self, '[Error] @splittrim - string #1 to be splittrim should not be nil.')
 	local r = str:split(delimiters, count)
 	for i, v in ipairs(r) do
 		r[i] = trim(v)
