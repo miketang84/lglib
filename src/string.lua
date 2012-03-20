@@ -79,15 +79,24 @@ end
 -- @param beg   substring
 -- @return true|false   
 ------------------------------------------------------------------------
-startsWith = lgstring.startsWith
-
+local lgstartsWith = lgstring.startsWith
+startsWith = function (self, beg)
+    assert(self, '[Error] @startsWith - string #1 to be checked should not be nil.')
+    assert(beg, '[Error] @startsWith - string #2 to be checked should not be nil.')    
+    return lgstartsWith(self, beg)
+end
 ------------------------------------------------------------------------
 -- check whether string ends with substring or not
 -- @param self  checked string
 -- @param tail   substring
 -- @return true|false   
 ------------------------------------------------------------------------
-endsWith = lgstring.endsWith
+local lgendsWith = lgstring.endsWith
+endsWith = function (self, tail)
+    assert(self, '[Error] @endsWith - string #1 to be checked should not be nil.')
+    assert(tail, '[Error] @endsWith - string #2 to be checked should not be nil.')    
+	return lgendsWith(self, tail)
+end
 
 ------------------------------------------------------------------------
 -- spliting a given string by a delimiter
@@ -96,9 +105,10 @@ endsWith = lgstring.endsWith
 -- @param count	 	how many times that the delimiter could be replaced
 -- @return rlist 	list of splited pieces
 ------------------------------------------------------------------------
+local lgsplit = lgstring.split
 split = function (self, delim, count)
-    assert(self, '[Error] @split - string #1 to be split should not be nil.')
-    return lgstring.split(self, delim, count)
+    assert(self, '[Error] @split - string #1 to be splited should not be nil.')
+    return lgsplit(self, delim, count)
 end
 
 ------------------------------------------------------------------------
@@ -109,7 +119,7 @@ end
 -- @return unpack a list of splited pieces
 ------------------------------------------------------------------------
 function splitout(self, delim, count)
-    assert(self, '[Error] @splitout - str #1 to be split should not be nil.')
+    assert(self, '[Error] @splitout - str #1 to be splited should not be nil.')
     return unpack(split(self, delim, count))
 end
 
@@ -121,7 +131,11 @@ end
 -- @param count 	times that a delimiter could be replaced
 -- @return unpack a list of splited pieces
 ------------------------------------------------------------------------
-splitset = lgstring.splitset
+local lgsplitset = lgstring.splitset
+splitset = function (self, delim, count)
+    assert(self, '[Error] @splitset - string #1 to be splited should not be nil.')	
+    return lgsplitset(self, delim, count)
+end
 
 ------------------------------------------------------------------------
 -- find location of the last substring in a given string
@@ -131,7 +145,13 @@ splitset = lgstring.splitset
 --         lastEndPos   the end position of last substring
 -- @note   SHOULD be optimized by pattern matching in the reversed direction
 ------------------------------------------------------------------------
-rfind = lgstring.rfind
+local lgrfind = lgstring.rfind
+rfind = function (self, substr)
+    assert(self, '[Error] @rfind - string #1 to be checked should not be nil.')	
+    return lgrfind(self, substr)
+end
+
+
 
 -- character set of blank spaces
 local TRIM_CHARS = Set {(" "):byte();("\t"):byte();("\v"):byte();("\r"):byte();("\n"):byte();0}
