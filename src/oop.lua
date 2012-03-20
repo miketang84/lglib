@@ -21,7 +21,7 @@ Object = {
 	-- inheritation function, here 'self' is the parent class
 	extend = function (self, tbl)
 		local this = rawget(self, 'extend')
-		assert(this and type(this) == 'function', "[ERROR] Only class can use extend method.")
+		assert(this and type(this) == 'function', "[Error] Only class can use extend method.")
 
 		tbl._parent = self
 		tbl.new = self.new
@@ -46,7 +46,7 @@ Object = {
 	--- instance creatation function, here 'self' is a class
 	new = function (self, ...)
 		local this = rawget(self, 'new')
-		assert(this and type(this) == 'function', "[ERROR] Only class can use new method.")
+		assert(this and type(this) == 'function', "[Error] Only class can use new method.")
 		local obj = {}
 		
 		local magic_methods = {"__add";"__sub";"__mul";"__div";"__mod";"__pow";"__unm";"__concat";"__len";"__eq";"__lt";"__le";"__tostring"}
@@ -67,7 +67,7 @@ Object = {
 		-- setting table and meta-table relationship
 		setmetatable(obj, mt)
 		-- check if the init() function exists. if not, reporting the error.
-		assert(self.init, '[ERROR] Class must implement init() function while defined.')
+		assert(self.init, '[Error] Class must implement init() function while defined.')
 		
 		-- store the inherited chain
 		local proto_chain = List()
@@ -96,6 +96,27 @@ Object = {
 		-- return self.init(obj, ...)
 	end; 
 	
+	-- mixin      119     clone = function (self)
+	
+	mixin = function (self, tbl)
+
+		assert(type(tbl) == 'table', "[Error] mixin can only accept table.")
+
+		-- combine the fields, note, may override the default definitions.
+		local new_fields = tbl.__fields
+		table.update(self.__fields, new_fields)
+		
+		-- copy other methods
+		for key, val pairs(tbl) do
+			if not key:startsWith('__') then
+				self[key] = val
+			end
+		end
+		
+		return self
+	end;
+
+
 	clone = function (self)
 		local new = table.copy(self)  --why not call table.deepCopy(self)??
 		setmetatable(new, getmetatable(self))
