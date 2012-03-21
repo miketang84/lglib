@@ -134,6 +134,8 @@ Object = {
 				for key, action in pairs(mixin_deco) do
 					if self_deco[key] and type(self_deco(key)) == 'function' then
 						self_deco[key] = action(self_deco[key])
+					else
+						self_deco[key] = action
 					end
 				end
 			end
