@@ -96,22 +96,49 @@ Object = {
 		-- return self.init(obj, ...)
 	end; 
 	
-	-- mixin      119     clone = function (self)
-	
-	mixin = function (self, tbl)
-
-		assert(type(tbl) == 'table', "[Error] mixin can only accept table.")
-
+	-- include the mixin
+	include = function (self, mixin)
+		assert(type(mixin) == 'table' or type(mixin) == 'string', "[Error] mixin can only accept table or string.")
+		
+		local tbl
+		if type(mixin) == 'string' then
+			tbl = require(mixin)
+		else
+			tbl = mixin
+		end
 		-- combine the fields, note, may override the default definitions.
 		local new_fields = tbl.__fields
 		table.update(self.__fields, new_fields)
 		
 		-- copy other methods
-		for key, val pairs(tbl) do
-			if not key:startsWith('__') then
+		for key, val in pairs(tbl) do
+			if not key:startsWith('__') and key ~= 'init' then
+				if self[key] then printf('[Warning] @include - method %s will be overrided.', key) end
 				self[key] = val
 			end
 		end
+		
+		-- process mixin init function
+		if self.init and tbl.init and type(self.init) == 'function' and type(tbl.init) == 'function' then
+			self.init = function (self, t)
+				return tbl.init(self.init(self, t), t)
+			end
+		end
+		
+		-- process mixin decorators
+		local mixin_deco = tbl.__decorators
+		local self_deco = rawget(self, '__decorators')
+		if mixin_deco and type(mixin_deco) == 'table' then
+			if not self_deco then self.__decorators = mixin_deco
+			else
+				for key, action in pairs(mixin_deco) do
+					if self_deco[key] and type(self_deco(key)) == 'function' then
+						self_deco[key] = action(self_deco[key])
+					end
+				end
+			end
+		end
+		
 		
 		return self
 	end;
