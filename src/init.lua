@@ -216,6 +216,7 @@ _G['printf'] = function (...)
 	print(string.format(...)) 
 end
 
+_G['format'] = string.format
 
 ------------------------------------------------------------------------
 -- serialize lua instances/objects into a lua-table format
