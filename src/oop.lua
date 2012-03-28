@@ -120,8 +120,10 @@ Object = {
 		
 		-- process mixin init function
 		if self.init and tbl.init and type(self.init) == 'function' and type(tbl.init) == 'function' then
+			local pinit = self.init
 			self.init = function (self, t)
-				return tbl.init(self.init(self, t), t)
+				tbl.init(pinit(self, t), t)
+				return self
 			end
 		end
 		
