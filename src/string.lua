@@ -177,9 +177,9 @@ rtrim = lgstring.rtrim
 trim = lgstring.trim
 
 
-splittrim = function (str, delimiters, count)
+splittrim = function (self, delimiters, count)
     assert(self, '[Error] @splittrim - string #1 to be splittrim should not be nil.')
-	local r = str:split(delimiters, count)
+	local r = self:split(delimiters, count)
 	for i, v in ipairs(r) do
 		r[i] = trim(v)
 	end
