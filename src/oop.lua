@@ -97,14 +97,14 @@ Object = {
 	end; 
 	
 	-- include the mixin
-	include = function (self, mixin)
-		assert(type(mixin) == 'table' or type(mixin) == 'string', "[Error] mixin can only accept table or string.")
+	include = function (self, mixin, ...)
+		assert(type(mixin) == 'function' or type(mixin) == 'string', "[Error] mixin can only accept function or string.")
 		
 		local tbl
 		if type(mixin) == 'string' then
-			tbl = require(mixin)
+			tbl = require(mixin)(...)
 		else
-			tbl = mixin
+			tbl = mixin(...)
 		end
 		-- combine the fields, note, may override the default definitions.
 		local new_fields = tbl.__fields
