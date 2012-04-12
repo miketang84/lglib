@@ -67,7 +67,6 @@ _G['import'] = import
 
 -- Define some global callable functions and use them directly later without "require"
 -- the only root or parent of all class objects
-_G['Object'] = require 'lglib.oop'
 _G['List'] = require 'lglib.list'
 _G['Dict'] = require 'lglib.dict'
 _G['Set'] = require 'lglib.set'
@@ -307,6 +306,8 @@ local function lglib_init()
 	loadStringModule()
 	loadIoModule()
 end
+
+_G['Object'] = require 'lglib.oop'
 -- call it
 lglib_init()
 

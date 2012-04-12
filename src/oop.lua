@@ -177,6 +177,10 @@ Object = {
 	
 	-- only the class object exist
 	singleton = function (self) return self end;
+
+	getClass = function (self) return self:isInstance() and getmetatable(self).__index or self  end;
+	getProto = function (self) return self:getClass() end;	
+
 }
 
 return Object
