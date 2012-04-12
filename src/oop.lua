@@ -2,7 +2,7 @@ local table = table
 local loadstring, assert = loadstring, assert
 local tostring, getmetatable, setmetatable, error, io, type, pairs, rawget, rawset = tostring, getmetatable, setmetatable, error, io, type, pairs, rawget, rawset
 local ipairs, debug, require, select = ipairs, debug, require, select
-local type, print = type, print
+local type, print, printf = type, print, printf
 
 local List = require 'lglib.list'
 
