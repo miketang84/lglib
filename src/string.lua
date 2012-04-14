@@ -108,7 +108,7 @@ end
 local lgsplit = lgstring.split
 split = function (self, delim, count)
     assert(self, '[Error] @split - string #1 to be splited should not be nil.')
-    return lgsplit(self, delim, count)
+    return List(lgsplit(self, delim, count))
 end
 
 ------------------------------------------------------------------------
@@ -134,7 +134,7 @@ end
 local lgsplitset = lgstring.splitset
 splitset = function (self, delim, count)
     assert(self, '[Error] @splitset - string #1 to be splited should not be nil.')	
-    return lgsplitset(self, delim, count)
+    return List(lgsplitset(self, delim, count))
 end
 
 ------------------------------------------------------------------------

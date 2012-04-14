@@ -122,8 +122,8 @@ Object = {
 		if self.init and tbl.init and type(self.init) == 'function' and type(tbl.init) == 'function' then
 			local pinit = self.init
 			self.init = function (self, t)
-				tbl.init(pinit(self, t), t)
-				return self
+				return tbl.init(pinit(self, t), t)
+				-- return self
 			end
 		end
 		
