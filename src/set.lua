@@ -13,7 +13,7 @@ local Set_meta = {}
 Set_meta.__index = Set
 Set_meta.__typename = "set"
 Set_meta.__newindex = function (self, k, v)
-	assert(isStrOrNum(k), '[Error] the key passed in to Set should only be string or number.')
+	assert(isNumOrStr(k), '[Error] the key passed in to Set should only be string or number.')
 	rawset(self, k, v)
 end
 

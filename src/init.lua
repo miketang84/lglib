@@ -182,7 +182,7 @@ _G['isFalse'] = function (onearg)
 end
 
 -- check if is string or number
-_G['isStrOrNum'] = function (arg)
+_G['isNumOrStr'] = function (arg)
 	local ctype = type(arg)
 	return ctype == 'string' or ctype == 'number'
 end
