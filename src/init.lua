@@ -191,7 +191,7 @@ end
 _G['setProto'] = function (obj, proto)
 	checkType(proto, 'table')
 	
-	local mt = getmetatable(obj) or {}
+	local mt = table.copy(getmetatable(obj) or {})
 	local old_t = mt.__index
 	
 	-- methods binding when old_meta is nil or table
