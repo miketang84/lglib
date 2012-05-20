@@ -199,7 +199,7 @@ _G['setProto'] = function (obj, proto)
 		mt.__index = proto
 	elseif type(old_t) == 'table' then
 		mt.__index = function (t, k)  	-- here, 't' is the table self
-			return old_t and old_t[k] or proto[k] 
+			return old_t[k] or proto[k] 
 		end
 	elseif type(old_t) == 'function' then
 		mt.__index = function (t, k)

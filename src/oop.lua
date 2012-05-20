@@ -1,4 +1,5 @@
 local table = table
+local tinsert = table.insert
 local loadstring, assert = loadstring, assert
 local tostring, getmetatable, setmetatable, error, io, type, pairs, rawget, rawset = tostring, getmetatable, setmetatable, error, io, type, pairs, rawget, rawset
 local ipairs, debug, require, select = ipairs, debug, require, select
@@ -70,10 +71,10 @@ Object = {
 		assert(self.init, '[Error] Class must implement init() function while defined.')
 		
 		-- store the inherited chain
-		local proto_chain = List()
+		local proto_chain = {}
 		local p = self
 		repeat
-			proto_chain:append(p)
+			tinsert(proto_chain, p)
 			-- go backward 
 			p = p._parent
 		-- stop unless back to primitive prototype, like Object or other root parent class
