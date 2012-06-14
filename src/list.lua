@@ -179,9 +179,10 @@ end
 function List:slice(start, stop, is_rev)
 	-- NOTICE: here, should not use checkType!
 	-- because start, stop, is_rev are all probably nil.
-	local nt = List()
+	local self_meta = getmetatable(self)
+	local nt = setmetatable({}, self_meta)
 	local start, stop = normalize_slice(self, start, stop)
-	if not start or not stop then return List() end
+	if not start or not stop then return nt end
 	
 	if is_rev ~= 'rev' then
 		for i = start, (#self > stop and stop or #self) do
@@ -280,7 +281,6 @@ function List:dump(count)
 		end
 	end
 end
-
 
 -- 
 function List:isEmpty ()
