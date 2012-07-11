@@ -68,3 +68,13 @@ function parseURL(url, sep)
 
     return result
 end
+
+function makeParams(t)
+	local ret = ''
+	for k, v in pairs(t) do
+		ret = ret .. '&' .. k .. '=' .. encodeURL(v)
+	end
+	ret = ret:sub(2, -1)
+	return ret
+end
+
