@@ -183,5 +183,6 @@ Object = {
 	getProto = function (self) return self:getClass() end;	
 
 }
+Object.extends = Object.extend
 
 return Object

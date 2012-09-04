@@ -102,6 +102,7 @@ function List:extend( another )
 	for i = 1, #another do tinsert(self, another[i]) end
 	return self
 end
+List.extends = List.extend
 
 -- delete by index
 function List:pop (i)
