@@ -108,7 +108,7 @@ Object = {
 			tbl = mixin(...)
 		end
 		-- combine the fields, note, may override the default definitions.
-		local new_fields = tbl.__fields
+		local new_fields = tbl.__fields or {}
 		table.update(self.__fields, new_fields)
 		
 		-- copy other methods

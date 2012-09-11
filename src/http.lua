@@ -32,7 +32,7 @@ end
 ------------------------------------------------------------------------
 function encodeURL(url)
 	checkType(url, 'string')
-    return url:gsub("\n","\r\n"):gsub("([^%w%-%.])", 
+    return url:gsub("\n","\r\n"):gsub("([^%w%-%._])", 
         function (c) return ("%%%02X"):format(string.byte(c)) 
     end)
 end
