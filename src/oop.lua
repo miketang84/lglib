@@ -50,51 +50,51 @@ Object = {
 		assert(this and type(this) == 'function', "[Error] Only class can use new method.")
 		local obj = {}
 		
-		local magic_methods = {"__add";"__sub";"__mul";"__div";"__mod";"__pow";"__unm";"__concat";"__len";"__eq";"__lt";"__le";"__tostring"}
+		-- local magic_methods = {"__add";"__sub";"__mul";"__div";"__mod";"__pow";"__unm";"__concat";"__len";"__eq";"__lt";"__le";"__tostring"}
 		
 		-- make a copy of metatable of prototype (self)
 		-- pls remember that this is just one-layer copy, mostly references
 		local mt = table.copy(getmetatable(self) or {})
 		-- for magic methods, a reference/index cache could accelarate callback processes
 		-- once callback functions modified, the change can not propagate into the reference cache?? lost a little of flexibility 
-		for _, v in ipairs(magic_methods) do
-			local method = self[v]
-			if method then
-				rawset(mt, v, method)   
-			end
-		end
+		-- for _, v in ipairs(magic_methods) do
+		-- 	local method = self[v]
+		-- 	if method then
+		-- 		rawset(mt, v, method)   
+		-- 	end
+		-- end
 		-- pointing back to the prototype itself "self"
 		mt.__index = self
 		-- setting table and meta-table relationship
 		setmetatable(obj, mt)
 		-- check if the init() function exists. if not, reporting the error.
-		assert(self.init, '[Error] Class must implement init() function while defined.')
+		-- assert(self.init, '[Error] Class must implement init() function while be defined.')
 		
 		-- store the inherited chain
-		local proto_chain = {}
-		local p = self
-		repeat
-			tinsert(proto_chain, p)
-			-- go backward 
-			p = p._parent
-		-- stop unless back to primitive prototype, like Object or other root parent class
-		-- it also means this oop structure is not single rooted??
-		until p == Object or not p
+		-- local proto_chain = {}
+		-- local p = self
+		-- repeat
+		-- 	tinsert(proto_chain, p)
+		-- 	-- go backward 
+		-- 	p = p._parent
+		-- -- stop unless back to primitive prototype, like Object or other root parent class
+		-- -- it also means this oop structure is not single rooted??
+		-- until p == Object or not p
 		
 		-- the inheritance relation is from bottom to top, child at head of list and parent at the tail
 		-- for init process, it should run in the backward direction
 		-- This feature makes every initial function in child class do its own new
 		-- fields' initialization only.
-		for i = #proto_chain, 1, -1 do
-			-- adding fields one group by another
-			-- non-last one should return self itself
-			obj = proto_chain[i].init(obj, ...)
-		end
+		-- for i = #proto_chain, 1, -1 do
+		-- 	-- adding fields one group by another
+		-- 	-- non-last one should return self itself
+		-- 	obj = proto_chain[i].init(obj, ...)
+		-- end
 		
-		return obj
+		-- return obj
 		
 		-- simplified version. 
-		-- return self.init(obj, ...)
+		return self.init(obj, ...)
 	end; 
 	
 	-- include the mixin

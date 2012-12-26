@@ -169,17 +169,48 @@ end
 
 -- use for what?
 -- nil, false, 0, "", {}, etc
-_G['isFalse'] = function (onearg)
-	if not onearg or onearg == '' or onearg == 0 then
+_G['isFalse'] = function (obj)
+	if not obj or obj == '' or obj == 0 then
 		return true
 	end
 
-	if type(onearg) == 'table' and table.isEmpty(onearg) then
+	if type(obj) == 'table' and table.isEmpty(obj) then
 		return true
 	end
 	
 	return false
 end
+
+_G['isTrue'] = function (obj)
+	local ctype = type(obj)
+	
+	if not obj then return false end
+
+	if ctype == 'string' then
+		if #obj > 0 then 
+			return true
+		else
+			return false
+		end
+	elseif ctype == 'number' then
+		if obj > 0 then 
+			return true 
+		else
+			return false
+		end
+	elseif ctype == 'boolean' then
+		return obj
+	elseif ctype == 'table' then
+		if not table.isEmpty(obj) then 
+			return true
+		else
+			return false
+		end
+	end
+	
+	return false
+end
+
 
 -- check if is string or number
 _G['isNumOrStr'] = function (arg)
