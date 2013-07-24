@@ -71,30 +71,30 @@ Object = {
 		-- assert(self.init, '[Error] Class must implement init() function while be defined.')
 		
 		-- store the inherited chain
-		-- local proto_chain = {}
-		-- local p = self
-		-- repeat
-		-- 	tinsert(proto_chain, p)
-		-- 	-- go backward 
-		-- 	p = p._parent
-		-- -- stop unless back to primitive prototype, like Object or other root parent class
-		-- -- it also means this oop structure is not single rooted??
-		-- until p == Object or not p
+		 local proto_chain = {}
+		 local p = self
+		 repeat
+		 	tinsert(proto_chain, p)
+		 	-- go backward 
+		 	p = p._parent
+		 -- stop unless back to primitive prototype, like Object or other root parent class
+		 -- it also means this oop structure is not single rooted??
+		 until p == Object or not p
 		
 		-- the inheritance relation is from bottom to top, child at head of list and parent at the tail
 		-- for init process, it should run in the backward direction
 		-- This feature makes every initial function in child class do its own new
 		-- fields' initialization only.
-		-- for i = #proto_chain, 1, -1 do
-		-- 	-- adding fields one group by another
-		-- 	-- non-last one should return self itself
-		-- 	obj = proto_chain[i].init(obj, ...)
-		-- end
+		 for i = #proto_chain, 1, -1 do
+		 	-- adding fields one group by another
+		 	-- non-last one should return self itself
+		 	obj = proto_chain[i].init(obj, ...)
+		 end
 		
-		-- return obj
+		 return obj
 		
 		-- simplified version. 
-		return self.init(obj, ...)
+		-- return self.init(obj, ...)
 	end; 
 	
 	-- include the mixin
