@@ -88,7 +88,10 @@ Object = {
 		 for i = #proto_chain, 1, -1 do
 		 	-- adding fields one group by another
 		 	-- non-last one should return self itself
-		 	obj = proto_chain[i].init(obj, ...)
+		 	local model = proto_chain[i]
+			if rawget(model, 'init') then
+				obj = model.init(obj, ...)
+			end
 		 end
 		
 		 return obj
